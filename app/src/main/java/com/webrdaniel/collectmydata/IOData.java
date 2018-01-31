@@ -17,10 +17,6 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
-/**
- * Created by dandu on 29.01.2018.
- */
-
 public class IOData {
     private Context mContext;
     private String mFileName;
@@ -30,7 +26,7 @@ public class IOData {
         mFileName = filename;
     }
 
-    public static JSONArray toJSONArray(ArrayList<DataCollItem> items) throws JSONException {
+    private static JSONArray toJSONArray(ArrayList<DataCollItem> items) throws JSONException {
         JSONArray jsonArray = new JSONArray();
         for(DataCollItem item : items){
             JSONObject jsonObject = item.toJSON();
@@ -64,7 +60,7 @@ public class IOData {
         }
     }
 
-    public ArrayList<DataCollItem> loadFromFile() throws IOException, JSONException{
+    private ArrayList<DataCollItem> loadFromFile() throws IOException, JSONException{
         ArrayList<DataCollItem> items = new ArrayList<>();
         BufferedReader bufferedReader = null;
         FileInputStream fileInputStream = null;
@@ -85,8 +81,7 @@ public class IOData {
 
 
         } catch (FileNotFoundException fnfe) {
-            //do nothing about it
-            //file won't exist first time app is run
+                //first run
         }
         finally {
             if(bufferedReader!=null){
@@ -96,6 +91,20 @@ public class IOData {
                 fileInputStream.close();
             }
 
+        }
+        return items;
+    }
+
+    public ArrayList<DataCollItem> getLocallyStoredData(){
+        ArrayList<DataCollItem> items = null;
+        try {
+            items  = loadFromFile();
+        }
+        catch (IOException | JSONException e) {
+            e.printStackTrace();
+        }
+        if(items == null){
+            items = new ArrayList<>();
         }
         return items;
     }

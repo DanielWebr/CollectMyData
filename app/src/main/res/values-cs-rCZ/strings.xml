@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">CollectMyData</string>
+    <string name="action_settings">Nastavení</string>
+    <string name="setting_reset">Vymazat data aplikace</string>
+    <string name="setting_delete">Vymazat</string>
+</resources>

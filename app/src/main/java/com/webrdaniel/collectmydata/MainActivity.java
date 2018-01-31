@@ -8,9 +8,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -27,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.recycler_view) RecyclerView mRecyclerView;
     private BasicListAdapter adapter;
-    private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private ArrayList<DataCollItem> mDataCollItemsArrayList;
     private IOData mIOData;
@@ -45,12 +47,12 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
 
+        mIOData = new IOData(this, FILENAME);
+        mDataCollItemsArrayList = mIOData.getLocallyStoredData();
+
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mIOData = new IOData(this, FILENAME);
-        mDataCollItemsArrayList = getLocallyStoredData(mIOData);
-        Log.d("tag", mDataCollItemsArrayList.toString());
         adapter = new BasicListAdapter(mDataCollItemsArrayList);
         mRecyclerView.setAdapter(adapter);
 
@@ -85,7 +87,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
-            case NEW_DATA_COLL_ITEM: DataCollItem item = (DataCollItem) data.getSerializableExtra(DATA_COLL_ITEM);
+            case NEW_DATA_COLL_ITEM:
+                DataCollItem item = (DataCollItem) data.getSerializableExtra(DATA_COLL_ITEM);
                 mDataCollItemsArrayList.add(item);
                 adapter.notifyDataSetChanged();
                 break;
@@ -102,22 +105,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-    public static ArrayList<DataCollItem> getLocallyStoredData(IOData storeRetrieveData){
-        ArrayList<DataCollItem> items = null;
-        try {
-            items  = storeRetrieveData.loadFromFile();
-            }
-            catch (IOException | JSONException e) {
-            e.printStackTrace();
-        }
-
-        if(items == null){
-            items = new ArrayList<>();
-        }
-        return items;
-    }
-
     @Override
     protected void onPause() {
         super.onPause();
@@ -127,5 +114,55 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
+    class BasicListAdapter extends RecyclerView.Adapter<BasicListAdapter.ViewHolder>{
+        private ArrayList<DataCollItem> items;
+        public static final String DATA_COLL_ITEM = "com.webrdaniel.collectmydata.MainActivity";
+
+        @Override
+        public BasicListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_data_coll, parent, false);
+            return new ViewHolder(v);
+        }
+
+        @Override
+        public void onBindViewHolder(final BasicListAdapter.ViewHolder holder, final int position) {
+            DataCollItem item = items.get(position);
+            holder.mDataCollname.setText(item.getmDataCollName());
+        }
+
+        @Override
+        public int getItemCount() {
+            return items.size();
+        }
+
+        BasicListAdapter(ArrayList<DataCollItem> items){
+            this.items = items;
+        }
+
+        @SuppressWarnings("deprecation")
+        public class ViewHolder extends RecyclerView.ViewHolder{
+            View mView;
+            TextView mDataCollname;
+
+            public ViewHolder(View v){
+                super(v);
+                mView = v;
+                v.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        DataCollItem item = items.get(ViewHolder.this.getAdapterPosition());
+                        Intent i = new Intent(MainActivity.this, DataCollDetailActivity.class);
+                        i.putExtra(DATA_COLL_ITEM, item);
+                        startActivity(i);
+                    }
+                });
+                mDataCollname = (TextView)v.findViewById(R.id.data_coll_name);
+            }
+
+
+        }
+    }
+
 }
 

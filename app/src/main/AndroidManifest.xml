@@ -20,7 +20,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".NewDataCollActivity" />
-        <activity android:name=".SettingActivity"></activity>
+        <activity android:name=".SettingActivity" />
+        <activity android:name=".DataCollDetailActivity"></activity>
     </application>
 
 </manifest>
