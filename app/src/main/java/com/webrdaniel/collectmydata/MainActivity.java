@@ -80,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_settings) {
             Intent settingIntent = new Intent(this, SettingActivity.class);
             startActivityForResult(settingIntent,SETTING);
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }

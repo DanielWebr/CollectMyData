@@ -4,4 +4,5 @@
     <string name="action_settings">Nastavení</string>
     <string name="setting_reset">Vymazat data aplikace</string>
     <string name="setting_delete">Vymazat</string>
+    <string name="tab_overview">Přehled</string>
 </resources>
