@@ -14,6 +14,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 /**
@@ -46,6 +47,21 @@ public class IOData {
         outputStreamWriter.write(toJSONArray(items).toString());
         outputStreamWriter.close();
         fileOutputStream.close();
+    }
+    public void deleteData(){
+        PrintWriter writer = null;
+        try {
+            writer = new PrintWriter(mFileName);
+            writer.print("");
+        } catch (FileNotFoundException e) {
+
+        }
+        finally {
+            if(writer!=null)
+            {
+                writer.close();
+            }
+        }
     }
 
     public ArrayList<DataCollItem> loadFromFile() throws IOException, JSONException{

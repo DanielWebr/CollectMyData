@@ -9,10 +9,11 @@ import java.util.UUID;
 
  class DataCollItem implements Serializable {
     private String mDataCollName;
+    private UUID mTodoIdentifier;
     private static final String DATACOLLITEM = "datacollitem";
 
     public DataCollItem(){
-
+        mTodoIdentifier = UUID.randomUUID();
     }
 
 
@@ -33,4 +34,7 @@ import java.util.UUID;
     public String getmDataCollName() {
         return mDataCollName;
     }
+     public UUID getIdentifier(){
+         return mTodoIdentifier;
+     }
 }
