@@ -1,6 +1,8 @@
 package com.webrdaniel.collectmydata;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -15,6 +17,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.sql.Date;
+import java.sql.Time;
 import java.util.ArrayList;
 
 public class IOData {
@@ -107,5 +111,27 @@ public class IOData {
             items = new ArrayList<>();
         }
         return items;
+    }
+
+    public static void deleteDataSQLite(DatabaseHelper dbHelper){
+        dbHelper.getReadableDatabase().delete("DATA_COLL_TABLE",null,null );
+    }
+
+    public static void insertDataColl(DatabaseHelper dbHelper, String name, int color, Time reminderTime )
+    {
+        ContentValues dataCollValues = new ContentValues();
+        dataCollValues.put("NAME", name);
+        dataCollValues.put("COLOR", color);
+        dataCollValues.put("REMINDER_TIME", reminderTime.toString());
+        dbHelper.getReadableDatabase().insert("DATA_COLL_TABLE",null, dataCollValues);
+    }
+
+    public static void insertDataValue(SQLiteDatabase db, int IDDataColl, int value, Date date )
+    {
+        ContentValues dataCollValues = new ContentValues();
+        dataCollValues.put("ID_DATA_COLL", IDDataColl);
+        dataCollValues.put("VALUE", value);
+        dataCollValues.put("DATE", date.toString());
+        db.insert("DATA_VALUE_TABLE",null, dataCollValues);
     }
 }

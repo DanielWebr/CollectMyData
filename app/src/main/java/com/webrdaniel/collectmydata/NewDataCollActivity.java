@@ -53,7 +53,7 @@ public class NewDataCollActivity extends AppCompatActivity {
 
     private void makeResult(int result) {
         Intent i = new Intent();
-        mDataCollItem.setmDataCollName(mUserEnteredText);
+        mDataCollItem.setName(mUserEnteredText);
         i.putExtra(MainActivity.DATA_COLL_ITEM, mDataCollItem);
         setResult(result,i);
     }

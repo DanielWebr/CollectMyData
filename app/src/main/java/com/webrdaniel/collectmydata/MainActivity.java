@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager mLayoutManager;
     private ArrayList<DataCollItem> mDataCollItemsArrayList;
     private IOData mIOData;
+    private DatabaseHelper mdatabaseHelper;
     public static final String FILENAME = "datacollitems.json";
     public static final String DATA_COLL_ITEM = "com.webrdaniel.collectmydata.MainActivity";
     public static final String DATA_DELETED = "";
@@ -54,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
         mIOData = new IOData(this, FILENAME);
         mDataCollItemsArrayList = mIOData.getLocallyStoredData();
 
+        mdatabaseHelper = new DatabaseHelper(this);
+
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -65,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent newDataColl= new Intent(MainActivity.this, NewDataCollActivity.class);
                 DataCollItem item = new DataCollItem();
-                item.setmColor(Utils.getMatColor(MainActivity.this));
+                item.setColor(Utils.getMatColor(MainActivity.this));
                 newDataColl.putExtra(DATA_COLL_ITEM, item);
                 startActivityForResult(newDataColl, NEW_DATA_COLL_ITEM);
             }
@@ -97,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
                 DataCollItem item = (DataCollItem) data.getSerializableExtra(DATA_COLL_ITEM);
                 mDataCollItemsArrayList.add(item);
                 adapter.notifyDataSetChanged();
+                IOData.insertDataColl(mdatabaseHelper,item.getName(),item.getColor(),item.getReminderTime());
                 break;
 
             case SETTING:
@@ -106,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
                     mDataCollItemsArrayList.clear();
                     adapter.notifyDataSetChanged();
                     Log.d("TAG", "onActivityResult: vymazáno");
+                    IOData.deleteDataSQLite(mdatabaseHelper);
                 }
                 break;
         }
@@ -137,9 +142,8 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(final BasicListAdapter.ViewHolder holder, final int position) {
             DataCollItem item = items.get(position);
-            holder.mDataCollname.setText(item.getmDataCollName());
-            Context context = MainActivity.this;
-            int color = item.getmColor();
+            holder.mDataCollname.setText(item.getName());
+            int color = item.getColor();
            ImageViewCompat.setImageTintList( holder.mIcon, ColorStateList.valueOf(color));
         }
 

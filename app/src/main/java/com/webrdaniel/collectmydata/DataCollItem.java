@@ -4,50 +4,47 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.UUID;
+import java.sql.Time;
 
- class DataCollItem implements Serializable {
-    private String mDataCollName;
-    private UUID mTodoIdentifier;
-    private int mColor;
+class DataCollItem implements Serializable {
+    private String name;
+    private int color;
+    private Time reminderTime;
     private static final String DATACOLLITEM = "datacollitem";
-     private static final String COLOR = "todocolor";
+    private static final String COLOR = "todocolor";
 
     public DataCollItem(){
-
+        reminderTime = new Time(125);
     }
 
-
     public DataCollItem(JSONObject jsonObject) throws JSONException {
-        mDataCollName = jsonObject.getString(DATACOLLITEM);
-        mColor = jsonObject.getInt(COLOR);
+        name = jsonObject.getString(DATACOLLITEM);
+        color = jsonObject.getInt(COLOR);
 
     }
 
     public JSONObject toJSON() throws JSONException{
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put(DATACOLLITEM, mDataCollName);
-        jsonObject.put(COLOR, mColor);
+        jsonObject.put(DATACOLLITEM, name);
+        jsonObject.put(COLOR, color);
         return jsonObject;
     }
-
-    public void setmDataCollName(String mDataCollName) {
-        this.mDataCollName = mDataCollName;
+    public Time getReminderTime() {
+        return reminderTime;
     }
-
-    public String getmDataCollName() {
-        return mDataCollName;
+    public void setReminderTime(Time reminderTime) {
+        this.reminderTime = reminderTime;
     }
-     public UUID getIdentifier(){
-         return mTodoIdentifier;
-     }
-
-     public void setmColor(int mTodoColor) {
-         this.mColor = mTodoColor;
-     }
-
-     public int getmColor() {
-         return mColor;
-     }
+    public void setName(String name) {
+        this.name = name;
+    }
+    public String getName() {
+        return name;
+    }
+    public void setColor(int mTodoColor) {
+        this.color = mTodoColor;
+    }
+    public int getColor() {
+        return color;
+    }
 }
