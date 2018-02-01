@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="mdcolor">
+    <item name="red_200" type="color">#f69988</item>
+    <item name="pink_200" type="color">#f48fb1</item>
+    <item name="purple_200" type="color">#ce93d8</item>
+    <item name="deep_purple_200" type="color">#b39ddb</item>
+    <item name="indigo_200" type="color">#9fa8da</item>
+    <item name="blue_200" type="color">#afbfff</item>
+    <item name="light_blue_200" type="color">#81d4fa</item>
+    <item name="cyan_200" type="color">#80deea</item>
+    <item name="teal_200" type="color">#80cbc4</item>
+    <item name="green_200" type="color">#72d572</item>
+    <item name="light_green_200" type="color">#c5e1a5</item>
+    <item name="lime_200" type="color">#e6ee9c</item>
+    <item name="yellow_200" type="color">#fff59d</item>
+    <item name="orange_200" type="color">#ffcc80</item>
+    <item name="deep_orange_200" type="color">#ffab91</item>
+    <item name="brown_200" type="color">#bcaaa4</item>
+    <item name="grey_200" type="color">#eeeeee</item>
+    <item name="blue_grey_200" type="color">#b0bec5</item>
+    </array>
+</resources>

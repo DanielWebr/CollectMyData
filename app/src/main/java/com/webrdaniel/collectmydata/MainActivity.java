@@ -1,8 +1,12 @@
 package com.webrdaniel.collectmydata;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.ImageViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,8 +17,8 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONException;
 
@@ -61,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent newDataColl= new Intent(MainActivity.this, NewDataCollActivity.class);
                 DataCollItem item = new DataCollItem();
+                item.setmColor(Utils.getMatColor(MainActivity.this));
                 newDataColl.putExtra(DATA_COLL_ITEM, item);
                 startActivityForResult(newDataColl, NEW_DATA_COLL_ITEM);
             }
@@ -116,6 +121,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void addData(View view) {
+    }
+
     class BasicListAdapter extends RecyclerView.Adapter<BasicListAdapter.ViewHolder>{
         private ArrayList<DataCollItem> items;
         public static final String DATA_COLL_ITEM = "com.webrdaniel.collectmydata.MainActivity";
@@ -130,6 +138,9 @@ public class MainActivity extends AppCompatActivity {
         public void onBindViewHolder(final BasicListAdapter.ViewHolder holder, final int position) {
             DataCollItem item = items.get(position);
             holder.mDataCollname.setText(item.getmDataCollName());
+            Context context = MainActivity.this;
+            int color = item.getmColor();
+           ImageViewCompat.setImageTintList( holder.mIcon, ColorStateList.valueOf(color));
         }
 
         @Override
@@ -145,6 +156,7 @@ public class MainActivity extends AppCompatActivity {
         public class ViewHolder extends RecyclerView.ViewHolder{
             View mView;
             TextView mDataCollname;
+            ImageView mIcon;
 
             public ViewHolder(View v){
                 super(v);
@@ -158,7 +170,8 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(i);
                     }
                 });
-                mDataCollname = (TextView)v.findViewById(R.id.data_coll_name);
+                mDataCollname = v.findViewById(R.id.tv_name);
+                mIcon = v.findViewById(R.id.iv_icon);
             }
 
 
