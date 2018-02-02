@@ -7,7 +7,6 @@ import android.view.View;
 
 public class SettingActivity extends AppCompatActivity {
 
-    public static final String FILENAME = "datacollitems.json";
     private boolean dataDeleted;
 
     @Override

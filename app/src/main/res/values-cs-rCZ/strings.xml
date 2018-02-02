@@ -5,5 +5,9 @@
     <string name="setting_reset">Vymazat data aplikace</string>
     <string name="setting_delete">Vymazat</string>
     <string name="tab_overview">Přehled</string>
-    <string name="input_data_dialog_title">Vlož data</string>
+    <string name="enter_data">Enter data</string>
+    <string name="value">hodnota:</string>
+    <string name="add">Přidat</string>
+    <string name="cancel">Zrušit</string>
+    <string name="ValueRequired">Chybý požadovaná hodnota</string>
 </resources>

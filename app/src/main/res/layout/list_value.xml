@@ -4,21 +4,43 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp"
     android:background="?android:attr/selectableItemBackground"
     android:minHeight="40dp"
-    android:orientation="vertical">
+    android:orientation="horizontal">
+
+    <Space
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
 
     <TextView
         android:id="@+id/tv_value_date"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:gravity="center_vertical"
         android:textAppearance="?attr/textAppearanceListItem"
-        tools:text="cus" />
+        android:textSize="24sp"
+        tools:text="date" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:text="@string/value"
+        android:gravity="start|center_vertical"
+        android:textSize="24sp" />
+
     <TextView
         android:id="@+id/tv_value"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:gravity="start|center_vertical"
         android:textAppearance="?attr/textAppearanceListItem"
-        tools:text="cus" />
+        android:textSize="24sp"
+        tools:text="value" />
 
 </LinearLayout>

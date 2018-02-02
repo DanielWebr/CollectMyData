@@ -8,8 +8,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Switch;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -34,6 +32,7 @@ public class NewDataCollActivity extends AppCompatActivity {
                 finish();
             }
         });
+        et_name.requestFocus();
         et_name.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -50,6 +49,7 @@ public class NewDataCollActivity extends AppCompatActivity {
 
             }
         });
+        Utils.keyboardOptions(this, null);
     }
 
     @Override
@@ -59,6 +59,7 @@ public class NewDataCollActivity extends AppCompatActivity {
     }
 
     private void makeResult(int result) {
+        Utils.keyboardOptions(this, et_name);
         Intent i = new Intent();
         if(result==RESULT_OK)
         {

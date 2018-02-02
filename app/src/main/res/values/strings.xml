@@ -5,4 +5,9 @@
     <string name="setting_delete">Vymazat</string>
     <string name="tab_overview">Overview</string>
     <string name="input_data_dialog_title">Enter data</string>
+    <string name="enter_data">Enter data</string>
+    <string name="value">value:</string>
+    <string name="add">Add</string>
+    <string name="cancel">Cancel</string>
+    <string name="ValueRequired">Value required</string>
 </resources>

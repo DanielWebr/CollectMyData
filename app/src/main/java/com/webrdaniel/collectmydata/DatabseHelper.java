@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import java.util.Date;
 import java.util.ArrayList;
@@ -39,7 +38,6 @@ class DatabaseHelper extends SQLiteOpenHelper {
                 "date TEXT);";
         db.execSQL(queryDataCollTable);
         db.execSQL(queryValuesTable);
-
     }
 
     @Override
@@ -88,6 +86,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
               dataCollItems.add(item);
           }while(cursor.moveToNext());
       }
+        cursor.close();
         return dataCollItems;
     }
 
@@ -101,10 +100,11 @@ class DatabaseHelper extends SQLiteOpenHelper {
         {
             do{
                 values.put(
-                        Utils.stringToDate(cursor.getString(3),"dd.MM.yy"),
+                        Utils.stringToDate(cursor.getString(3),"ss:mm:HH d.M.yyyy"),
                         Integer.parseInt(cursor.getString(2)));
             }while(cursor.moveToNext());
         }
+        cursor.close();
         return values;
     }
 

@@ -1,29 +1,17 @@
 package com.webrdaniel.collectmydata;
 
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.ImageViewCompat;
-import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class DataListFragment extends Fragment {
 
@@ -39,7 +27,6 @@ public class DataListFragment extends Fragment {
         DataCollDetailActivity parent = (DataCollDetailActivity) getActivity();
         mDatabaseHelper = new DatabaseHelper(getActivity());
         mValueHashMap = mDatabaseHelper.getValues(parent.getmDataCollItem().getId());
-        Log.d("TAG", "onCreate: "+mValueHashMap.toString());
     }
 
     @Override
@@ -56,6 +43,10 @@ public class DataListFragment extends Fragment {
 
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
+
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL);
+        mRecyclerView.addItemDecoration(dividerItemDecoration);
+
         return mRecyclerView;
     }
     class BasicListAdapter extends RecyclerView.Adapter<BasicListAdapter.ViewHolder>{
@@ -71,7 +62,7 @@ public class DataListFragment extends Fragment {
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {
             holder.mValue.setText(Integer.toString(items.get(keys.get(position))));
-            holder.mValueDate.setText(Utils.dateToString(keys.get(position),"dd.MM."));
+            holder.mValueDate.setText(Utils.dateToString(keys.get(position),"d. M."));
         }
 
         @Override
