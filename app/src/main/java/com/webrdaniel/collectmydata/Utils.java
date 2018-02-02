@@ -3,12 +3,16 @@ package com.webrdaniel.collectmydata;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.util.Log;
 
-/**
- * Created by dandu on 31.01.2018.
- */
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+
 
 public class Utils {
+
 
     public static int getMatColor(Context context)
     {
@@ -20,4 +24,22 @@ public class Utils {
         colors.recycle();
         return returnColor;
     }
+
+    public static Date stringToDate(String date, String format)
+    {
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        try {
+            return sdf.parse(date);
+        } catch (ParseException e) {
+            Log.d("Util parse", "stringToDate: nono");
+            return new Date();
+        }
+    }
+
+    public static String dateToString(Date date, String format)
+    {
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        return sdf.format(date);
+    }
+
 }

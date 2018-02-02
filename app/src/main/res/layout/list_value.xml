@@ -9,9 +9,16 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/list_title"
+        android:id="@+id/tv_value_date"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:textAppearance="?attr/textAppearanceListItem"
         tools:text="cus" />
+    <TextView
+        android:id="@+id/tv_value"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textAppearance="?attr/textAppearanceListItem"
+        tools:text="cus" />
+
 </LinearLayout>

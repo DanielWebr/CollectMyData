@@ -1,28 +1,26 @@
 package com.webrdaniel.collectmydata;
 
-import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.ImageViewCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.json.JSONException;
-
-import java.io.IOException;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -33,12 +31,10 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.fab) FloatingActionButton fab;
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.recycler_view) RecyclerView mRecyclerView;
-    private BasicListAdapter adapter;
+    private CardAdapter adapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private ArrayList<DataCollItem> mDataCollItemsArrayList;
-    private IOData mIOData;
-    private DatabaseHelper mdatabaseHelper;
-    public static final String FILENAME = "datacollitems.json";
+    private DatabaseHelper mDatabaseHelper;
     public static final String DATA_COLL_ITEM = "com.webrdaniel.collectmydata.MainActivity";
     public static final String DATA_DELETED = "";
     private static final int NEW_DATA_COLL_ITEM = 100;
@@ -52,15 +48,13 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
 
-        mIOData = new IOData(this, FILENAME);
-        mDataCollItemsArrayList = mIOData.getLocallyStoredData();
+        mDatabaseHelper = new DatabaseHelper(this);
 
-        mdatabaseHelper = new DatabaseHelper(this);
-
+        mDataCollItemsArrayList = mDatabaseHelper.getDataCollItems();
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        adapter = new BasicListAdapter(mDataCollItemsArrayList);
+        adapter = new CardAdapter(mDataCollItemsArrayList);
         mRecyclerView.setAdapter(adapter);
 
         fab.setOnClickListener(new View.OnClickListener() {
@@ -95,12 +89,13 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == RESULT_CANCELED) return;
         switch (requestCode) {
             case NEW_DATA_COLL_ITEM:
                 DataCollItem item = (DataCollItem) data.getSerializableExtra(DATA_COLL_ITEM);
                 mDataCollItemsArrayList.add(item);
                 adapter.notifyDataSetChanged();
-                IOData.insertDataColl(mdatabaseHelper,item.getName(),item.getColor(),item.getReminderTime());
+                item.setId(mDatabaseHelper.insertDataColl(item.getName(), item.getColor(), item.getReminderTimeString()));
                 break;
 
             case SETTING:
@@ -109,38 +104,24 @@ public class MainActivity extends AppCompatActivity {
                 {
                     mDataCollItemsArrayList.clear();
                     adapter.notifyDataSetChanged();
-                    Log.d("TAG", "onActivityResult: vymazáno");
-                    IOData.deleteDataSQLite(mdatabaseHelper);
                 }
                 break;
         }
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        try {
-            mIOData.saveToFile(mDataCollItemsArrayList);
-        } catch (JSONException | IOException e) {
-            e.printStackTrace();
-        }
-    }
 
-    public void addData(View view) {
-    }
-
-    class BasicListAdapter extends RecyclerView.Adapter<BasicListAdapter.ViewHolder>{
+    class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder>{
         private ArrayList<DataCollItem> items;
         public static final String DATA_COLL_ITEM = "com.webrdaniel.collectmydata.MainActivity";
 
         @Override
-        public BasicListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public CardAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_data_coll, parent, false);
             return new ViewHolder(v);
         }
 
         @Override
-        public void onBindViewHolder(final BasicListAdapter.ViewHolder holder, final int position) {
+        public void onBindViewHolder(final CardAdapter.ViewHolder holder, final int position) {
             DataCollItem item = items.get(position);
             holder.mDataCollname.setText(item.getName());
             int color = item.getColor();
@@ -152,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
             return items.size();
         }
 
-        BasicListAdapter(ArrayList<DataCollItem> items){
+        CardAdapter(ArrayList<DataCollItem> items){
             this.items = items;
         }
 
@@ -161,10 +142,14 @@ public class MainActivity extends AppCompatActivity {
             View mView;
             TextView mDataCollname;
             ImageView mIcon;
+            ImageButton mIbDialog;
 
             public ViewHolder(View v){
                 super(v);
                 mView = v;
+                mDataCollname = v.findViewById(R.id.tv_name);
+                mIcon = v.findViewById(R.id.iv_icon);
+                mIbDialog = v.findViewById(R.id.ib_dialog);
                 v.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -174,8 +159,36 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(i);
                     }
                 });
-                mDataCollname = v.findViewById(R.id.tv_name);
-                mIcon = v.findViewById(R.id.iv_icon);
+                mIbDialog.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        final DataCollItem item = items.get(ViewHolder.this.getAdapterPosition());
+                        LayoutInflater layoutInflaterAndroid = LayoutInflater.from(MainActivity.this);
+                        View mView = layoutInflaterAndroid.inflate(R.layout.input_dialog, null);
+                        AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(MainActivity.this);
+                        alertDialogBuilderUserInput.setView(mView);
+
+                        final EditText etValue = mView.findViewById(R.id.et_value);
+                        final EditText etDate = mView.findViewById(R.id.et_date);
+                        alertDialogBuilderUserInput
+                                .setCancelable(false)
+                                .setPositiveButton("Send", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialogBox, int id) {
+                                        mDatabaseHelper.insertDataValue(item.getId(),Integer.parseInt(etValue.getText().toString()),etDate.getText().toString());
+                                    }
+                                })
+                                .setNegativeButton("Cancel",
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialogBox, int id) {
+                                                dialogBox.cancel();
+                                            }
+                                        });
+
+                        AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
+                        alertDialogAndroid.show();
+                    }
+                });
+
             }
 
 

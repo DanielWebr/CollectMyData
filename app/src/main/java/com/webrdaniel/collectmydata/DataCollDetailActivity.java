@@ -22,6 +22,8 @@ public class DataCollDetailActivity extends AppCompatActivity {
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.viewpager) ViewPager viewPager;
     @BindView(R.id.tabs) TabLayout tabs;
+    private DataCollItem mDataCollItem;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +32,7 @@ public class DataCollDetailActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         setupViewPager(viewPager);
         tabs.setupWithViewPager(viewPager);
+        mDataCollItem = (DataCollItem)getIntent().getSerializableExtra(MainActivity.DATA_COLL_ITEM);
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -81,5 +84,9 @@ public class DataCollDetailActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public DataCollItem getmDataCollItem() {
+        return mDataCollItem;
     }
 }

@@ -8,6 +8,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Switch;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -51,10 +52,19 @@ public class NewDataCollActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        makeResult(RESULT_CANCELED);
+        finish();
+    }
+
     private void makeResult(int result) {
         Intent i = new Intent();
-        mDataCollItem.setName(mUserEnteredText);
-        i.putExtra(MainActivity.DATA_COLL_ITEM, mDataCollItem);
-        setResult(result,i);
+        if(result==RESULT_OK)
+        {
+            mDataCollItem.setName(mUserEnteredText);
+            i.putExtra(MainActivity.DATA_COLL_ITEM, mDataCollItem);
+        }
+        setResult(result, i);
     }
 }

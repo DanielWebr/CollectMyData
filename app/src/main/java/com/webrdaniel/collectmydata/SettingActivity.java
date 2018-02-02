@@ -9,7 +9,6 @@ public class SettingActivity extends AppCompatActivity {
 
     public static final String FILENAME = "datacollitems.json";
     private boolean dataDeleted;
-    private IOData mIOData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,8 +19,8 @@ public class SettingActivity extends AppCompatActivity {
     }
 
     public void deleteData(View view) {
-        mIOData = new IOData(this,FILENAME);
-        mIOData.deleteData();
+        DatabaseHelper dbHelper = new DatabaseHelper(this);
+        dbHelper.deleteDataSQLite();
         dataDeleted = true;
         makeResult(RESULT_OK);
     }
