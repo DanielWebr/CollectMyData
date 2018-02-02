@@ -11,20 +11,20 @@ class DataCollItem implements Serializable {
     private int id;
 
     public DataCollItem(){
-        reminderTime = Utils.stringToDate("11:25","HH:mm");
+        reminderTime = Utils.stringToDate("11:25",Utils.DATE_FORMAT_REMINDER);
     }
     public DataCollItem(int id, String name, int color, String reminderTime){
         this.id = id;
         this.name = name;
         this.color = color;
-        this.reminderTime = Utils.stringToDate(reminderTime,"HH:mm");
+        this.reminderTime = Utils.stringToDate(reminderTime,Utils.DATE_FORMAT_REMINDER);
     }
 
     public Date getReminderTime() {
         return reminderTime;
     }
     public String getReminderTimeString() {
-        return Utils.dateToString(reminderTime,"HH:mm");
+        return Utils.dateToString(reminderTime,Utils.DATE_FORMAT_REMINDER);
     }
     public void setName(String name) {
         this.name = name;

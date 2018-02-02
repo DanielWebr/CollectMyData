@@ -96,5 +96,10 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
     }
+    protected void onPause() {
+        super.onPause();
+        Utils.hideKeyboard(this);
+    }
+
 }
 
