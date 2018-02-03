@@ -44,7 +44,7 @@ public class DataListFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(), R.drawable.devider);
         mRecyclerView.addItemDecoration(dividerItemDecoration);
 
         return mRecyclerView;

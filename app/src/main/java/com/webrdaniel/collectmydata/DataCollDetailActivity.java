@@ -1,5 +1,7 @@
 package com.webrdaniel.collectmydata;
 
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -10,6 +12,8 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.List;
 import butterknife.BindView;
@@ -17,7 +21,7 @@ import butterknife.ButterKnife;
 
 public class DataCollDetailActivity extends AppCompatActivity {
 
-    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.toolbar) protected Toolbar toolbar;
     @BindView(R.id.viewpager) ViewPager viewPager;
     @BindView(R.id.tabs) TabLayout tabs;
     protected DataCollItem mDataCollItem;
@@ -29,6 +33,7 @@ public class DataCollDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_data_coll_detail);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
+
         setupViewPager(viewPager);
         tabs.setupWithViewPager(viewPager);
         mDataCollItem = (DataCollItem)getIntent().getSerializableExtra(MainActivity.DATA_COLL_ITEM);

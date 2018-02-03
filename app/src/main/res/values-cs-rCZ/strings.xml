@@ -11,10 +11,10 @@
     <string name="cancel">Zrušit</string>
     <string name="ValueRequired">Chybý požadovaná hodnota</string>
     <string name="avg">Průměr hodnot:</string>
-    <string name="sum">Suučet hodnot</string>
+    <string name="sum">Součet hodnot</string>
     <string name="min">Minimální hodnota:</string>
     <string name="max">Maximální hodnota:</string>
-    <string name="count">Počet hodnot</string>
+    <string name="count">Počet hodnot:</string>
     <string name="name_of_data_collection">Název datové kolekce</string>
     <string name="nameError">Název požadován</string>
 </resources>
