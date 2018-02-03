@@ -21,7 +21,7 @@ class CardAdapter extends RecyclerView.Adapter<MainViewHolder>{
     }
 
     @Override
-    public void onBindViewHolder(final MainViewHolder holder, final int position) {
+    public void onBindViewHolder(final MainViewHolder holder, int position) {
         DataCollItem item = mDataCollItemsArrayList.get(position);
         holder.mDataCollname.setText(item.getName());
         int color = item.getColor();

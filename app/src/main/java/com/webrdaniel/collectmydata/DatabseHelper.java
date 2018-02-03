@@ -5,6 +5,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+import android.util.Pair;
+import android.widget.Toast;
 
 import java.util.Date;
 import java.util.ArrayList;
@@ -91,18 +94,18 @@ class DatabaseHelper extends SQLiteOpenHelper {
         return dataCollItems;
     }
 
-    public LinkedHashMap<Date,Integer> getValues (int dataCollId)
+    public ArrayList<Pair<Date, Integer>> getValues (int dataCollId)
     {
         String query = "SELECT  * FROM " + VALUES_TABLE + " WHERE _idDataColl=" + dataCollId + " ORDER BY _id DESC";
-        LinkedHashMap<Date,Integer> values = new LinkedHashMap<>();
+        ArrayList<Pair<Date, Integer>> values = new ArrayList<>();
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
         if(cursor.moveToFirst())
         {
             do{
-                values.put(
+                values.add( new Pair<>(
                         Utils.stringToDate(cursor.getString(3),Utils.DATE_FORMAT_RAW),
-                        cursor.getInt(2));
+                        cursor.getInt(2)));
             }while(cursor.moveToNext());
         }
         cursor.close();
@@ -136,4 +139,21 @@ class DatabaseHelper extends SQLiteOpenHelper {
         return result;
     }
 
+    public void renameDataColl(int id, String name) {
+        String queryRenameDataColl = "UPDATE "+DATA_COLL_TABLE+
+                " SET name = '"+ name +"'"+
+                " WHERE _id = " + id;
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL(queryRenameDataColl);
+    }
+
+    public void deleteDataColl(int id) {
+        String queryDeleteDataColl = "DELETE FROM "+DATA_COLL_TABLE+
+                " WHERE _id = " + id;
+        String queryDeleteValues = "DELETE FROM "+VALUES_TABLE+
+                " WHERE _idDataColl = " + id;
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL(queryDeleteDataColl);
+        db.execSQL(queryDeleteValues);
+    }
 }

@@ -6,11 +6,10 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
-import android.widget.EditText;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -38,7 +37,7 @@ public class NewDataCollActivity extends AppCompatActivity {
                 }
                 else
                 {
-                    et_name.setError(getResources().getString(R.string.nameError));
+                    et_name.setError(getResources().getString(R.string.name_error));
                 }
             }
         });

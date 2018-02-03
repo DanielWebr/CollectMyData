@@ -10,6 +10,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -20,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.fab) FloatingActionButton fab;
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.recycler_view) RecyclerView mRecyclerView;
-    private CardAdapter adapter;
+    protected CardAdapter adapter;
     private RecyclerView.LayoutManager mLayoutManager;
     protected ArrayList<DataCollItem> mDataCollItemsArrayList;
     protected DatabaseHelper mDatabaseHelper;
@@ -81,9 +83,10 @@ public class MainActivity extends AppCompatActivity {
         switch (requestCode) {
             case NEW_DATA_COLL_ITEM:
                 DataCollItem item = (DataCollItem) data.getSerializableExtra(DATA_COLL_ITEM);
+                int id = mDatabaseHelper.insertDataColl(item.getName(), item.getColor(), item.getReminderTimeString());
+                item.setId(id);
                 mDataCollItemsArrayList.add(item);
                 adapter.notifyDataSetChanged();
-                item.setId(mDatabaseHelper.insertDataColl(item.getName(), item.getColor(), item.getReminderTimeString()));
                 break;
 
             case SETTING:

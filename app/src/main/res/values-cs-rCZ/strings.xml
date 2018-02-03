@@ -6,15 +6,19 @@
     <string name="setting_delete">Vymazat</string>
     <string name="tab_overview">Přehled</string>
     <string name="enter_data">Vlož data</string>
-    <string name="value">hodnota:</string>
+    <string name="value">hodnota</string>
     <string name="add">Přidat</string>
     <string name="cancel">Zrušit</string>
-    <string name="ValueRequired">Chybý požadovaná hodnota</string>
     <string name="avg">Průměr hodnot:</string>
     <string name="sum">Součet hodnot</string>
     <string name="min">Minimální hodnota:</string>
     <string name="max">Maximální hodnota:</string>
     <string name="count">Počet hodnot:</string>
     <string name="name_of_data_collection">Název datové kolekce</string>
-    <string name="nameError">Název požadován</string>
+    <string name="name_error">Název požadován</string>
+    <string name="rename">Přejmenovat</string>
+    <string name="delete">Odstranit</string>
+    <string name="data_added">Data přidána</string>
+    <string name="name">Jméno</string>
+    <string name="really_dellete">Opravdu odstranit datovou kolekci?</string>
 </resources>

@@ -51,6 +51,17 @@
                 android:layout_weight="1"
                 android:background="@drawable/ic_add_black_24dp"
                 android:backgroundTint="@color/secondaryDarkColor"/>
+
+            <ImageButton
+                android:id="@+id/ib_menu"
+                android:layout_width="20dp"
+                android:layout_height="30dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginTop="8dp"
+                android:background="@null"
+                android:tint="@android:color/darker_gray"
+                android:onClick="showCardMenu"
+                android:src="@drawable/ic_more_vert_black_24dp" />
         </LinearLayout>
     </android.support.v7.widget.CardView>
 </LinearLayout>

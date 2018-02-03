@@ -5,15 +5,19 @@
     <string name="setting_delete">Vymazat</string>
     <string name="tab_overview">Overview</string>
     <string name="enter_data">Enter data</string>
-    <string name="value">value:</string>
+    <string name="value">value</string>
     <string name="add">Add</string>
     <string name="cancel">Cancel</string>
-    <string name="ValueRequired">Value required</string>
     <string name="sum">Sum of values:</string>
     <string name="avg">Average value:</string>
     <string name="min">Minimal value:</string>
     <string name="max">Maximal value:</string>
     <string name="count">Number of values:</string>
     <string name="name_of_data_collection">Name of data collection</string>
-    <string name="nameError">Name required</string>
+    <string name="name_error">Name required</string>
+    <string name="rename">Rename</string>
+    <string name="delete">Delete</string>
+    <string name="data_added">Data added</string>
+    <string name="name">Name</string>
+    <string name="really_dellete">Really delete data collection?</string>
 </resources>

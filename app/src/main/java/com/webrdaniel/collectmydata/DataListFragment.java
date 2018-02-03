@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +19,7 @@ public class DataListFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private BasicListAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private LinkedHashMap<Date,Integer> mValueHashMap;
+    private ArrayList<Pair<Date, Integer>> mValueHashMap;
     private DatabaseHelper mDatabaseHelper;
 
     @Override
@@ -44,14 +45,14 @@ public class DataListFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(), R.drawable.devider);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(),  DividerItemDecoration.VERTICAL);
+        dividerItemDecoration.setDrawable(getActivity().getDrawable(R.drawable.divider));
         mRecyclerView.addItemDecoration(dividerItemDecoration);
 
         return mRecyclerView;
     }
     class BasicListAdapter extends RecyclerView.Adapter<BasicListAdapter.ViewHolder>{
-        private LinkedHashMap<Date,Integer> items;
-        private ArrayList<Date> keys;
+        private ArrayList<Pair<Date, Integer>> items;
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -60,19 +61,17 @@ public class DataListFragment extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(final ViewHolder holder, final int position) {
-            holder.mValue.setText(String.valueOf(items.get(keys.get(position))));
-            holder.mValueDate.setText(Utils.dateToString(keys.get(position),"d. M."));
+        public void onBindViewHolder(final ViewHolder holder,int position) {
+            holder.mValue.setText(String.valueOf(items.get(position).second));
+            holder.mValueDate.setText(Utils.dateToString(items.get(position).first,"d. M."));
         }
-
         @Override
         public int getItemCount() {
             return items.size();
         }
 
-        BasicListAdapter(LinkedHashMap<Date,Integer> items){
+        BasicListAdapter(ArrayList<Pair<Date, Integer>> items){
             this.items = items;
-            this.keys = new ArrayList<>(items.keySet());
         }
 
         @SuppressWarnings("deprecation")
