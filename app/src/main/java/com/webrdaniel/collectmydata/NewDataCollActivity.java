@@ -2,10 +2,12 @@ package com.webrdaniel.collectmydata;
 
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
@@ -17,7 +19,7 @@ public class NewDataCollActivity extends AppCompatActivity {
     private DataCollItem mDataCollItem;
     private String mUserEnteredText;
     @BindView(R.id.fab) FloatingActionButton fab;
-    @BindView(R.id.et_name) EditText et_name;
+    @BindView(R.id.ti_et) TextInputEditText et_name;
 
 
     @Override
@@ -29,8 +31,15 @@ public class NewDataCollActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                makeResult(RESULT_OK);
-                finish();
+                if(!TextUtils.isEmpty(mUserEnteredText))
+                {
+                    makeResult(RESULT_OK);
+                    finish();
+                }
+                else
+                {
+                    et_name.setError(getResources().getString(R.string.nameError));
+                }
             }
         });
         et_name.requestFocus();
@@ -50,7 +59,6 @@ public class NewDataCollActivity extends AppCompatActivity {
 
             }
         });
-        et_name.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
         Utils.showKeyboard(this);
     }
 

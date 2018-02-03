@@ -103,8 +103,8 @@ public class MainViewHolder extends RecyclerView.ViewHolder {
                         });
 
         AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
-        enterListener(etValue,alertDialogAndroid);
         alertDialogAndroid.show();
+        enterListener(etValue,alertDialogAndroid);
         lockButton(alertDialogAndroid, etValue);
         Utils.showKeyboard(activity);
     }

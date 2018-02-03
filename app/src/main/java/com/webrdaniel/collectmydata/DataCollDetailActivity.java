@@ -86,7 +86,4 @@ public class DataCollDetailActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public DataCollItem getmDataCollItem() {
-        return mDataCollItem;
-    }
 }

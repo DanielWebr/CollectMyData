@@ -14,4 +14,6 @@
     <string name="min">Minimal value:</string>
     <string name="max">Maximal value:</string>
     <string name="count">Number of values:</string>
+    <string name="name_of_data_collection">Name of data collection</string>
+    <string name="nameError">Name required</string>
 </resources>

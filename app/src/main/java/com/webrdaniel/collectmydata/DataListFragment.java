@@ -11,14 +11,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class DataListFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
     private BasicListAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private HashMap<Date,Integer> mValueHashMap;
+    private LinkedHashMap<Date,Integer> mValueHashMap;
     private DatabaseHelper mDatabaseHelper;
 
     @Override
@@ -50,7 +50,7 @@ public class DataListFragment extends Fragment {
         return mRecyclerView;
     }
     class BasicListAdapter extends RecyclerView.Adapter<BasicListAdapter.ViewHolder>{
-        private HashMap<Date,Integer> items;
+        private LinkedHashMap<Date,Integer> items;
         private ArrayList<Date> keys;
 
         @Override
@@ -70,7 +70,7 @@ public class DataListFragment extends Fragment {
             return items.size();
         }
 
-        BasicListAdapter(HashMap<Date,Integer> items){
+        BasicListAdapter(LinkedHashMap<Date,Integer> items){
             this.items = items;
             this.keys = new ArrayList<>(items.keySet());
         }

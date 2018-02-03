@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 
 class DatabaseHelper extends SQLiteOpenHelper {
@@ -90,10 +91,10 @@ class DatabaseHelper extends SQLiteOpenHelper {
         return dataCollItems;
     }
 
-    public HashMap<Date,Integer> getValues (int dataCollId)
+    public LinkedHashMap<Date,Integer> getValues (int dataCollId)
     {
-        String query = "SELECT  * FROM " + VALUES_TABLE + " WHERE _idDataColl="+ dataCollId;
-        HashMap<Date,Integer> values = new HashMap<>();
+        String query = "SELECT  * FROM " + VALUES_TABLE + " WHERE _idDataColl=" + dataCollId + " ORDER BY _id DESC";
+        LinkedHashMap<Date,Integer> values = new LinkedHashMap<>();
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
         if(cursor.moveToFirst())
