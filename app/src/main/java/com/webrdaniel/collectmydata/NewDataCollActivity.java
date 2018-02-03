@@ -5,6 +5,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
@@ -49,7 +50,8 @@ public class NewDataCollActivity extends AppCompatActivity {
 
             }
         });
-        Utils.keyboardOptions(this, null);
+        et_name.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+        Utils.showKeyboard(this);
     }
 
     @Override
@@ -59,7 +61,6 @@ public class NewDataCollActivity extends AppCompatActivity {
     }
 
     private void makeResult(int result) {
-        Utils.keyboardOptions(this, et_name);
         Intent i = new Intent();
         if(result==RESULT_OK)
         {
@@ -67,5 +68,11 @@ public class NewDataCollActivity extends AppCompatActivity {
             i.putExtra(MainActivity.DATA_COLL_ITEM, mDataCollItem);
         }
         setResult(result, i);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Utils.hideKeyboard(this);
     }
 }

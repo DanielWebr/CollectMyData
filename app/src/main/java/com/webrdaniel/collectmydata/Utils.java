@@ -3,9 +3,7 @@ package com.webrdaniel.collectmydata;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
-import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -16,6 +14,7 @@ public class Utils {
 
     public static final String DATE_FORMAT_RAW ="ss:mm:HH d.M.yyyy";
     public static final String DATE_FORMAT_DAY ="d. M. yyyy";
+    public static final String DATE_FORMAT_REMINDER ="mm:HH";
 
     public static int getMatColor(Context context)
     {
@@ -43,16 +42,16 @@ public class Utils {
             return sdf.format((date!=null)?date:new Date());
     }
 
-    public static void keyboardOptions(Context activity, View view)
+    public static void showKeyboard(Context activity)
     {
         InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-        if(view == null) {
-            inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-        }
-        else
-        {
-            inputMethodManager.hideSoftInputFromInputMethod(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-        }
+        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+
+    }
+    public  static void hideKeyboard(Context activity)
+    {
+        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+        if(inputMethodManager.isAcceptingText()) inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_NOT_ALWAYS, 0);
     }
 
 }

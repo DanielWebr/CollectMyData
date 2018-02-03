@@ -20,7 +20,8 @@ public class DataCollDetailActivity extends AppCompatActivity {
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.viewpager) ViewPager viewPager;
     @BindView(R.id.tabs) TabLayout tabs;
-    private DataCollItem mDataCollItem;
+    protected DataCollItem mDataCollItem;
+    protected DatabaseHelper mDatabaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +32,7 @@ public class DataCollDetailActivity extends AppCompatActivity {
         setupViewPager(viewPager);
         tabs.setupWithViewPager(viewPager);
         mDataCollItem = (DataCollItem)getIntent().getSerializableExtra(MainActivity.DATA_COLL_ITEM);
+        mDatabaseHelper = new DatabaseHelper(this);
     }
 
     private void setupViewPager(ViewPager viewPager) {

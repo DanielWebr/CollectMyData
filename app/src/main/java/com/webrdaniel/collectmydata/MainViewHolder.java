@@ -94,12 +94,11 @@ public class MainViewHolder extends RecyclerView.ViewHolder {
         .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialogBox, int id) {
                             storeValue(etValue);
-                            Utils.keyboardOptions(activity, etValue);
                         }
                         })
         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialogBox, int id) {
-                        dialogBox.cancel();
+                            dialogBox.cancel();
                         }
                         });
 
@@ -107,7 +106,7 @@ public class MainViewHolder extends RecyclerView.ViewHolder {
         enterListener(etValue,alertDialogAndroid);
         alertDialogAndroid.show();
         lockButton(alertDialogAndroid, etValue);
-        Utils.keyboardOptions(activity,null);
+        Utils.showKeyboard(activity);
     }
 
     public void startDataCollDetailActivity()
@@ -130,7 +129,6 @@ public class MainViewHolder extends RecyclerView.ViewHolder {
                 return false;
             }
         });
-
 
     }
 

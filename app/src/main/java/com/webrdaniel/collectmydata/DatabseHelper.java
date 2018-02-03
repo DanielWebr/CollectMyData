@@ -79,9 +79,9 @@ class DatabaseHelper extends SQLiteOpenHelper {
       {
           do{
               DataCollItem item = new DataCollItem(
-                      Integer.parseInt(cursor.getString(0)),
+                      cursor.getInt(0),
                       cursor.getString(1),
-                      Integer.parseInt(cursor.getString(2)),
+                      cursor.getInt(2),
                       cursor.getString(3));
               dataCollItems.add(item);
           }while(cursor.moveToNext());
@@ -100,12 +100,39 @@ class DatabaseHelper extends SQLiteOpenHelper {
         {
             do{
                 values.put(
-                        Utils.stringToDate(cursor.getString(3),"ss:mm:HH d.M.yyyy"),
-                        Integer.parseInt(cursor.getString(2)));
+                        Utils.stringToDate(cursor.getString(3),Utils.DATE_FORMAT_RAW),
+                        cursor.getInt(2));
             }while(cursor.moveToNext());
         }
         cursor.close();
         return values;
+    }
+
+    public int getValuesSelect (String type, int dataCollId)
+    {
+        int result;
+        String query;
+        switch (type)
+        {
+            case "COUNT": query = "SELECT COUNT(_id) FROM "+ VALUES_TABLE+ " WHERE _idDataColl="+ dataCollId;break;
+            case "MIN": query = "SELECT MIN(value) FROM "+ VALUES_TABLE+ " WHERE _idDataColl="+ dataCollId;break;
+            case "MAX": query = "SELECT MAX(value) FROM "+ VALUES_TABLE+ " WHERE _idDataColl="+ dataCollId;break;
+            case "AVG": query = "SELECT AVG(value) FROM "+ VALUES_TABLE+ " WHERE _idDataColl="+ dataCollId;break;
+            case "SUM": query = "SELECT SUM(value) FROM "+ VALUES_TABLE+ " WHERE _idDataColl="+ dataCollId;break;
+            default: return 0;
+        }
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        if(cursor.moveToFirst())
+        {
+            result = cursor.getInt(0);
+        }
+        else
+        {
+            result = 0;
+        }
+        cursor.close();
+        return result;
     }
 
 }

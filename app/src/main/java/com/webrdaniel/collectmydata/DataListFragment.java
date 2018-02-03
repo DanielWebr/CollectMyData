@@ -25,8 +25,8 @@ public class DataListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         DataCollDetailActivity parent = (DataCollDetailActivity) getActivity();
-        mDatabaseHelper = new DatabaseHelper(getActivity());
-        mValueHashMap = mDatabaseHelper.getValues(parent.getmDataCollItem().getId());
+        mDatabaseHelper = ((DataCollDetailActivity) getActivity()).mDatabaseHelper;
+        mValueHashMap = mDatabaseHelper.getValues(parent.mDataCollItem.getId());
     }
 
     @Override
@@ -61,7 +61,7 @@ public class DataListFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {
-            holder.mValue.setText(Integer.toString(items.get(keys.get(position))));
+            holder.mValue.setText(String.valueOf(items.get(keys.get(position))));
             holder.mValueDate.setText(Utils.dateToString(keys.get(position),"d. M."));
         }
 

@@ -5,9 +5,14 @@
     <string name="setting_reset">Vymazat data aplikace</string>
     <string name="setting_delete">Vymazat</string>
     <string name="tab_overview">Přehled</string>
-    <string name="enter_data">Enter data</string>
+    <string name="enter_data">Vlož data</string>
     <string name="value">hodnota:</string>
     <string name="add">Přidat</string>
     <string name="cancel">Zrušit</string>
     <string name="ValueRequired">Chybý požadovaná hodnota</string>
+    <string name="avg">Průměr hodnot:</string>
+    <string name="sum">Suučet hodnot</string>
+    <string name="min">Minimální hodnota:</string>
+    <string name="max">Maximální hodnota:</string>
+    <string name="count">Počet hodnot</string>
 </resources>
