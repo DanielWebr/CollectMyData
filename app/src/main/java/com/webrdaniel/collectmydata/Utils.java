@@ -120,8 +120,11 @@ public class Utils {
                 }
                 if (previousContent!=null && s.toString().equals(previousContent)) {
                     tv.setTextColor(Color.GRAY);
+                    positiveButton.setEnabled(false);
+
                 } else {
                     tv.setTextColor(Color.BLACK);
+                    positiveButton.setEnabled(true);
                 }
             }
         });

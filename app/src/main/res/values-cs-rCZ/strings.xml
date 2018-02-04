@@ -26,7 +26,7 @@
     <string name="no_data_coll">Nemáš žádné datové kolekce</string>
     <string name="about_app">O aplikaci</string>
     <string name="app_info1">Kód aplikace dostupný na </string>
-    <string name="app_info2"> GitHubu, licence Apache 2.0.</string>
+    <string name="app_info2"> licence Apache 2.0</string>
     <string name="app_icon">Ikona aplikace vytvořena díky Material design icons od společnosti Google.</string>
     <string name="new_dataColl">Nová datová kolekce</string>
 </resources>
