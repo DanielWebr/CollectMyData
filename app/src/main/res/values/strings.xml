@@ -21,4 +21,6 @@
     <string name="name">Name:</string>
     <string name="really_dellete">Really delete data collection?</string>
     <string name="edit">Edit</string>
+    <string name="no_data">There are no data.</string>
+    <string name="no_data_coll">There are no data colletions.</string>
 </resources>

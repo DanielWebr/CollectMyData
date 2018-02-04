@@ -156,6 +156,7 @@ public class MainViewHolder extends RecyclerView.ViewHolder {
     private void deleteDataColl() {
         activity.mDatabaseHelper.deleteDataColl(item.getId());
         activity.mDataCollItemsArrayList.remove(item);
+        activity.messageIfempty();
         activity.adapter.notifyItemRemoved(MainViewHolder.this.getAdapterPosition());
     }
 

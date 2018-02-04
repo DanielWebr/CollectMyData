@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.fab) FloatingActionButton fab;
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.recycler_view) RecyclerView mRecyclerView;
+    @BindView(R.id.empty_view) TextView empty_view;
     protected CardAdapter adapter;
     private RecyclerView.LayoutManager mLayoutManager;
     protected ArrayList<DataCollItem> mDataCollItemsArrayList;
@@ -46,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
         adapter = new CardAdapter(MainActivity.this);
         mRecyclerView.setAdapter(adapter);
+        messageIfempty();
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
                 int id = mDatabaseHelper.insertDataColl(item.getName(), item.getColor(), item.getReminderTimeString());
                 item.setId(id);
                 mDataCollItemsArrayList.add(item);
+                messageIfempty();
                 adapter.notifyItemInserted(adapter.getItemCount());
                 break;
 
@@ -94,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
                 if(dataDeleted)
                 {
                     mDataCollItemsArrayList.clear();
+                    messageIfempty();
                     adapter.notifyDataSetChanged();
                 }
                 break;
@@ -102,6 +107,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         Utils.hideKeyboard(this);
+    }
+
+    protected void messageIfempty()
+    {
+        if (mDataCollItemsArrayList.isEmpty()) {
+            mRecyclerView.setVisibility(View.GONE);
+            empty_view.setVisibility(View.VISIBLE);
+        }
+        else {
+            mRecyclerView.setVisibility(View.VISIBLE);
+            empty_view.setVisibility(View.GONE);
+        }
     }
 
 }

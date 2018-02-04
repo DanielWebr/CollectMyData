@@ -10,9 +10,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -22,6 +22,9 @@ public class DataListFragment extends Fragment {
     private ArrayList<Record> mRecords;
     private DataCollDetailActivity parent;
     private BasicListAdapter mBasicListAdapter;
+    private RecyclerView mRecyclerView;
+    private FrameLayout mFrameLayout;
+    private TextView tv_emptryRV;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,9 +36,10 @@ public class DataListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.recycler_view, container, false);
+        View rootView = inflater.inflate(R.layout.values_recycler_view, container, false);
         rootView.setTag("DataListFragment");
-        RecyclerView mRecyclerView =  rootView.findViewById(R.id.recycler_view);
+        mFrameLayout =  rootView.findViewById(R.id.FrameLayout);
+        mRecyclerView =  rootView.findViewById(R.id.recycler_view_values_list);
         mBasicListAdapter = new BasicListAdapter(mRecords);
         mRecyclerView.setAdapter(mBasicListAdapter);
         mRecyclerView.setHasFixedSize(true);
@@ -45,9 +49,23 @@ public class DataListFragment extends Fragment {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(parent,  DividerItemDecoration.VERTICAL);
         dividerItemDecoration.setDrawable(getContext().getDrawable(R.drawable.divider));
         mRecyclerView.addItemDecoration(dividerItemDecoration);
-
-        return mRecyclerView;
+        tv_emptryRV = mFrameLayout.findViewById(R.id.empty_view);
+        messageIfEmpty();
+        return mFrameLayout;
     }
+
+    private void messageIfEmpty()
+    {
+        if (mRecords.isEmpty()) {
+            mRecyclerView.setVisibility(View.GONE);
+            tv_emptryRV.setVisibility(View.VISIBLE);
+        }
+        else {
+            mRecyclerView.setVisibility(View.VISIBLE);
+            tv_emptryRV.setVisibility(View.GONE);
+        }
+    }
+
     class BasicListAdapter extends RecyclerView.Adapter<BasicListAdapter.ViewHolder>{
         private ArrayList<Record> items;
 

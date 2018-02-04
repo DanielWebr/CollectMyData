@@ -22,4 +22,6 @@
     <string name="name">Jméno:</string>
     <string name="really_dellete">Opravdu odstranit datovou kolekci?</string>
     <string name="edit">Upravit</string>
+    <string name="no_data">Neexistují žádná data.</string>
+    <string name="no_data_coll">Neexistují žádné datkové kolekce.</string>
 </resources>

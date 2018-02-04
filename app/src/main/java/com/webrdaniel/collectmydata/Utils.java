@@ -21,7 +21,7 @@ import java.util.concurrent.Callable;
 
 public class Utils {
 
-    public static final String DATE_FORMAT_RAW ="ss:mm:HH d.M.yyyy";
+    public static final String DATE_FORMAT_RAW ="HH:mm:ss d.M.yyyy";
     public static final String DATE_FORMAT_DAY_MONTH ="d. M.";
     public static final String DATE_FORMAT_MINUTE_HOUR ="mm:HH";
 
