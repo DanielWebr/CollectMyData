@@ -38,7 +38,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
         String queryValuesTable = "CREATE TABLE "+VALUES_TABLE+" ("+
                 "_id INTEGER PRIMARY KEY AUTOINCREMENT, "+
                 "_idDataColl INTEGER, "+
-                "value INTEGER, "+
+                "value DOUBLE, "+
                 "date TEXT);";
         db.execSQL(queryDataCollTable);
         db.execSQL(queryValuesTable);
@@ -58,7 +58,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
         return (int) this.getWritableDatabase().insert(DATA_COLL_TABLE,null, dataCollValues);
     }
 
-    public void insertDataValue(int IDDataColl, int value, String date )
+    public void insertDataValue(int IDDataColl, double value, String date )
     {
         ContentValues dataCollValues = new ContentValues();
         dataCollValues.put("_idDataColl", IDDataColl);
@@ -94,10 +94,10 @@ class DatabaseHelper extends SQLiteOpenHelper {
         return dataCollItems;
     }
 
-    public ArrayList<Pair<Date, Integer>> getValues (int dataCollId)
+    public ArrayList<Pair<Date, Double>> getValues (int dataCollId)
     {
         String query = "SELECT  * FROM " + VALUES_TABLE + " WHERE _idDataColl=" + dataCollId + " ORDER BY _id DESC";
-        ArrayList<Pair<Date, Integer>> values = new ArrayList<>();
+        ArrayList<Pair<Date, Double>> values = new ArrayList<>();
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
         if(cursor.moveToFirst())
@@ -105,16 +105,16 @@ class DatabaseHelper extends SQLiteOpenHelper {
             do{
                 values.add( new Pair<>(
                         Utils.stringToDate(cursor.getString(3),Utils.DATE_FORMAT_RAW),
-                        cursor.getInt(2)));
+                        cursor.getDouble(2)));
             }while(cursor.moveToNext());
         }
         cursor.close();
         return values;
     }
 
-    public int getValuesSelect (String type, int dataCollId)
+    public double getValuesSelect (String type, int dataCollId)
     {
-        int result;
+        double result;
         String query;
         switch (type)
         {
@@ -129,7 +129,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(query, null);
         if(cursor.moveToFirst())
         {
-            result = cursor.getInt(0);
+            result = cursor.getDouble(0);
         }
         else
         {

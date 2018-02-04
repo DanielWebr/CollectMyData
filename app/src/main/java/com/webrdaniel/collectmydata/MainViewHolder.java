@@ -137,7 +137,7 @@ public class MainViewHolder extends RecyclerView.ViewHolder {
     {
         item = activity.mDataCollItemsArrayList.get(MainViewHolder.this.getAdapterPosition());
         activity.mDatabaseHelper.insertDataValue(item.getId(),
-                Integer.parseInt(editText.getText().toString()),
+                Double.parseDouble(editText.getText().toString()),
                 Utils.dateToString(null, Utils.DATE_FORMAT_RAW));
     }
 

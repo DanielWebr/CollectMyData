@@ -54,4 +54,6 @@ public class Utils {
         if(inputMethodManager.isAcceptingText()) inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_NOT_ALWAYS, 0);
     }
 
+
+
 }

@@ -16,18 +16,14 @@ import java.util.LinkedHashMap;
 
 public class DataListFragment extends Fragment {
 
-    private RecyclerView mRecyclerView;
-    private BasicListAdapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
-    private ArrayList<Pair<Date, Integer>> mValueHashMap;
-    private DatabaseHelper mDatabaseHelper;
+    private ArrayList<Pair<Date, Double>> mValueHashMap;
+    private DataCollDetailActivity parent;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        DataCollDetailActivity parent = (DataCollDetailActivity) getActivity();
-        mDatabaseHelper = ((DataCollDetailActivity) getActivity()).mDatabaseHelper;
-        mValueHashMap = mDatabaseHelper.getValues(parent.mDataCollItem.getId());
+        parent = (DataCollDetailActivity) getActivity();
+        mValueHashMap = parent.mDatabaseHelper.getValues(parent.mDataCollItem.getId());
     }
 
     @Override
@@ -35,24 +31,20 @@ public class DataListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.recycler_view, container, false);
         rootView.setTag("DataListFragment");
-        mRecyclerView =  rootView.findViewById(R.id.recycler_view);
-
-        mAdapter = new BasicListAdapter(mValueHashMap);
-        mRecyclerView.setAdapter(mAdapter);
-
+        RecyclerView mRecyclerView =  rootView.findViewById(R.id.recycler_view);
+        mRecyclerView.setAdapter(new BasicListAdapter(mValueHashMap));
         mRecyclerView.setHasFixedSize(true);
-
-        mLayoutManager = new LinearLayoutManager(getActivity());
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(),  DividerItemDecoration.VERTICAL);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(parent,  DividerItemDecoration.VERTICAL);
         dividerItemDecoration.setDrawable(getActivity().getDrawable(R.drawable.divider));
         mRecyclerView.addItemDecoration(dividerItemDecoration);
 
         return mRecyclerView;
     }
     class BasicListAdapter extends RecyclerView.Adapter<BasicListAdapter.ViewHolder>{
-        private ArrayList<Pair<Date, Integer>> items;
+        private ArrayList<Pair<Date, Double>> items;
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -62,7 +54,7 @@ public class DataListFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder,int position) {
-            holder.mValue.setText(String.valueOf(items.get(position).second));
+            holder.mValue.setText(parent.formatNoLastZero.format(items.get(position).second));
             holder.mValueDate.setText(Utils.dateToString(items.get(position).first,"d. M."));
         }
         @Override
@@ -70,7 +62,7 @@ public class DataListFragment extends Fragment {
             return items.size();
         }
 
-        BasicListAdapter(ArrayList<Pair<Date, Integer>> items){
+        BasicListAdapter(ArrayList<Pair<Date, Double>> items){
             this.items = items;
         }
 

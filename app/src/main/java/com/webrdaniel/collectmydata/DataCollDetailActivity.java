@@ -12,8 +12,8 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import butterknife.BindView;
@@ -26,6 +26,7 @@ public class DataCollDetailActivity extends AppCompatActivity {
     @BindView(R.id.tabs) TabLayout tabs;
     protected DataCollItem mDataCollItem;
     protected DatabaseHelper mDatabaseHelper;
+    protected DecimalFormat formatNoLastZero;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +34,8 @@ public class DataCollDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_data_coll_detail);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
+
+        formatNoLastZero = new DecimalFormat("0.##");
 
         setupViewPager(viewPager);
         tabs.setupWithViewPager(viewPager);
