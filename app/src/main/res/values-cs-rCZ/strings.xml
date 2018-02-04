@@ -6,7 +6,7 @@
     <string name="setting_delete">Vymazat</string>
     <string name="tab_overview">Přehled</string>
     <string name="enter_data">Vlož data</string>
-    <string name="value">hodnota</string>
+    <string name="value">hodnota:</string>
     <string name="add">Přidat</string>
     <string name="cancel">Zrušit</string>
     <string name="avg">Průměr hodnot:</string>
@@ -19,6 +19,7 @@
     <string name="rename">Přejmenovat</string>
     <string name="delete">Odstranit</string>
     <string name="data_added">Data přidána</string>
-    <string name="name">Jméno</string>
+    <string name="name">Jméno:</string>
     <string name="really_dellete">Opravdu odstranit datovou kolekci?</string>
+    <string name="edit">Upravit</string>
 </resources>

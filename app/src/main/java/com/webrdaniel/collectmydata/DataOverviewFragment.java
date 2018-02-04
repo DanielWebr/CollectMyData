@@ -1,21 +1,13 @@
 package com.webrdaniel.collectmydata;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import java.text.DecimalFormat;
-
-import butterknife.BindView;
+import android.widget.Toast;
 
 
 public class DataOverviewFragment extends Fragment {
@@ -25,25 +17,36 @@ public class DataOverviewFragment extends Fragment {
     double min, max, sum, avg;
     int count;
     private DataCollDetailActivity parent;
+    private LinearLayout linearLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        parent = (DataCollDetailActivity) getActivity();
-        DatabaseHelper mDatabaseHelper = parent.mDatabaseHelper;
+        parent = (DataCollDetailActivity) getContext();
         dataCollId = parent.mDataCollItem.getId();
-        count = (int)mDatabaseHelper.getValuesSelect("COUNT",dataCollId);
-        if(count!=0) {
-            min = mDatabaseHelper.getValuesSelect("MIN", dataCollId);
-            max = mDatabaseHelper.getValuesSelect("MAX", dataCollId);
-            sum = mDatabaseHelper.getValuesSelect("SUM", dataCollId);
-            avg = mDatabaseHelper.getValuesSelect("AVG", dataCollId);
-        }
+        updateData();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        LinearLayout linearLayout = (LinearLayout) inflater.inflate(R.layout.data_detail_overview, container, false);
+        linearLayout = (LinearLayout) inflater.inflate(R.layout.data_detail_overview, container, false);
+        updateLayout();
+        return linearLayout;
+    }
+
+    public void updateData()
+    {
+        count = (int)parent.mDatabaseHelper.getValuesSelect("COUNT",dataCollId);
+        if(count!=0) {
+            min = parent.mDatabaseHelper.getValuesSelect("MIN", dataCollId);
+            max = parent.mDatabaseHelper.getValuesSelect("MAX", dataCollId);
+            sum = parent.mDatabaseHelper.getValuesSelect("SUM", dataCollId);
+            avg = parent.mDatabaseHelper.getValuesSelect("AVG", dataCollId);
+        }
+    }
+
+    public void updateLayout()
+    {
         tv_count = linearLayout.findViewById(R.id.tv_count);
         tv_min = linearLayout.findViewById(R.id.tv_min);
         tv_max = linearLayout.findViewById(R.id.tv_max);
@@ -54,7 +57,5 @@ public class DataOverviewFragment extends Fragment {
         tv_max.setText(parent.formatNoLastZero.format(max));
         tv_sum.setText(parent.formatNoLastZero.format(sum));
         tv_avg.setText(parent.formatNoLastZero.format(avg));
-        return linearLayout;
-
     }
 }

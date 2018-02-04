@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
                 int id = mDatabaseHelper.insertDataColl(item.getName(), item.getColor(), item.getReminderTimeString());
                 item.setId(id);
                 mDataCollItemsArrayList.add(item);
-                adapter.notifyDataSetChanged();
+                adapter.notifyItemInserted(adapter.getItemCount());
                 break;
 
             case SETTING:

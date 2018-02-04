@@ -1,8 +1,6 @@
 package com.webrdaniel.collectmydata;
 
 
-import android.util.Log;
-
 import java.io.Serializable;
 import java.util.Date;
 
@@ -13,20 +11,20 @@ class DataCollItem implements Serializable {
     private int id;
 
     public DataCollItem(){
-        reminderTime = Utils.stringToDate("11:25",Utils.DATE_FORMAT_REMINDER);
+        reminderTime = Utils.stringToDate("11:25",Utils.DATE_FORMAT_MINUTE_HOUR);
     }
     public DataCollItem(int id, String name, int color, String reminderTime){
         this.id = id;
         this.name = name;
         this.color = color;
-        this.reminderTime = Utils.stringToDate(reminderTime,Utils.DATE_FORMAT_REMINDER);
+        this.reminderTime = Utils.stringToDate(reminderTime,Utils.DATE_FORMAT_MINUTE_HOUR);
     }
 
     public Date getReminderTime() {
         return reminderTime;
     }
     public String getReminderTimeString() {
-        return Utils.dateToString(reminderTime,Utils.DATE_FORMAT_REMINDER);
+        return Utils.dateToString(reminderTime,Utils.DATE_FORMAT_MINUTE_HOUR);
     }
     public void setName(String name) {
         this.name = name;

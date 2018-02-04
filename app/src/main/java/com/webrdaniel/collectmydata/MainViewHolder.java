@@ -1,22 +1,15 @@
 package com.webrdaniel.collectmydata;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -63,100 +56,14 @@ public class MainViewHolder extends RecyclerView.ViewHolder {
         });
     }
 
-    public void lockButton(AlertDialog alertDialogAndroid,final TextInputEditText tv,final String forbiddenText)
-    {
-        final Button positiveButton = alertDialogAndroid.getButton(AlertDialog.BUTTON_POSITIVE);
-        positiveButton.setEnabled(false);
-        tv.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                }
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                }
-            @Override
-            public void afterTextChanged(Editable s) {
-                    if (TextUtils.isEmpty(s)) {
-                        positiveButton.setEnabled(false);
-                    } else {
-                        positiveButton.setEnabled(true);
-                    }
-                if (s.toString().equals(forbiddenText)) {
-                    tv.setTextColor(Color.GRAY);
-                } else {
-                    tv.setTextColor(Color.BLACK);
-                }
-                }
-        });
-    }
-
-    public void showDialogSetValue()
-    {
-        LayoutInflater layoutInflaterAndroid = LayoutInflater.from(activity);
-        View dialog = layoutInflaterAndroid.inflate(R.layout.input_dialog_value, null);
-        final TextInputEditText etValue = dialog.findViewById(R.id.ti_et);
-        final TextView tvDate = dialog.findViewById(R.id.tv_date);
-        tvDate.setText(Utils.dateToString(null, Utils.DATE_FORMAT_DAY));
-
-        Callable method = new Callable() {
-            @Override
-            public Object call() throws Exception {
-                storeValue(etValue);
-                return null;
-            }
-        };
-        setDialog(dialog,etValue,method,R.string.add);
-    }
-
-    public void startDataCollDetailActivity()
-    {
+    private void startDataCollDetailActivity() {
         item = activity.mDataCollItemsArrayList.get(MainViewHolder.this.getAdapterPosition());
         Intent i = new Intent(activity, DataCollDetailActivity.class);
         i.putExtra(MainActivity.DATA_COLL_ITEM, item);
         activity.startActivity(i);
     }
 
-    public void enterListener(final TextInputEditText editText,final AlertDialog alertDialogAndroid)
-    {
-        editText.setOnKeyListener(new View.OnKeyListener() {
-            public boolean onKey(View view, int keyCode, KeyEvent keyevent) {
-                Button button =  alertDialogAndroid.getButton(AlertDialog.BUTTON_POSITIVE);
-                if ((keyevent.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)&& button.isEnabled()) {
-                    button.performClick();
-                    return true;
-                }
-                return false;
-            }
-        });
-
-    }
-
-    public void storeValue(TextInputEditText editText)
-    {
-        item = activity.mDataCollItemsArrayList.get(MainViewHolder.this.getAdapterPosition());
-        activity.mDatabaseHelper.insertDataValue(item.getId(),
-                Double.parseDouble(editText.getText().toString()),
-                Utils.dateToString(null, Utils.DATE_FORMAT_RAW));
-    }
-
-    public void renameDataColl(String name)
-    {
-        activity.mDatabaseHelper.renameDataColl(item.getId(),name);
-        item.setName(name);
-        activity.adapter.notifyDataSetChanged();
-    }
-
-    public void deleteDataColl()
-    {
-        activity.mDatabaseHelper.deleteDataColl(item.getId());
-        activity.mDataCollItemsArrayList.remove(item);
-        activity.adapter.notifyDataSetChanged();
-    }
-
-    public void showPopupMenu()
-    {
+    private void showPopupMenu() {
         item = activity.mDataCollItemsArrayList.get(MainViewHolder.this.getAdapterPosition());
         PopupMenu popup = new PopupMenu(activity,mIbmenu );
         MenuInflater inflater = popup.getMenuInflater();
@@ -188,7 +95,7 @@ public class MainViewHolder extends RecyclerView.ViewHolder {
                 return null;
             }
         };
-        setDialog(dialog,null, methodDeleteDataColl,R.string.delete);
+        Utils.getDialog(dialog,activity, methodDeleteDataColl,R.string.delete);
     }
 
     private void showDialogRename() {
@@ -204,48 +111,52 @@ public class MainViewHolder extends RecyclerView.ViewHolder {
                 return null;
             }
         };
-        setDialog(dialog,et_name, methodRenameDataColl,R.string.rename);
-
+        AlertDialog alertDialog = Utils.getDialog(dialog,activity, methodRenameDataColl,R.string.rename);
+        String name = activity.mDataCollItemsArrayList.get(MainViewHolder.this.getAdapterPosition()).getName();
+        Utils.lockPositiveButtonOnEmptyText(alertDialog, et_name, name);
+        et_name.requestFocus();
+        Utils.OnEnterConfirm(et_name,alertDialog);
+        Utils.showKeyboard(activity);
     }
-    private void setDialog(View dialog, TextInputEditText editText, final Callable method, int positiveButtonText)
-    {
-        AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(activity);
-        alertDialogBuilderUserInput.setView(dialog);
-        alertDialogBuilderUserInput
-                .setCancelable(false)
-                .setPositiveButton(positiveButtonText, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialogBox, int id) {
-                        try{
-                            method.call();
-                        }
-                        catch (Exception e) {}
-                    }
-                })
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialogBox, int id) {
-                        dialogBox.cancel();
-                    }
-                });
 
-        AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
-        alertDialogAndroid.setOnKeyListener(new DialogInterface.OnKeyListener() {
+    private void showDialogSetValue() {
+        LayoutInflater layoutInflaterAndroid = LayoutInflater.from(activity);
+        View dialog = layoutInflaterAndroid.inflate(R.layout.input_dialog_value, null);
+        final TextInputEditText etValue = dialog.findViewById(R.id.ti_et);
+        final TextView tvDate = dialog.findViewById(R.id.tv_date);
+        tvDate.setText(Utils.dateToString(null, Utils.DATE_FORMAT_DAY_MONTH));
+
+        Callable methodStoreValue = new Callable() {
             @Override
-            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_BACK) {
-                    dialog.dismiss();
-                }
-                return false;
+            public Object call() throws Exception {
+                storeValue(Double.parseDouble(etValue.getText().toString()));
+                return null;
             }
-        });
-        alertDialogAndroid.show();
-        if(editText!=null)
-        {
-            String name = activity.mDataCollItemsArrayList.get(MainViewHolder.this.getAdapterPosition()).getName();
-            lockButton(alertDialogAndroid, editText, name);
-            editText.requestFocus();
-            enterListener(editText,alertDialogAndroid);
-            Utils.showKeyboard(activity);
-        }
+        };
+        AlertDialog alertDialog = Utils.getDialog(dialog,activity, methodStoreValue,R.string.add);
+        Utils.lockPositiveButtonOnEmptyText(alertDialog, etValue, null);
+        etValue.requestFocus();
+        Utils.OnEnterConfirm(etValue,alertDialog);
+        Utils.showKeyboard(activity);
+    }
+
+    private void storeValue(Double value) {
+        item = activity.mDataCollItemsArrayList.get(MainViewHolder.this.getAdapterPosition());
+        activity.mDatabaseHelper.insertDataValue(item.getId(),
+                value,
+                Utils.dateToString(null, Utils.DATE_FORMAT_RAW));
+    }
+
+    private void renameDataColl(String name) {
+        activity.mDatabaseHelper.renameDataColl(item.getId(),name);
+        item.setName(name);
+        activity.adapter.notifyItemChanged(MainViewHolder.this.getAdapterPosition());
+    }
+
+    private void deleteDataColl() {
+        activity.mDatabaseHelper.deleteDataColl(item.getId());
+        activity.mDataCollItemsArrayList.remove(item);
+        activity.adapter.notifyItemRemoved(MainViewHolder.this.getAdapterPosition());
     }
 
 }

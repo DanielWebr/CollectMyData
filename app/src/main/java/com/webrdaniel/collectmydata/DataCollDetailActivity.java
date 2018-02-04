@@ -1,7 +1,5 @@
 package com.webrdaniel.collectmydata;
 
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -21,12 +19,14 @@ import butterknife.ButterKnife;
 
 public class DataCollDetailActivity extends AppCompatActivity {
 
-    @BindView(R.id.toolbar) protected Toolbar toolbar;
-    @BindView(R.id.viewpager) ViewPager viewPager;
+    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.viewpager) protected ViewPager viewPager;
     @BindView(R.id.tabs) TabLayout tabs;
     protected DataCollItem mDataCollItem;
     protected DatabaseHelper mDatabaseHelper;
     protected DecimalFormat formatNoLastZero;
+    protected DataOverviewFragment dataOverviewFragment;
+    protected Adapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +44,9 @@ public class DataCollDetailActivity extends AppCompatActivity {
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        Adapter adapter = new Adapter(getSupportFragmentManager());
-        adapter.addFragment(new DataOverviewFragment(),getResources().getString(R.string.tab_overview));
+        adapter = new Adapter(getSupportFragmentManager());
+        dataOverviewFragment = new DataOverviewFragment();
+        adapter.addFragment(dataOverviewFragment,getResources().getString(R.string.tab_overview));
         adapter.addFragment(new DataListFragment(), "Data");
         viewPager.setAdapter(adapter);
     }

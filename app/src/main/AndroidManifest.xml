@@ -20,13 +20,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".NewDataCollActivity"
-            android:screenOrientation="portrait"/>
+        <activity android:name=".NewDataCollActivity" />
         <activity android:name=".SettingActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".DataCollDetailActivity"
             android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden"/>
     </application>
 
 </manifest>

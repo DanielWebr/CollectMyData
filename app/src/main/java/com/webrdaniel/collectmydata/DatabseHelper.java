@@ -94,16 +94,17 @@ class DatabaseHelper extends SQLiteOpenHelper {
         return dataCollItems;
     }
 
-    public ArrayList<Pair<Date, Double>> getValues (int dataCollId)
+    public ArrayList<Record> getValues (int dataCollId)
     {
         String query = "SELECT  * FROM " + VALUES_TABLE + " WHERE _idDataColl=" + dataCollId + " ORDER BY _id DESC";
-        ArrayList<Pair<Date, Double>> values = new ArrayList<>();
+        ArrayList<Record> values = new ArrayList<>();
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
         if(cursor.moveToFirst())
         {
             do{
-                values.add( new Pair<>(
+                values.add( new Record(
+                        cursor.getInt(0),
                         Utils.stringToDate(cursor.getString(3),Utils.DATE_FORMAT_RAW),
                         cursor.getDouble(2)));
             }while(cursor.moveToNext());
@@ -155,5 +156,13 @@ class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL(queryDeleteDataColl);
         db.execSQL(queryDeleteValues);
+    }
+
+    public void editValue(int id, double value) {
+        String queryRenameDataColl = "UPDATE "+VALUES_TABLE+
+                " SET value = '"+ value +"'"+
+                " WHERE _id = " + id;
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL(queryRenameDataColl);
     }
 }
