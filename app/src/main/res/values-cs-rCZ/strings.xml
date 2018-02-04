@@ -22,6 +22,11 @@
     <string name="name">Jméno:</string>
     <string name="really_dellete">Opravdu odstranit datovou kolekci?</string>
     <string name="edit">Upravit</string>
-    <string name="no_data">Neexistují žádná data.</string>
-    <string name="no_data_coll">Neexistují žádné datkové kolekce.</string>
+    <string name="no_data">Neexistují žádná uležená data.</string>
+    <string name="no_data_coll">Nemáš žádné datové kolekce</string>
+    <string name="about_app">O aplikaci</string>
+    <string name="app_info1">Kód aplikace dostupný na </string>
+    <string name="app_info2"> GitHubu, licence Apache 2.0.</string>
+    <string name="app_icon">Ikona aplikace vytvořena díky Material design icons od společnosti Google.</string>
+    <string name="new_dataColl">Nová datová kolekce</string>
 </resources>

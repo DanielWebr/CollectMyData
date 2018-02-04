@@ -21,6 +21,12 @@
     <string name="name">Name:</string>
     <string name="really_dellete">Really delete data collection?</string>
     <string name="edit">Edit</string>
-    <string name="no_data">There are no data.</string>
-    <string name="no_data_coll">There are no data colletions.</string>
+    <string name="no_data">There are no stored data.</string>
+    <string name="no_data_coll">You do not have any data colletions.</string>
+    <string name="about_app">About app</string>
+    <string name="app_info1">Application code available on </string>
+    <string name="app_info2"> under Apache 2.0 licence.</string>
+    <string name="app_icon">Icon of the application made thanks to Material design icons by Google.</string>
+    <string name="repository">GitHb Re</string>
+    <string name="new_dataColl">New data collection</string>
 </resources>

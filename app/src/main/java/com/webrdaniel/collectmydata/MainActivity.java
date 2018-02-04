@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -29,9 +28,7 @@ public class MainActivity extends AppCompatActivity {
     protected ArrayList<DataCollItem> mDataCollItemsArrayList;
     protected DatabaseHelper mDatabaseHelper;
     public static final String DATA_COLL_ITEM = "com.webrdaniel.collectmydata.MainActivity";
-    public static final String DATA_DELETED = "";
     private static final int NEW_DATA_COLL_ITEM = 100;
-    private static final int SETTING = 101;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setIcon(R.mipmap.ic_launcher);
 
         mDatabaseHelper = new DatabaseHelper(this);
 
@@ -71,10 +70,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
         if (id == R.id.action_settings) {
-            Intent settingIntent = new Intent(this, SettingActivity.class);
-            startActivityForResult(settingIntent,SETTING);
+            Intent settingIntent = new Intent(this, AboutAppActivity.class);
+            startActivity(settingIntent);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -83,26 +81,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode == RESULT_CANCELED) return;
-        switch (requestCode) {
-            case NEW_DATA_COLL_ITEM:
-                DataCollItem item = (DataCollItem) data.getSerializableExtra(DATA_COLL_ITEM);
-                int id = mDatabaseHelper.insertDataColl(item.getName(), item.getColor(), item.getReminderTimeString());
-                item.setId(id);
-                mDataCollItemsArrayList.add(item);
-                messageIfempty();
-                adapter.notifyItemInserted(adapter.getItemCount());
-                break;
+        DataCollItem item = (DataCollItem) data.getSerializableExtra(DATA_COLL_ITEM);
+        int id = mDatabaseHelper.insertDataColl(item.getName(), item.getColor(), item.getReminderTimeString());
+        item.setId(id);
+        mDataCollItemsArrayList.add(item);
+        messageIfempty();
+        adapter.notifyItemInserted(adapter.getItemCount());
 
-            case SETTING:
-                boolean dataDeleted = data.getBooleanExtra(DATA_DELETED,false);
-                if(dataDeleted)
-                {
-                    mDataCollItemsArrayList.clear();
-                    messageIfempty();
-                    adapter.notifyDataSetChanged();
-                }
-                break;
-        }
     }
     protected void onPause() {
         super.onPause();

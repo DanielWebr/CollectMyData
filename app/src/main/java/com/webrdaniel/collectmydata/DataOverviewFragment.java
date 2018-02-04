@@ -53,9 +53,18 @@ public class DataOverviewFragment extends Fragment {
         tv_sum = linearLayout.findViewById(R.id.tv_sum);
         tv_avg = linearLayout.findViewById(R.id.tv_avg);
         tv_count.setText(String.valueOf(count));
-        tv_min.setText(parent.formatNoLastZero.format(min));
-        tv_max.setText(parent.formatNoLastZero.format(max));
-        tv_sum.setText(parent.formatNoLastZero.format(sum));
-        tv_avg.setText(parent.formatNoLastZero.format(avg));
+        if(count!=0){
+            tv_min.setText(parent.formatNoLastZero.format(min));
+            tv_max.setText(parent.formatNoLastZero.format(max));
+            tv_sum.setText(parent.formatNoLastZero.format(sum));
+            tv_avg.setText(parent.formatNoLastZero.format(avg));
+        }
+        else
+        {
+            tv_min.setText("-");
+            tv_max.setText("-");
+            tv_sum.setText("-");
+            tv_avg.setText("-");
+        }
     }
 }

@@ -6,6 +6,7 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -115,6 +116,7 @@ public class MainViewHolder extends RecyclerView.ViewHolder {
         String name = activity.mDataCollItemsArrayList.get(MainViewHolder.this.getAdapterPosition()).getName();
         Utils.lockPositiveButtonOnEmptyText(alertDialog, et_name, name);
         et_name.requestFocus();
+        et_name.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         Utils.OnEnterConfirm(et_name,alertDialog);
         Utils.showKeyboard(activity);
     }

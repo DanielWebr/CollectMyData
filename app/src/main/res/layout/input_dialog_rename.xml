@@ -12,9 +12,9 @@
 
     <TextView
         android:id="@+id/textView3"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:layout_weight="2"
         android:gravity="center_vertical"
         android:text="@string/name"
         android:textSize="25sp"
@@ -22,7 +22,7 @@
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/ti_layout"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1">
 

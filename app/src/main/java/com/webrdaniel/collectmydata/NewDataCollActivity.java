@@ -6,6 +6,7 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
@@ -58,7 +59,9 @@ public class NewDataCollActivity extends AppCompatActivity {
 
             }
         });
+        et_name.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         Utils.showKeyboard(this);
+        getSupportActionBar().setTitle(getString(R.string.new_dataColl));
     }
 
     @Override

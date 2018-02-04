@@ -20,13 +20,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".NewDataCollActivity" />
-        <activity android:name=".SettingActivity"
-            android:screenOrientation="portrait"/>
+        <activity android:name=".NewDataCollActivity"
+            android:parentActivityName=".MainActivity"/>
+        <activity android:name=".AboutAppActivity"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".MainActivity"/>
         <activity android:name=".DataCollDetailActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden"/>
+            android:windowSoftInputMode="stateAlwaysHidden"
+            android:parentActivityName=".MainActivity"/>
     </application>
 
 </manifest>
