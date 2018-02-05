@@ -42,12 +42,12 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:clickable="true"
-        android:tint="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.423"
         app:layout_constraintStart_toEndOf="@+id/ti_layout"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.202"
-        app:srcCompat="@drawable/ic_done_black_24dp" />
+        app:srcCompat="@drawable/ic_done_white_24dp" />
+
 </android.support.constraint.ConstraintLayout>

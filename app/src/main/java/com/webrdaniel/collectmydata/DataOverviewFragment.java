@@ -7,7 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 
 public class DataOverviewFragment extends Fragment {
@@ -23,18 +25,23 @@ public class DataOverviewFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         parent = (DataCollDetailActivity) getContext();
-        dataCollId = parent.mDataCollItem.getId();
         updateData();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         linearLayout = (LinearLayout) inflater.inflate(R.layout.data_detail_overview, container, false);
+        tv_count = linearLayout.findViewById(R.id.tv_count);
+        tv_min = linearLayout.findViewById(R.id.tv_min);
+        tv_max = linearLayout.findViewById(R.id.tv_max);
+        tv_sum = linearLayout.findViewById(R.id.tv_sum);
+        tv_avg = linearLayout.findViewById(R.id.tv_avg);
+        tv_count.setText(String.valueOf(count));
         updateLayout();
         return linearLayout;
     }
 
-    public void updateData()
+  /* public void updateData()
     {
         count = (int)parent.mDatabaseHelper.getValuesSelect("COUNT",dataCollId);
         if(count!=0) {
@@ -43,15 +50,31 @@ public class DataOverviewFragment extends Fragment {
             sum = parent.mDatabaseHelper.getValuesSelect("SUM", dataCollId);
             avg = parent.mDatabaseHelper.getValuesSelect("AVG", dataCollId);
         }
+    }*/
+
+    public void updateData()
+    {
+        count = parent.mRecords.size();
+        if(count!=0) getValues();
+    }
+
+    public void getValues()
+    {
+        sum = 0;
+        max = parent.mRecords.get(0).getValue();
+        min = parent.mRecords.get(0).getValue();
+        for(Record record : parent.mRecords)
+        {
+            double value = record.getValue();
+            sum+=value;
+            if(value<min)min = value;
+            else if(value>max)max = value;
+        }
+        avg = sum / parent.mRecords.size();
     }
 
     public void updateLayout()
     {
-        tv_count = linearLayout.findViewById(R.id.tv_count);
-        tv_min = linearLayout.findViewById(R.id.tv_min);
-        tv_max = linearLayout.findViewById(R.id.tv_max);
-        tv_sum = linearLayout.findViewById(R.id.tv_sum);
-        tv_avg = linearLayout.findViewById(R.id.tv_avg);
         tv_count.setText(String.valueOf(count));
         if(count!=0){
             tv_min.setText(parent.formatNoLastZero.format(min));

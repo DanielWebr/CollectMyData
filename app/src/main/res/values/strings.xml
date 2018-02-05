@@ -5,7 +5,7 @@
     <string name="setting_delete">Vymazat</string>
     <string name="tab_overview">Overview</string>
     <string name="enter_data">Enter data</string>
-    <string name="value">value:</string>
+    <string name="value">Value</string>
     <string name="add">Add</string>
     <string name="cancel">Cancel</string>
     <string name="sum">Sum of values:</string>
@@ -19,9 +19,9 @@
     <string name="delete">Delete</string>
     <string name="data_added">Data added</string>
     <string name="name">Name:</string>
-    <string name="really_dellete">Really delete data collection?</string>
+    <string name="really_delete_data_collection">Really delete data collection?</string>
     <string name="edit">Edit</string>
-    <string name="no_data">There are no stored data.</string>
+    <string name="no_data">There are no data available.</string>
     <string name="no_data_coll">You do not have any data colletions.</string>
     <string name="about_app">About app</string>
     <string name="app_info1">Application code available on </string>
@@ -29,4 +29,15 @@
     <string name="app_icon">Icon of the application made thanks to Material design icons by Google.</string>
     <string name="repository">GitHb Re</string>
     <string name="new_dataColl">New data collection</string>
+    <string name="really_delete_record">Really delete record?</string>
+    <string name="date">Date</string>
+    <string name="last_week">Week</string>
+    <string name="last_month">Month</string>
+    <string name="last_year">Year</string>
+    <string name="filter">Filter</string>
+    <string name="add_record">Add record</string>
+    <string name="all">All</string>
+    <string name="this_week">This week</string>
+    <string name="this_month">This month</string>
+    <string name="this_year">This year</string>
 </resources>

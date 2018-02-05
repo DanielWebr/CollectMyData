@@ -1,5 +1,6 @@
 package com.webrdaniel.collectmydata;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
@@ -13,34 +14,32 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
 
 public class DataListFragment extends Fragment {
 
-    private ArrayList<Record> mRecords;
     private DataCollDetailActivity parent;
-    private BasicListAdapter mBasicListAdapter;
-    private RecyclerView mRecyclerView;
-    private FrameLayout mFrameLayout;
+    protected BasicListAdapter mBasicListAdapter;
+    protected RecyclerView mRecyclerView;
     private TextView tv_emptryRV;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         parent = (DataCollDetailActivity) getContext();
-        mRecords = parent.mDatabaseHelper.getValues(parent.mDataCollItem.getId());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.values_recycler_view, container, false);
+        View rootView = inflater.inflate(R.layout.records_recycler_view, container, false);
         rootView.setTag("DataListFragment");
-        mFrameLayout =  rootView.findViewById(R.id.FrameLayout);
+        FrameLayout frame = rootView.findViewById(R.id.frame);
         mRecyclerView =  rootView.findViewById(R.id.recycler_view_values_list);
-        mBasicListAdapter = new BasicListAdapter(mRecords);
+        mBasicListAdapter = new BasicListAdapter(parent.mRecords);
         mRecyclerView.setAdapter(mBasicListAdapter);
         mRecyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
@@ -49,14 +48,14 @@ public class DataListFragment extends Fragment {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(parent,  DividerItemDecoration.VERTICAL);
         dividerItemDecoration.setDrawable(getContext().getDrawable(R.drawable.divider));
         mRecyclerView.addItemDecoration(dividerItemDecoration);
-        tv_emptryRV = mFrameLayout.findViewById(R.id.empty_view);
+        tv_emptryRV = rootView.findViewById(R.id.empty_view);
         messageIfEmpty();
-        return mFrameLayout;
+        return frame;
     }
 
-    private void messageIfEmpty()
+    public void messageIfEmpty()
     {
-        if (mRecords.isEmpty()) {
+        if (parent.mRecords.size()==0) {
             mRecyclerView.setVisibility(View.GONE);
             tv_emptryRV.setVisibility(View.VISIBLE);
         }
@@ -66,57 +65,114 @@ public class DataListFragment extends Fragment {
         }
     }
 
-    class BasicListAdapter extends RecyclerView.Adapter<BasicListAdapter.ViewHolder>{
+    public BasicListAdapter getBasicListAdapter()
+    {
+        return new BasicListAdapter(parent.mRecords);
+    }
+
+    public class BasicListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         private ArrayList<Record> items;
 
         @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_value, parent, false);
-            return new ViewHolder(v);
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            if(viewType == 0) {
+                View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.records_recyclre_view_header, parent, false);
+                return new HeaderViewHolder(v);
+            }
+            else
+            {
+                View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_records, parent, false);
+                return new ListViewHolder(v,getActivity());
+            }
         }
 
         @Override
-        public void onBindViewHolder(final ViewHolder holder,int position) {
-            holder.mValue.setText(parent.formatNoLastZero.format(items.get(position).getValue()));
-            holder.mValueDate.setText(Utils.dateToString(items.get(position).getDate(),Utils.DATE_FORMAT_DAY_MONTH));
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+             if(position!=0) {
+                BasicListAdapter.ListViewHolder listViewHolder = (BasicListAdapter.ListViewHolder) holder;
+                 listViewHolder.mValue.setText(parent.formatNoLastZero.format(items.get(position-1).getValue()));
+                 listViewHolder.mValueDate.setText(Utils.dateToString(items.get(position-1).getDate(), Utils.DATE_FORMAT_DM));
+            }
         }
+
         @Override
         public int getItemCount() {
-            return items.size();
+            return items.size()+1;
+        }
+
+        @Override
+        public int getItemViewType (int position) {
+            if(position == 0) {
+                return 0;
+            } else{
+                return 1;
+            }
         }
 
         BasicListAdapter(ArrayList<Record> items){
             this.items = items;
-
         }
 
         @SuppressWarnings("deprecation")
-        public class ViewHolder extends RecyclerView.ViewHolder{
+        public class ListViewHolder extends RecyclerView.ViewHolder{
             View mView;
             TextView mValueDate;
             TextView mValue;
-            ImageButton mIbMenu;
+            ImageButton mIbEdit,bIbDelete;
             Record record;
 
-            public ViewHolder(View v){
+            public ListViewHolder(View v, Context record){
                 super(v);
                 mView = v;
                 mValue = v.findViewById(R.id.tv_value);
                 mValueDate = v.findViewById(R.id.tv_value_date);
-                mIbMenu = v.findViewById(R.id.ib_edit);
-                mIbMenu.setOnClickListener(new View.OnClickListener() {
+                mIbEdit = v.findViewById(R.id.ib_edit);
+                mIbEdit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         showDialogEditValue();
                     }
                 });
+                bIbDelete = v.findViewById(R.id.ib_delete);
+                bIbDelete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showDialogDeleteRecord();
+                    }
+                });
+            }
+
+            private void showDialogDeleteRecord() {
+                LayoutInflater layoutInflaterAndroid = LayoutInflater.from(parent);
+                View dialog = layoutInflaterAndroid.inflate(R.layout.input_dialog_delete, null);
+                TextView tv_delete = (TextView) dialog.findViewById(R.id.tv_delete);
+                tv_delete.setText(parent.getString(R.string.really_delete_record));
+                Callable methodEditValue = new Callable() {
+                    @Override
+                    public Object call() throws Exception {
+                        deleteRecord();
+                        return null;
+                    }
+                };
+                Utils.getDialog(dialog,parent, methodEditValue,R.string.delete);
+            }
+
+            private void deleteRecord() {
+                int position = ListViewHolder.this.getAdapterPosition();
+                record = parent.mRecords.get(position-1);
+                parent.mDatabaseHelper.deleteRecord(record.getId());
+                parent.mRecords.remove(record);
+                mBasicListAdapter.notifyItemRemoved(position);
+                parent.dataOverviewFragment.updateData();
+                parent.dataOverviewFragment.updateLayout();
+                messageIfEmpty();
             }
 
             private void showDialogEditValue() {
                 LayoutInflater layoutInflaterAndroid = LayoutInflater.from(parent);
                 View dialog = layoutInflaterAndroid.inflate(R.layout.input_dialog_edit_value, null);
                 final TextInputEditText et_name = dialog.findViewById(R.id.ti_et);
-                double value = mRecords.get(ViewHolder.this.getAdapterPosition()).getValue();
+                double value = parent.mRecords.get(ListViewHolder.this.getAdapterPosition()-1).getValue();
                 et_name.setText(parent.formatNoLastZero.format(value));
                 Callable methodEditValue = new Callable() {
                     @Override
@@ -128,18 +184,24 @@ public class DataListFragment extends Fragment {
                 AlertDialog alertDialog = Utils.getDialog(dialog,parent, methodEditValue,R.string.edit);
                 Utils.lockPositiveButtonOnEmptyText(alertDialog, et_name, String.valueOf(parent.formatNoLastZero.format(value)));
                 et_name.requestFocus();
-                Utils.OnEnterConfirm(et_name,alertDialog);
+                Utils.onEnterConfirm(et_name,alertDialog);
                 Utils.showKeyboard(parent);
             }
 
             private void editValue(Double value) {
-                int position = ViewHolder.this.getAdapterPosition();
-                record = mRecords.get(position);
+                int position = ListViewHolder.this.getAdapterPosition();
+                record = parent.mRecords.get(position-1);
                 parent.mDatabaseHelper.editValue(record.getId(), value);
                 record.setValue(value);
                 mBasicListAdapter.notifyItemChanged(position);
                 parent.dataOverviewFragment.updateData();
                 parent.dataOverviewFragment.updateLayout();
+            }
+        }
+
+        private class HeaderViewHolder extends RecyclerView.ViewHolder {
+            public HeaderViewHolder(View v) {
+                super(v);
             }
         }
     }

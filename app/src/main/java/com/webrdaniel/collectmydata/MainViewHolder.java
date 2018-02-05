@@ -46,7 +46,7 @@ public class MainViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onClick(View v) {
                 item = activity.mDataCollItemsArrayList.get(MainViewHolder.this.getAdapterPosition());
-                showDialogSetValue();
+                showDialogNewRecord();
             }
         });
         mIbmenu.setOnClickListener(new View.OnClickListener() {
@@ -117,36 +117,36 @@ public class MainViewHolder extends RecyclerView.ViewHolder {
         Utils.lockPositiveButtonOnEmptyText(alertDialog, et_name, name);
         et_name.requestFocus();
         et_name.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
-        Utils.OnEnterConfirm(et_name,alertDialog);
+        Utils.onEnterConfirm(et_name,alertDialog);
         Utils.showKeyboard(activity);
     }
 
-    private void showDialogSetValue() {
+    private void showDialogNewRecord() {
         LayoutInflater layoutInflaterAndroid = LayoutInflater.from(activity);
         View dialog = layoutInflaterAndroid.inflate(R.layout.input_dialog_value, null);
         final TextInputEditText etValue = dialog.findViewById(R.id.ti_et);
         final TextView tvDate = dialog.findViewById(R.id.tv_date);
-        tvDate.setText(Utils.dateToString(null, Utils.DATE_FORMAT_DAY_MONTH));
+        tvDate.setText(Utils.dateToString(null, Utils.DATE_FORMAT_DM));
 
         Callable methodStoreValue = new Callable() {
             @Override
             public Object call() throws Exception {
-                storeValue(Double.parseDouble(etValue.getText().toString()));
+                storeRecord(Double.parseDouble(etValue.getText().toString()));
                 return null;
             }
         };
         AlertDialog alertDialog = Utils.getDialog(dialog,activity, methodStoreValue,R.string.add);
         Utils.lockPositiveButtonOnEmptyText(alertDialog, etValue, null);
         etValue.requestFocus();
-        Utils.OnEnterConfirm(etValue,alertDialog);
+        Utils.onEnterConfirm(etValue,alertDialog);
         Utils.showKeyboard(activity);
     }
 
-    private void storeValue(Double value) {
+    private void storeRecord(Double value) {
         item = activity.mDataCollItemsArrayList.get(MainViewHolder.this.getAdapterPosition());
         activity.mDatabaseHelper.insertDataValue(item.getId(),
                 value,
-                Utils.dateToString(null, Utils.DATE_FORMAT_RAW));
+                Utils.dateToString(null, Utils.DATE_FORMAT_DMY));
     }
 
     private void renameDataColl(String name) {
@@ -158,7 +158,7 @@ public class MainViewHolder extends RecyclerView.ViewHolder {
     private void deleteDataColl() {
         activity.mDatabaseHelper.deleteDataColl(item.getId());
         activity.mDataCollItemsArrayList.remove(item);
-        activity.messageIfempty();
+        activity.messageIfEmpty();
         activity.adapter.notifyItemRemoved(MainViewHolder.this.getAdapterPosition());
     }
 

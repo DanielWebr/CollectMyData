@@ -22,25 +22,17 @@
         android:layout_weight="2"
         android:gravity="start|center_vertical"
         android:textAppearance="?attr/textAppearanceListItem"
-        android:textSize="24sp"
+        android:textSize="18sp"
         tools:text="date" />
-
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="3"
-        android:gravity="start|center_vertical"
-        android:text="@string/value"
-        android:textSize="24sp" />
 
     <TextView
         android:id="@+id/tv_value"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="2"
-        android:gravity="start|center_vertical"
+        android:gravity="center|center_vertical"
         android:textAppearance="?attr/textAppearanceListItem"
-        android:textSize="24sp"
+        android:textSize="18sp"
         tools:text="value" />
 
     <ImageButton
@@ -48,10 +40,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_marginEnd="16dp"
         android:layout_weight="1"
         android:background="@null"
         android:tint="@android:color/darker_gray"
         app:srcCompat="@drawable/ic_edit_black_24dp" />
+
+    <ImageButton
+        android:id="@+id/ib_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:background="@null"
+        android:tint="@android:color/darker_gray"
+        app:srcCompat="@drawable/ic_delete_black_24dp" />
 
 </LinearLayout>

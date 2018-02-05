@@ -1,12 +1,14 @@
 package com.webrdaniel.collectmydata;
 
+import android.support.annotation.NonNull;
+
 import java.util.Date;
 
 /**
  * Created by dandu on 04.02.2018.
  */
 
-public class Record {
+public class Record{
     int id;
     Date date;
     double value;
@@ -41,4 +43,6 @@ public class Record {
     public void setValue(double value) {
         this.value = value;
     }
+
+
 }

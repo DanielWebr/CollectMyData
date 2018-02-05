@@ -10,14 +10,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.TextView;
-
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
 
     @BindView(R.id.fab) FloatingActionButton fab;
     @BindView(R.id.toolbar) Toolbar toolbar;
@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
         adapter = new CardAdapter(MainActivity.this);
         mRecyclerView.setAdapter(adapter);
-        messageIfempty();
+        messageIfEmpty();
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
         int id = mDatabaseHelper.insertDataColl(item.getName(), item.getColor(), item.getReminderTimeString());
         item.setId(id);
         mDataCollItemsArrayList.add(item);
-        messageIfempty();
+        messageIfEmpty();
         adapter.notifyItemInserted(adapter.getItemCount());
 
     }
@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
         Utils.hideKeyboard(this);
     }
 
-    protected void messageIfempty()
+    protected void messageIfEmpty()
     {
         if (mDataCollItemsArrayList.isEmpty()) {
             mRecyclerView.setVisibility(View.GONE);

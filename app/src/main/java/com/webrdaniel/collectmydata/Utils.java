@@ -9,21 +9,24 @@ import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.Callable;
 
 
 public class Utils {
-
-    public static final String DATE_FORMAT_RAW ="HH:mm:ss d.M.yyyy";
-    public static final String DATE_FORMAT_DAY_MONTH ="d. M.";
+    public static final String DATE_FORMAT_DM ="d. M.";
     public static final String DATE_FORMAT_MINUTE_HOUR ="mm:HH";
+    public static final String DATE_FORMAT_DMY ="d. M. yyyy";
 
     public static int getMatColor(Context context)
     {
@@ -60,7 +63,16 @@ public class Utils {
     public  static void hideKeyboard(Context activity)
     {
         InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-        if(inputMethodManager.isAcceptingText()) inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_NOT_ALWAYS, 0);
+        if(inputMethodManager.isAcceptingText())
+        {
+            inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_NOT_ALWAYS, 0);
+        }
+    }
+
+    public static void hideKeyboard(Context activity, EditText editText)
+    {
+    InputMethodManager imm = (InputMethodManager)activity.getSystemService(activity.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
     }
 
     public static AlertDialog getDialog(View dialog, Context context, final Callable method, int positiveButtonText)
@@ -74,7 +86,9 @@ public class Utils {
                         try{
                             method.call();
                         }
-                        catch (Exception e) {}
+                        catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -113,24 +127,27 @@ public class Utils {
             }
             @Override
             public void afterTextChanged(Editable s) {
-                if (TextUtils.isEmpty(s)) {
-                    positiveButton.setEnabled(false);
-                } else {
-                    positiveButton.setEnabled(true);
+                if(previousContent!=null){
+                    if (s.toString().equals(previousContent)||TextUtils.isEmpty(s)) {
+                        tv.setTextColor(Color.GRAY);
+                        positiveButton.setEnabled(false);
+                    } else {
+                        tv.setTextColor(Color.BLACK);
+                        positiveButton.setEnabled(true);
+                    }
                 }
-                if (previousContent!=null && s.toString().equals(previousContent)) {
-                    tv.setTextColor(Color.GRAY);
-                    positiveButton.setEnabled(false);
-
-                } else {
-                    tv.setTextColor(Color.BLACK);
-                    positiveButton.setEnabled(true);
+                else {
+                    if (TextUtils.isEmpty(s)) {
+                        positiveButton.setEnabled(false);
+                    } else {
+                        positiveButton.setEnabled(true);
+                    }
                 }
             }
         });
     }
 
-    public static void OnEnterConfirm(final TextInputEditText editText, final AlertDialog alertDialogAndroid)
+    public static void onEnterConfirm(final TextInputEditText editText, final AlertDialog alertDialogAndroid)
     {
         editText.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View view, int keyCode, KeyEvent keyevent) {
