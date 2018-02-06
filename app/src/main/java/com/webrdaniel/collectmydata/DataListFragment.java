@@ -65,11 +65,6 @@ public class DataListFragment extends Fragment {
         }
     }
 
-    public BasicListAdapter getBasicListAdapter()
-    {
-        return new BasicListAdapter(parent.mRecords);
-    }
-
     public class BasicListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         private ArrayList<Record> items;
 

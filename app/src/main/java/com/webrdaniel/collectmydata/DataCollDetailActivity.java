@@ -191,6 +191,7 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
                 Utils.hideKeyboard(DataCollDetailActivity.this,et_date);
                 DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(DataCollDetailActivity.this, year, month, day);
                 datePickerDialog.show(getFragmentManager(), "DateFragment");
+                datePickerDialog.setMaxDate(calendar);
             }
         });
     }
@@ -282,8 +283,8 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
     }
 
     private void filterRecords(int i) {
-        mRecords = mDatabaseHelper.getRecords(mDataCollItem.getId());
-        dataListFragment.mRecyclerView.setAdapter(dataListFragment.getBasicListAdapter());
+        mRecords.clear();
+        mRecords.addAll(mDatabaseHelper.getRecords(mDataCollItem.getId()));
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, -i-1);
         Date date = cal.getTime();
@@ -303,8 +304,8 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
 
     private void showAllRecords()
     {
-        mRecords = mDatabaseHelper.getRecords(mDataCollItem.getId());
-        dataListFragment.mRecyclerView.setAdapter(dataListFragment.getBasicListAdapter());
+        mRecords.clear();
+        mRecords.addAll(mDatabaseHelper.getRecords(mDataCollItem.getId()));
         dataOverviewFragment.updateData();
         dataOverviewFragment.updateLayout();
         dataListFragment.messageIfEmpty();

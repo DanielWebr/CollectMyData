@@ -27,7 +27,7 @@
     <string name="about_app">O aplikaci</string>
     <string name="app_info1">Kód aplikace dostupný na </string>
     <string name="app_info2"> ,licence Apache 2.0</string>
-    <string name="app_icon">Ikona aplikace vytvořena pomocí Material design icons od společnosti Google.</string>
+    <string name="app_icon">Ikony použity v aplikaci pževzaty z Material design icons od společnosti Google.</string>
     <string name="new_dataColl">Nová datová kolekce</string>
     <string name="really_dellete_record">Opravdu odstranit záznam?</string>
     <string name="date">Datum</string>
