@@ -1,7 +1,5 @@
 package com.webrdaniel.collectmydata;
 
-import android.support.annotation.NonNull;
-
 import java.util.Date;
 
 /**
@@ -16,6 +14,12 @@ public class Record{
     public Record (int id,Date date, double value)
     {
         this.id = id;
+        this.date = date;
+        this.value = value;
+    }
+
+    public Record (Date date, double value)
+    {
         this.date = date;
         this.value = value;
     }

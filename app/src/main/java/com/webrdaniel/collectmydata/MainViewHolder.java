@@ -15,6 +15,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.Date;
 import java.util.concurrent.Callable;
 
 
@@ -36,6 +37,7 @@ public class MainViewHolder extends RecyclerView.ViewHolder {
         activity = (MainActivity) context;
         mView = v;
 
+
         v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -46,6 +48,7 @@ public class MainViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onClick(View v) {
                 item = activity.mDataCollItemsArrayList.get(MainViewHolder.this.getAdapterPosition());
+                mIbDialog.setEnabled(false);
                 showDialogNewRecord();
             }
         });
@@ -126,7 +129,7 @@ public class MainViewHolder extends RecyclerView.ViewHolder {
         View dialog = layoutInflaterAndroid.inflate(R.layout.input_dialog_value, null);
         final TextInputEditText etValue = dialog.findViewById(R.id.ti_et);
         final TextView tvDate = dialog.findViewById(R.id.tv_date);
-        tvDate.setText(Utils.dateToString(null, Utils.DATE_FORMAT_DM));
+        tvDate.setText(Utils.dateToString(null, Utils.DATE_FORMAT_EDMM));
 
         Callable methodStoreValue = new Callable() {
             @Override
@@ -143,6 +146,15 @@ public class MainViewHolder extends RecyclerView.ViewHolder {
     }
 
     private void storeRecord(Double value) {
+        Date date = Utils.dateToDateFormat(Utils.DATE_FORMAT_DMY);
+        if(activity.mDatabaseHelper.getDates(item.getId()).contains(date))
+        {
+            mIbDialog.setEnabled(false);
+        }
+        else{
+            mIbDialog.setEnabled(true);
+        }
+        activity.adapter.notifyItemChanged(MainViewHolder.this.getAdapterPosition());
         item = activity.mDataCollItemsArrayList.get(MainViewHolder.this.getAdapterPosition());
         activity.mDatabaseHelper.insertDataValue(item.getId(),
                 value,

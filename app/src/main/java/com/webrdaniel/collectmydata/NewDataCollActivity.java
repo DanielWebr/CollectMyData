@@ -3,6 +3,7 @@ package com.webrdaniel.collectmydata;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -20,6 +21,7 @@ public class NewDataCollActivity extends AppCompatActivity {
     private String mUserEnteredText;
     @BindView(R.id.fab) FloatingActionButton fab;
     @BindView(R.id.ti_et) TextInputEditText et_name;
+    @BindView(R.id.ti_layout) TextInputLayout ti_layout;
 
 
     @Override
@@ -38,7 +40,7 @@ public class NewDataCollActivity extends AppCompatActivity {
                 }
                 else
                 {
-                    et_name.setError(getResources().getString(R.string.name_error));
+                    ti_layout.setError(getResources().getString(R.string.name_error));
                 }
             }
         });

@@ -9,22 +9,22 @@ import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.Callable;
 
 
 public class Utils {
-    public static final String DATE_FORMAT_DM ="d. M.";
+    public static final String DATE_FORMAT_DM ="d.M.";
+    public static final String DATE_FORMAT_EDMM ="EEE d. MMMM";
+    public static final String DATE_FORMAT_EDM ="EEE d. M.";
     public static final String DATE_FORMAT_MINUTE_HOUR ="mm:HH";
     public static final String DATE_FORMAT_DMY ="d. M. yyyy";
 
@@ -44,6 +44,7 @@ public class Utils {
         try {
             return  sdf.parse(date);
         } catch (Exception e) {
+            e.printStackTrace();
             return new Date();
         }
     }
@@ -53,6 +54,17 @@ public class Utils {
             SimpleDateFormat sdf = new SimpleDateFormat(format);
             return sdf.format((date!=null)?date:new Date());
     }
+
+    public static Date dateToDateFormat(String format)
+    {
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        try {
+            return sdf.parse(sdf.format(new Date()));
+        } catch (ParseException e) {
+            return new Date();
+        }
+    }
+
 
     public static void showKeyboard(Context activity)
     {

@@ -3,35 +3,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.webrdaniel.collectmydata.DataCollDetailActivity">
     <item
-        android:id="@+id/menu_filter_last_week"
+        android:id="@+id/menu_filter_all"
         android:orderInCategory="1"
+        android:title="@string/all"/>
+    <item
+        android:id="@+id/menu_filter_last_week"
+        android:orderInCategory="2"
         android:title="@string/last_week" />
 
     <item
         android:id="@+id/menu_filter_last_month"
-        android:orderInCategory="2"
+        android:orderInCategory="3"
         android:title="@string/last_month"/>
 
     <item
         android:id="@+id/menu_filter_last_year"
-        android:orderInCategory="3"
+        android:orderInCategory="4"
         android:title="@string/last_year"/>
     <item
         android:id="@+id/menu_filter_this_week"
-        android:orderInCategory="4"
+        android:orderInCategory="5"
         android:title="@string/this_week" />
 
     <item
         android:id="@+id/menu_filter_this_month"
-        android:orderInCategory="5"
+        android:orderInCategory="6"
         android:title="@string/this_month"/>
 
     <item
         android:id="@+id/menu_filter_this_year"
-        android:orderInCategory="6"
-        android:title="@string/this_year"/>
-    <item
-        android:id="@+id/menu_filter_all"
         android:orderInCategory="7"
-        android:title="@string/all"/>
+        android:title="@string/this_year"/>
+
 </menu>

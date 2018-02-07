@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 
 
 class DatabaseHelper extends SQLiteOpenHelper {
@@ -167,5 +168,20 @@ class DatabaseHelper extends SQLiteOpenHelper {
                 " WHERE _id= " + id;
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL(queryDeleteValues);
+    }
+
+    public ArrayList<Date> getDates(int dataCollId){
+        String query = "SELECT  date FROM " + RECORDS_TABLE + " WHERE _idDataColl=" + dataCollId;
+        ArrayList<Date> dates = new ArrayList<>();
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        if(cursor.moveToFirst())
+        {
+            do{
+                dates.add( Utils.stringToDate(cursor.getString(0),Utils.DATE_FORMAT_DMY));
+            }while(cursor.moveToNext());
+        }
+        cursor.close();
+        return dates;
     }
 }

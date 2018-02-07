@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 class CardAdapter extends RecyclerView.Adapter<MainViewHolder>{
     protected ArrayList<DataCollItem> mDataCollItemsArrayList;
@@ -26,6 +27,14 @@ class CardAdapter extends RecyclerView.Adapter<MainViewHolder>{
         holder.mDataCollname.setText(item.getName());
         int color = item.getColor();
         ImageViewCompat.setImageTintList( holder.mIcon, ColorStateList.valueOf(color));
+        Date date = Utils.dateToDateFormat(Utils.DATE_FORMAT_DMY);
+        if(activity.mDatabaseHelper.getDates(item.getId()).contains(date))
+        {
+            holder.mIbDialog.setEnabled(false);
+        }
+        else{
+            holder.mIbDialog.setEnabled(true);
+        }
     }
 
     @Override
