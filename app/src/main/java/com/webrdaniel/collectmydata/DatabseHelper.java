@@ -28,9 +28,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
         String queryDataCollTable = "CREATE TABLE "+DATA_COLL_TABLE+" ("+
                 "_id INTEGER PRIMARY KEY AUTOINCREMENT, "+
                 "name TEXT, "+
-                "color INTEGER, "+
-                "reminderTime TEXT);";
-
+                "color INTEGER);";
         String queryValuesTable = "CREATE TABLE "+ RECORDS_TABLE +" ("+
                 "_id INTEGER PRIMARY KEY AUTOINCREMENT, "+
                 "_idDataColl INTEGER, "+
@@ -45,17 +43,14 @@ class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public int insertDataColl( String name, int color, String reminderTime )
-    {
+    int insertDataColl(String name, int color) {
         ContentValues dataCollValues = new ContentValues();
         dataCollValues.put("name", name);
         dataCollValues.put("color", color);
-        dataCollValues.put("reminderTime", reminderTime);
         return (int) this.getWritableDatabase().insert(DATA_COLL_TABLE,null, dataCollValues);
     }
 
-    public int insertDataValue(int IDDataColl, double value, String date )
-    {
+    int insertDataValue(int IDDataColl, double value, String date) {
         ContentValues dataCollValues = new ContentValues();
         dataCollValues.put("_idDataColl", IDDataColl);
         dataCollValues.put("value", value);
@@ -63,41 +58,37 @@ class DatabaseHelper extends SQLiteOpenHelper {
         return (int) this.getWritableDatabase().insert(RECORDS_TABLE,null, dataCollValues);
     }
 
-    public void deleteDataSQLite( ){
+    protected void deleteDataSQLite( ){
         this.getWritableDatabase().delete(DATA_COLL_TABLE,null,null );
         this.getWritableDatabase().delete(RECORDS_TABLE,null,null );
 
     }
 
-    public ArrayList<DataCollItem> getDataCollItems()
-    {
+    ArrayList<DataCollItem> getDataCollItems() {
         String query = "SELECT  * FROM " + DATA_COLL_TABLE;
         ArrayList<DataCollItem> dataCollItems = new  ArrayList<>();
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
-      if(cursor.moveToFirst())
-      {
+        if(cursor.moveToFirst())
+        {
           do{
               DataCollItem item = new DataCollItem(
                       cursor.getInt(0),
                       cursor.getString(1),
-                      cursor.getInt(2),
-                      cursor.getString(3));
+                      cursor.getInt(2));
               dataCollItems.add(item);
           }while(cursor.moveToNext());
-      }
+        }
         cursor.close();
         return dataCollItems;
     }
 
-    public ArrayList<Record> getRecords(int dataCollId)
-    {
+    ArrayList<Record> getRecords(int dataCollId) {
         String query = "SELECT  * FROM " + RECORDS_TABLE + " WHERE _idDataColl=" + dataCollId;
         ArrayList<Record> records = new ArrayList<>();
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
-        if(cursor.moveToFirst())
-        {
+        if(cursor.moveToFirst()) {
             do{
                 records.add( new Record(
                         cursor.getInt(0),
@@ -110,12 +101,10 @@ class DatabaseHelper extends SQLiteOpenHelper {
         return records;
     }
 
-    public double getValuesSelect (String type, int dataCollId)
-    {
+    protected double getValuesSelect (String type, int dataCollId) {
         double result;
         String query;
-        switch (type)
-        {
+        switch (type) {
             case "COUNT": query = "SELECT COUNT(_id) FROM "+ RECORDS_TABLE + " WHERE _idDataColl="+ dataCollId;break;
             case "MIN": query = "SELECT MIN(value) FROM "+ RECORDS_TABLE + " WHERE _idDataColl="+ dataCollId;break;
             case "MAX": query = "SELECT MAX(value) FROM "+ RECORDS_TABLE + " WHERE _idDataColl="+ dataCollId;break;
@@ -125,19 +114,17 @@ class DatabaseHelper extends SQLiteOpenHelper {
         }
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
-        if(cursor.moveToFirst())
-        {
+        if(cursor.moveToFirst()) {
             result = cursor.getDouble(0);
         }
-        else
-        {
+        else {
             result = 0;
         }
         cursor.close();
         return result;
     }
 
-    public void renameDataColl(int id, String name) {
+    void renameDataColl(int id, String name) {
         String queryRenameDataColl = "UPDATE "+DATA_COLL_TABLE+
                 " SET name = '"+ name +"'"+
                 " WHERE _id = " + id;
@@ -145,7 +132,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(queryRenameDataColl);
     }
 
-    public void deleteDataColl(int id) {
+    void deleteDataColl(int id) {
         String queryDeleteDataColl = "DELETE FROM "+DATA_COLL_TABLE+
                 " WHERE _id = " + id;
         String queryDeleteValues = "DELETE FROM "+ RECORDS_TABLE +
@@ -155,7 +142,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(queryDeleteValues);
     }
 
-    public void editValue(int id, double value) {
+    void editValue(int id, double value) {
         String queryRenameDataColl = "UPDATE "+ RECORDS_TABLE +
                 " SET value = '"+ value +"'"+
                 " WHERE _id = " + id;
@@ -163,20 +150,19 @@ class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(queryRenameDataColl);
     }
 
-    public void deleteRecord(int id) {
+    void deleteRecord(int id) {
         String queryDeleteValues = "DELETE FROM "+ RECORDS_TABLE +
                 " WHERE _id= " + id;
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL(queryDeleteValues);
     }
 
-    public ArrayList<Date> getDates(int dataCollId){
+    ArrayList<Date> getDates(int dataCollId){
         String query = "SELECT  date FROM " + RECORDS_TABLE + " WHERE _idDataColl=" + dataCollId;
         ArrayList<Date> dates = new ArrayList<>();
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
-        if(cursor.moveToFirst())
-        {
+        if(cursor.moveToFirst()) {
             do{
                 dates.add( Utils.stringToDate(cursor.getString(0),Utils.DATE_FORMAT_DMY));
             }while(cursor.moveToNext());

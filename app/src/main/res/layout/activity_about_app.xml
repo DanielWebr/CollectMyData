@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="36dp"
+    android:paddingEnd="36dp"
+    android:paddingStart="36dp"
     tools:context="com.webrdaniel.collectmydata.AboutAppActivity">
 
     <ImageView
@@ -15,7 +16,8 @@
         android:layout_gravity="center_horizontal"
         android:alpha="0.3"
         android:tint="@color/primaryColor"
-        app:srcCompat="@drawable/ic_poll_orange_24dp" />
+        app:srcCompat="@drawable/ic_poll_orange_24dp"
+        android:contentDescription="@string/app_name" />
 
     <TextView
         android:id="@+id/textView4"
@@ -24,7 +26,8 @@
         android:layout_gravity="center_horizontal"
         android:gravity="center_horizontal"
         android:text="CollectMyData"
-        android:textSize="30sp" />
+        android:textSize="30sp"
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/textView8"
@@ -61,12 +64,21 @@
         android:text="@string/date_picker_about" />
 
     <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:gravity="center_horizontal"
+        android:text="@string/about_chart" />
+
+    <TextView
         android:id="@+id/textView7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
         android:layout_marginEnd="12dp"
         android:layout_marginTop="48dp"
-        android:text="Daniel Wébr, 2018" />
+        android:text="Daniel Wébr, 2018"
+        tools:ignore="HardcodedText" />
 
 </LinearLayout>

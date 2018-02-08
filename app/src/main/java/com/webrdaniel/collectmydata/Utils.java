@@ -18,18 +18,17 @@ import android.widget.EditText;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.concurrent.Callable;
 
 
 public class Utils {
-    public static final String DATE_FORMAT_DM ="d.M.";
-    public static final String DATE_FORMAT_EDMM ="EEE d. MMMM";
-    public static final String DATE_FORMAT_EDM ="EEE d. M.";
-    public static final String DATE_FORMAT_MINUTE_HOUR ="mm:HH";
-    public static final String DATE_FORMAT_DMY ="d. M. yyyy";
+    static final String DATE_FORMAT_DM ="d.M.";
+    static final String DATE_FORMAT_EDMM ="EEE d. MMMM";
+    static final String DATE_FORMAT_EDM ="EEE d. M.";
+    static final String DATE_FORMAT_DMY ="d. M. yyyy";
 
-    public static int getMatColor(Context context)
-    {
+    static int getMatColor(Context context) {
         int arrayId = context.getResources().getIdentifier("mdcolor", "array", context.getApplicationContext().getPackageName());
         TypedArray colors = context.getResources().obtainTypedArray(arrayId);
         int index = (int) (Math.random() * colors.length());
@@ -38,9 +37,8 @@ public class Utils {
         return returnColor;
     }
 
-    public static Date stringToDate(String date, String format)
-    {
-        SimpleDateFormat sdf = new SimpleDateFormat(format);
+    static Date stringToDate(String date, String format) {
+        SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.getDefault());
         try {
             return  sdf.parse(date);
         } catch (Exception e) {
@@ -49,15 +47,13 @@ public class Utils {
         }
     }
 
-    public static String dateToString(Date date, String format)
-    {
-            SimpleDateFormat sdf = new SimpleDateFormat(format);
+    static String dateToString(Date date, String format) {
+            SimpleDateFormat sdf = new SimpleDateFormat(format,Locale.getDefault());
             return sdf.format((date!=null)?date:new Date());
     }
 
-    public static Date dateToDateFormat(String format)
-    {
-        SimpleDateFormat sdf = new SimpleDateFormat(format);
+    static Date dateToDateFormat(String format) {
+        SimpleDateFormat sdf = new SimpleDateFormat(format,Locale.getDefault());
         try {
             return sdf.parse(sdf.format(new Date()));
         } catch (ParseException e) {
@@ -65,30 +61,24 @@ public class Utils {
         }
     }
 
-
-    public static void showKeyboard(Context activity)
-    {
+    static void showKeyboard(Context activity) {
         InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-
+        if (inputMethodManager != null) inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
     }
-    public  static void hideKeyboard(Context activity)
-    {
+
+    static void hideKeyboard(Context activity) {
         InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-        if(inputMethodManager.isAcceptingText())
-        {
+        if(inputMethodManager != null && inputMethodManager.isAcceptingText()) {
             inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_NOT_ALWAYS, 0);
         }
     }
 
-    public static void hideKeyboard(Context activity, EditText editText)
-    {
-    InputMethodManager imm = (InputMethodManager)activity.getSystemService(activity.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+    static void hideKeyboard(Context activity, EditText editText) {
+    InputMethodManager imm = (InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
     }
 
-    public static AlertDialog getDialog(View dialog, Context context, final Callable method, int positiveButtonText)
-    {
+    static AlertDialog getDialog(View dialog, Context context, final Callable method, int positiveButtonText){
         AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(context);
         alertDialogBuilderUserInput.setView(dialog);
         alertDialogBuilderUserInput
@@ -108,7 +98,6 @@ public class Utils {
                         dialogBox.cancel();
                     }
                 });
-
         AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
         alertDialogAndroid.setOnKeyListener(new DialogInterface.OnKeyListener() {
             @Override
@@ -121,11 +110,9 @@ public class Utils {
         });
         alertDialogAndroid.show();
         return alertDialogAndroid;
-
     }
 
-    public static void lockPositiveButtonOnEmptyText(AlertDialog alertDialogAndroid, final TextInputEditText tv, final String previousContent)
-    {
+    static void lockPositiveButtonOnEmptyText(AlertDialog alertDialogAndroid, final TextInputEditText tv, final String previousContent) {
         final Button positiveButton = alertDialogAndroid.getButton(AlertDialog.BUTTON_POSITIVE);
         positiveButton.setEnabled(false);
         tv.addTextChangedListener(new TextWatcher() {
@@ -159,8 +146,7 @@ public class Utils {
         });
     }
 
-    public static void onEnterConfirm(final TextInputEditText editText, final AlertDialog alertDialogAndroid)
-    {
+    static void onEnterConfirm(final TextInputEditText editText, final AlertDialog alertDialogAndroid) {
         editText.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View view, int keyCode, KeyEvent keyevent) {
                 Button button =  alertDialogAndroid.getButton(AlertDialog.BUTTON_POSITIVE);

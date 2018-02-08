@@ -1,9 +1,12 @@
 package com.webrdaniel.collectmydata;
 
 import android.content.DialogInterface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,12 +21,13 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
 
-public class DataListFragment extends Fragment {
+public class RecordsRecyclerViewFragment extends Fragment {
 
-    private DataCollDetailActivity parent;
     protected BasicListAdapter mBasicListAdapter;
     protected RecyclerView mRecyclerView;
     private TextView tv_emptryRV;
+    private DataCollDetailActivity parent;
+    private View rootView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -32,10 +36,9 @@ public class DataListFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.records_recycler_view, container, false);
-        rootView.setTag("DataListFragment");
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        rootView = inflater.inflate(R.layout.fragment_records_recycler_view, container, false);
+        rootView.setTag("RecordsRecyclerViewFragment");
         FrameLayout frame = rootView.findViewById(R.id.frame);
         mRecyclerView =  rootView.findViewById(R.id.recycler_view_values_list);
         mBasicListAdapter = new BasicListAdapter(parent.mRecords);
@@ -45,7 +48,8 @@ public class DataListFragment extends Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(parent,  DividerItemDecoration.VERTICAL);
-        dividerItemDecoration.setDrawable(getContext().getDrawable(R.drawable.divider));
+        Drawable drawable = ContextCompat.getDrawable(parent, R.drawable.divider);
+        if(drawable!=null)dividerItemDecoration.setDrawable( drawable);
         mRecyclerView.addItemDecoration(dividerItemDecoration);
         tv_emptryRV = rootView.findViewById(R.id.empty_view);
         messageIfEmpty();
@@ -77,8 +81,7 @@ public class DataListFragment extends Fragment {
         return frame;
     }
 
-    public void messageIfEmpty()
-    {
+    public void messageIfEmpty() {
         if (parent.mRecords.size()==0) {
             mRecyclerView.setVisibility(View.GONE);
             tv_emptryRV.setVisibility(View.VISIBLE);
@@ -91,8 +94,8 @@ public class DataListFragment extends Fragment {
 
     private void showDialogDeleteRecord(final int position) {
         LayoutInflater layoutInflaterAndroid = LayoutInflater.from(parent);
-        View dialog = layoutInflaterAndroid.inflate(R.layout.input_dialog_delete, null);
-        TextView tv_delete = (TextView) dialog.findViewById(R.id.tv_delete);
+        View dialog = layoutInflaterAndroid.inflate(R.layout.input_dialog_delete, (ViewGroup) rootView,false);
+        TextView tv_delete =  dialog.findViewById(R.id.tv_delete);
         tv_delete.setText(parent.getString(R.string.really_delete_record));
         Callable methodEditValue = new Callable() {
             @Override
@@ -115,8 +118,8 @@ public class DataListFragment extends Fragment {
         parent.mDatabaseHelper.deleteRecord(record.getId());
         parent.mRecords.remove(record);
         mBasicListAdapter.notifyItemRemoved(position);
-        parent.dataOverviewFragment.updateData();
-        parent.dataOverviewFragment.updateLayout();
+        parent.recordsOverviewFragment.updateData();
+        parent.recordsOverviewFragment.updateLayout();
         parent.updateDatesList();
         messageIfEmpty();
 
@@ -128,12 +131,11 @@ public class DataListFragment extends Fragment {
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             if(viewType == 0) {
-                View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.records_recyclre_view_header, parent, false);
+                View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.header_records_recyclre_view, parent, false);
                 return new HeaderViewHolder(v);
             }
-            else
-            {
-                View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_records, parent, false);
+            else {
+                View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_records_recycler_view, parent, false);
                 return new ListViewHolder(v);
             }
         }
@@ -166,13 +168,13 @@ public class DataListFragment extends Fragment {
         }
 
         @SuppressWarnings("deprecation")
-        public class ListViewHolder extends RecyclerView.ViewHolder{
+        class ListViewHolder extends RecyclerView.ViewHolder{
             View mView;
             TextView mValueDate;
             TextView mValue;
             Record record;
 
-            public ListViewHolder(View v){
+            ListViewHolder(View v){
                 super(v);
                 mView = v;
                 mValue = v.findViewById(R.id.tv_value);
@@ -188,7 +190,7 @@ public class DataListFragment extends Fragment {
 
             private void showDialogEditValue() {
                 LayoutInflater layoutInflaterAndroid = LayoutInflater.from(parent);
-                View dialog = layoutInflaterAndroid.inflate(R.layout.input_dialog_edit_value, null);
+                View dialog = layoutInflaterAndroid.inflate(R.layout.input_dialog_record_value_edit, (ViewGroup) rootView,false);
                 final TextInputEditText et_name = dialog.findViewById(R.id.ti_et);
                 double value = parent.mRecords.get(ListViewHolder.this.getAdapterPosition()-1).getValue();
                 et_name.setText(parent.formatNoLastZero.format(value));
@@ -212,14 +214,14 @@ public class DataListFragment extends Fragment {
                 parent.mDatabaseHelper.editValue(record.getId(), value);
                 record.setValue(value);
                 mBasicListAdapter.notifyItemChanged(position);
-                parent.dataOverviewFragment.updateData();
-                parent.dataOverviewFragment.updateLayout();
+                parent.recordsOverviewFragment.updateData();
+                parent.recordsOverviewFragment.updateLayout();
 
             }
         }
 
-        public class HeaderViewHolder extends RecyclerView.ViewHolder {
-            public HeaderViewHolder(View v) {
+        class HeaderViewHolder extends RecyclerView.ViewHolder {
+            HeaderViewHolder(View v) {
                 super(v);
             }
         }

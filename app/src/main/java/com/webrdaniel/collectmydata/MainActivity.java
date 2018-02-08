@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity{
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.recycler_view) RecyclerView mRecyclerView;
     @BindView(R.id.empty_view) TextView empty_view;
-    protected CardAdapter adapter;
+    protected MainActivityCardAdapter adapter;
     private RecyclerView.LayoutManager mLayoutManager;
     protected ArrayList<DataCollItem> mDataCollItemsArrayList;
     protected DatabaseHelper mDatabaseHelper;
@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity{
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        if(getSupportActionBar()!=null)getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.drawable.ic_poll_orange_24dp);
 
         mDatabaseHelper = new DatabaseHelper(this);
@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity{
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        adapter = new CardAdapter(MainActivity.this);
+        adapter = new MainActivityCardAdapter(MainActivity.this);
         mRecyclerView.setAdapter(adapter);
         messageIfEmpty();
 
@@ -82,20 +82,21 @@ public class MainActivity extends AppCompatActivity{
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode == RESULT_CANCELED) return;
         DataCollItem item = (DataCollItem) data.getSerializableExtra(DATA_COLL_ITEM);
-        int id = mDatabaseHelper.insertDataColl(item.getName(), item.getColor(), item.getReminderTimeString());
+        int id = mDatabaseHelper.insertDataColl(item.getName(), item.getColor());
         item.setId(id);
         mDataCollItemsArrayList.add(item);
         messageIfEmpty();
         adapter.notifyItemInserted(adapter.getItemCount());
 
     }
+
+    @Override
     protected void onPause() {
         super.onPause();
         Utils.hideKeyboard(this);
     }
 
-    protected void messageIfEmpty()
-    {
+    protected void messageIfEmpty() {
         if (mDataCollItemsArrayList.isEmpty()) {
             mRecyclerView.setVisibility(View.GONE);
             empty_view.setVisibility(View.VISIBLE);

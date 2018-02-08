@@ -41,9 +41,11 @@
     <string name="this_week">Tenhle týden</string>
     <string name="this_month">Tenhle měsíc</string>
     <string name="this_year">Tenhle rok</string>
-    <string name="date_picker_about">Dialog pro výběr datumu od Wouter Dullaert</string>
+    <string name="date_picker_about">Dialog výběru datumu od Wouter Dullaert</string>
     <string name="app_version">Verze 1.0</string>
     <string name="message_graph">Není dostatek dat pro vytvoření grafu.</string>
     <string name="error_date">Záznam s tímto datem již existuje</string>
     <string name="record_added">Záznam přidán</string>
+    <string name="about_chart">Grafické znázornění hodnot od Jonas Gehring</string>
+    <string name="my_data_collection">My data collection</string>
 </resources>

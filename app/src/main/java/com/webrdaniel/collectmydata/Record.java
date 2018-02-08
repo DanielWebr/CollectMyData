@@ -2,24 +2,18 @@ package com.webrdaniel.collectmydata;
 
 import java.util.Date;
 
-/**
- * Created by dandu on 04.02.2018.
- */
-
 public class Record{
-    int id;
-    Date date;
-    double value;
+    private int id;
+    private Date date;
+    private double value;
 
-    public Record (int id,Date date, double value)
-    {
+    Record(int id, Date date, double value) {
         this.id = id;
         this.date = date;
         this.value = value;
     }
 
-    public Record (Date date, double value)
-    {
+    Record(Date date, double value) {
         this.date = date;
         this.value = value;
     }

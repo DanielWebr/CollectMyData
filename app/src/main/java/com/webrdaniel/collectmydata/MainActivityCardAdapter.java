@@ -11,25 +11,24 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.Date;
 
-class CardAdapter extends RecyclerView.Adapter<MainViewHolder>{
-    protected ArrayList<DataCollItem> mDataCollItemsArrayList;
-    MainActivity activity;
+class MainActivityCardAdapter extends RecyclerView.Adapter<MainActivityViewHolder>{
+    private ArrayList<DataCollItem> mDataCollItemsArrayList;
+    private MainActivity activity;
 
     @Override
-    public MainViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_data_coll, parent, false);
-        return new MainViewHolder(v,activity);
+    public MainActivityViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_activity_main_recycler_view, parent, false);
+        return new MainActivityViewHolder(v,activity);
     }
 
     @Override
-    public void onBindViewHolder(final MainViewHolder holder, int position) {
+    public void onBindViewHolder(final MainActivityViewHolder holder, int position) {
         DataCollItem item = mDataCollItemsArrayList.get(position);
         holder.mDataCollname.setText(item.getName());
         int color = item.getColor();
         ImageViewCompat.setImageTintList( holder.mIcon, ColorStateList.valueOf(color));
         Date date = Utils.dateToDateFormat(Utils.DATE_FORMAT_DMY);
-        if(activity.mDatabaseHelper.getDates(item.getId()).contains(date))
-        {
+        if(activity.mDatabaseHelper.getDates(item.getId()).contains(date)) {
             holder.mIbDialog.setEnabled(false);
         }
         else{
@@ -42,7 +41,7 @@ class CardAdapter extends RecyclerView.Adapter<MainViewHolder>{
         return mDataCollItemsArrayList.size();
     }
 
-    public CardAdapter(Context context) {
+    MainActivityCardAdapter(Context context) {
         activity = (MainActivity) context;
         mDataCollItemsArrayList = activity.mDataCollItemsArrayList;
     }

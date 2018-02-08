@@ -9,15 +9,14 @@ import android.widget.TextView;
 
 public class AboutAppActivity extends AppCompatActivity {
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.about_app);
+        setContentView(R.layout.activity_about_app);
         TextView github = findViewById(R.id.textView5);
         Spanned Text = Html.fromHtml(getString(R.string.app_info," <a href='https://github.com/DanielWebr/CollectMyData'>GitHub</a> "));
         github.setMovementMethod(LinkMovementMethod.getInstance());
         github.setText(Text);
-        getSupportActionBar().setTitle(getString(R.string.about_app));
+        if(getSupportActionBar() != null)getSupportActionBar().setTitle(getString(R.string.about_app));
     }
 }

@@ -23,7 +23,6 @@ public class NewDataCollActivity extends AppCompatActivity {
     @BindView(R.id.ti_et) TextInputEditText et_name;
     @BindView(R.id.ti_layout) TextInputLayout ti_layout;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,17 +32,16 @@ public class NewDataCollActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!TextUtils.isEmpty(mUserEnteredText))
-                {
+                if(!TextUtils.isEmpty(mUserEnteredText)) {
                     makeResult(RESULT_OK);
                     finish();
                 }
-                else
-                {
+                else {
                     ti_layout.setError(getResources().getString(R.string.name_error));
                 }
             }
         });
+
         et_name.requestFocus();
         et_name.addTextChangedListener(new TextWatcher() {
             @Override
@@ -61,9 +59,10 @@ public class NewDataCollActivity extends AppCompatActivity {
 
             }
         });
+
         et_name.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         Utils.showKeyboard(this);
-        getSupportActionBar().setTitle(getString(R.string.new_dataColl));
+        if(getSupportActionBar()!=null)getSupportActionBar().setTitle(getString(R.string.new_dataColl));
     }
 
     @Override
@@ -72,19 +71,18 @@ public class NewDataCollActivity extends AppCompatActivity {
         finish();
     }
 
-    private void makeResult(int result) {
-        Intent i = new Intent();
-        if(result==RESULT_OK)
-        {
-            mDataCollItem.setName(mUserEnteredText);
-            i.putExtra(MainActivity.DATA_COLL_ITEM, mDataCollItem);
-        }
-        setResult(result, i);
-    }
-
     @Override
     protected void onPause() {
         super.onPause();
         Utils.hideKeyboard(this);
+    }
+
+    private void makeResult(int result) {
+        Intent i = new Intent();
+        if(result==RESULT_OK) {
+            mDataCollItem.setName(mUserEnteredText);
+            i.putExtra(MainActivity.DATA_COLL_ITEM, mDataCollItem);
+        }
+        setResult(result, i);
     }
 }

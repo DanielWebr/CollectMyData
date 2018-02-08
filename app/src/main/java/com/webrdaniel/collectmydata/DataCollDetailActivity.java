@@ -21,6 +21,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -47,8 +48,8 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
     public ArrayList<Record> mRecords;
     protected DatabaseHelper mDatabaseHelper;
     protected DecimalFormat formatNoLastZero;
-    protected DataOverviewFragment dataOverviewFragment;
-    protected DataListFragment dataListFragment;
+    protected RecordsOverviewFragment recordsOverviewFragment;
+    protected RecordsRecyclerViewFragment recordsRecyclerViewFragment;
     protected Adapter adapter;
     private TextInputEditText et_date;
     private TextInputLayout ti_layout_date;
@@ -73,7 +74,7 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
         mDatabaseHelper = new DatabaseHelper(this);
         dates = mDatabaseHelper.getDates(mDataCollItem.getId());
         mRecords = mDatabaseHelper.getRecords(mDataCollItem.getId());
-        getSupportActionBar().setTitle(mDataCollItem.getName());
+        if(getSupportActionBar()!=null)getSupportActionBar().setTitle(mDataCollItem.getName());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
@@ -110,44 +111,6 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
         });
     }
 
-    private void setupViewPager(ViewPager viewPager) {
-        adapter = new Adapter(getSupportFragmentManager());
-        dataOverviewFragment = new DataOverviewFragment();
-        adapter.addFragment(dataOverviewFragment,getResources().getString(R.string.tab_overview));
-        dataListFragment = new DataListFragment();
-        adapter.addFragment(dataListFragment, "Data");
-        viewPager.setAdapter(adapter);
-    }
-
-    static class Adapter extends FragmentPagerAdapter {
-
-        private final List<Fragment> mFragmentList = new ArrayList<>();
-        private final List<String> mFragmentTitleList = new ArrayList<>();
-        public Adapter(FragmentManager manager) {
-            super(manager);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return mFragmentList.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return mFragmentList.size();
-        }
-
-        public void addFragment(Fragment fragment, String title) {
-            mFragmentList.add(fragment);
-            mFragmentTitleList.add(title);
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return mFragmentTitleList.get(position);
-        }
-
-    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         this.menu = menu;
@@ -165,14 +128,63 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
     protected void onPause() {
         super.onPause();
         Utils.hideKeyboard(this);
     }
 
+    @Override
+    public void onDateSet(DatePickerDialog datePickerDialog, int year, int month, int day) {
+        setDate(year, month, day);
+    }
+
+    private void setupViewPager(ViewPager viewPager) {
+        adapter = new Adapter(getSupportFragmentManager());
+        recordsOverviewFragment = new RecordsOverviewFragment();
+        adapter.addFragment(recordsOverviewFragment,getResources().getString(R.string.tab_overview));
+        recordsRecyclerViewFragment = new RecordsRecyclerViewFragment();
+        adapter.addFragment(recordsRecyclerViewFragment, "Data");
+        viewPager.setAdapter(adapter);
+    }
+    static class Adapter extends FragmentPagerAdapter {
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+
+        private final List<String> mFragmentTitleList = new ArrayList<>();
+
+        Adapter(FragmentManager manager) {
+            super(manager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+
+        void addFragment(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
+        }
+
+    }
+
+    protected void updateDatesList() {
+        dates.clear();
+        dates.addAll(mDatabaseHelper.getDates(mDataCollItem.getId()));
+    }
+
     private void showDialogAddValueDate() {
         LayoutInflater layoutInflaterAndroid = LayoutInflater.from(this);
-        View dialog = layoutInflaterAndroid.inflate(R.layout.input_dialog_value_date, null);
+        View dialog = layoutInflaterAndroid.inflate(R.layout.input_dialog_record_value_date, (ViewGroup) getWindow().getDecorView().getRootView(),false);
         final TextInputEditText etValue = dialog.findViewById(R.id.ti_et);
         et_date = dialog.findViewById(R.id.ti_et_date);
         ti_layout_date = dialog.findViewById(R.id.ti_layout_date);
@@ -181,7 +193,7 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
         Callable methodStoreValue = new Callable() {
             @Override
             public Object call() throws Exception {
-                storeRecord(Double.parseDouble(etValue.getText().toString()),Utils.stringToDate(et_date.getText().toString(),Utils.DATE_FORMAT_DMY));
+                storeRecord(Double.parseDouble(etValue.getText().toString()),dateChosen);
                 return null;
             }
         };
@@ -193,19 +205,9 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
         et_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Calendar calendar =Calendar.getInstance();
-                calendar.setTime(dateChosen);
-                int year = calendar.get(Calendar.YEAR);
-                int month = calendar.get(Calendar.MONTH);
-                int day = calendar.get(Calendar.DAY_OF_MONTH);
-                DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(DataCollDetailActivity.this, year, month, day);
-                datePickerDialog.show(getFragmentManager(), "DateFragment");
-                datePickerDialog.setMaxDate(Calendar.getInstance());
-                Utils.hideKeyboard(DataCollDetailActivity.this,et_date);
+                showDatePickerDialog();
             }
         });
-
 
         final Button positiveButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
         positiveButton.setEnabled(false);
@@ -224,8 +226,7 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
             }
             @Override
             public void afterTextChanged(Editable s) {
-                if(dates.contains(dateChosen))
-                {
+                if(dates.contains(dateChosen)) {
                     positiveButton.setEnabled(false);
                     ti_layout_date.setError(getResources().getString(R.string.error_date));
                 }
@@ -253,6 +254,18 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
         });
     }
 
+    private void showDatePickerDialog(){
+        Calendar calendar =Calendar.getInstance();
+        calendar.setTime(dateChosen);
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(DataCollDetailActivity.this, year, month, day);
+        datePickerDialog.show(getFragmentManager(), "DateFragment");
+        datePickerDialog.setMaxDate(Calendar.getInstance());
+        Utils.hideKeyboard(DataCollDetailActivity.this,et_date);
+    }
+
     private void storeRecord(double value, Date date) {
         int id = mDatabaseHelper.insertDataValue(mDataCollItem.getId(),value,Utils.dateToString(date,Utils.DATE_FORMAT_DMY));
         int idList = getIdToList(date);
@@ -260,34 +273,28 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
         mRecords.add(idList,record);
         filterRecords(filterDates);
         Collections.sort(mRecords, new RecordComparator());
-        dataOverviewFragment.updateData();
-        dataOverviewFragment.updateLayout();
-        dataListFragment.messageIfEmpty();
-        dataListFragment.mBasicListAdapter.notifyDataSetChanged();
+        recordsOverviewFragment.updateData();
+        recordsOverviewFragment.updateLayout();
+        recordsRecyclerViewFragment.messageIfEmpty();
+        recordsRecyclerViewFragment.mBasicListAdapter.notifyDataSetChanged();
         updateDatesList();
         Toast.makeText(this, this.getString(R.string.record_added), Toast.LENGTH_SHORT).show();
     }
 
     private int getIdToList(Date date) {
-        for(Record record : mRecords )
-        {
+        for(Record record : mRecords ) {
             if(date.after(record.getDate()))
             return mRecords.indexOf(record);
         }
         return mRecords.size();
     }
 
-    @Override
-    public void onDateSet(DatePickerDialog datePickerDialog, int year, int month, int day) {
-        setDate(year, month, day);
-    }
-
-    public void setDate(int year, int month, int day){
+    private void setDate(int year, int month, int day){
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month, day,0,0,0);
         calendar.clear(Calendar.MILLISECOND);
         dateChosen = calendar.getTime();
-        et_date.setText(Utils.dateToString(calendar.getTime(),Utils.DATE_FORMAT_DMY));
+        et_date.setText(Utils.dateToString(calendar.getTime(),Utils.DATE_FORMAT_EDM));
         Utils.showKeyboard(this);
     }
 
@@ -346,8 +353,7 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
     }
 
     private void filterRecords(int daysToPast) {
-        if (daysToPast==0)
-        {
+        if (daysToPast==0) {
             showAllRecords();
             return;
         }
@@ -358,31 +364,25 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
         Date date = cal.getTime();
         List<Record> listToRemove = new ArrayList<>();
         for(Record record : mRecords) {
-            if (record.getDate().before(date))
-            {
+            if (record.getDate().before(date)) {
                 listToRemove.add(record);
             }
         }
         mRecords.removeAll(listToRemove);
-        dataOverviewFragment.updateData();
-        dataOverviewFragment.updateLayout();
-        dataListFragment.messageIfEmpty();
-        dataListFragment.mBasicListAdapter.notifyDataSetChanged();
+        recordsOverviewFragment.updateData();
+        recordsOverviewFragment.updateLayout();
+        recordsRecyclerViewFragment.messageIfEmpty();
+        recordsRecyclerViewFragment.mBasicListAdapter.notifyDataSetChanged();
         filterDates = daysToPast;
     }
 
     private void showAllRecords() {
         mRecords.clear();
         mRecords.addAll(mDatabaseHelper.getRecords(mDataCollItem.getId()));
-        dataOverviewFragment.updateData();
-        dataOverviewFragment.updateLayout();
-        dataListFragment.messageIfEmpty();
-        dataListFragment.mBasicListAdapter.notifyDataSetChanged();
+        recordsOverviewFragment.updateData();
+        recordsOverviewFragment.updateLayout();
+        recordsRecyclerViewFragment.messageIfEmpty();
+        recordsRecyclerViewFragment.mBasicListAdapter.notifyDataSetChanged();
         filterDates = 0;
-    }
-    protected void updateDatesList()
-    {
-        dates.clear();
-        dates.addAll(mDatabaseHelper.getDates(mDataCollItem.getId()));
     }
 }

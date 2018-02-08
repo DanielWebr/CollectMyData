@@ -2,9 +2,7 @@ package com.webrdaniel.collectmydata;
 
 import java.util.Comparator;
 
-
 public class RecordComparator implements Comparator<Record> {
-
     @Override
     public int compare(Record o1, Record o2) {
         int x = o1.getDate().compareTo(o2.getDate());

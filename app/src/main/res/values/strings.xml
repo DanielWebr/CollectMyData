@@ -43,4 +43,7 @@
     <string name="message_graph">Not enough data to make graph.</string>
     <string name="error_date">Record with this date already exists</string>
     <string name="record_added">Record added</string>
+    <string name="about_chart">Graph in the app made by GraphView library by Jonas Gehring</string>
+    <string name="my_data_collection">My data collection</string>
+    <string name="menu">menu</string>
 </resources>
