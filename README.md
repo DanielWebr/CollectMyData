@@ -1,6 +1,12 @@
 # CollectMyData
 Android app for collecting data.
 
+## Libraries used in app
+<a href="https://materialdesignicons.com/">Material Design Icons<a/>
+<a href="http://www.android-graphview.org/">Graph View<a/>
+<a href="https://github.com/wdullaer/MaterialDateTimePicker">Material Date Time Picker<a/>
+    
+
 ## License
 
     Copyright 2018 DanielWebr
