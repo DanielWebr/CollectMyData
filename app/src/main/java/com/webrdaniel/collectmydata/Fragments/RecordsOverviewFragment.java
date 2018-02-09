@@ -1,4 +1,4 @@
-package com.webrdaniel.collectmydata;
+package com.webrdaniel.collectmydata.Fragments;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,6 +14,10 @@ import com.jjoe64.graphview.GridLabelRenderer;
 import com.jjoe64.graphview.helper.StaticLabelsFormatter;
 import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
+import com.webrdaniel.collectmydata.Activities.DataCollDetailActivity;
+import com.webrdaniel.collectmydata.Models.Record;
+import com.webrdaniel.collectmydata.R;
+import com.webrdaniel.collectmydata.Utils.DateUtils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -26,7 +30,6 @@ public class RecordsOverviewFragment extends Fragment {
     double min, max, sum, avg;
     int count;
     private DataCollDetailActivity parent;
-    private LinearLayout linearLayout;
     GraphView graph;
     BarGraphSeries<DataPoint> series;
     StaticLabelsFormatter staticLabelsFormatter;
@@ -41,7 +44,7 @@ public class RecordsOverviewFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        linearLayout = (LinearLayout) inflater.inflate(R.layout.fragment_data_detail_overview, container, false);
+        LinearLayout linearLayout = (LinearLayout) inflater.inflate(R.layout.fragment_records_overview, container, false);
         tv_count = linearLayout.findViewById(R.id.tv_count);
         tv_min = linearLayout.findViewById(R.id.tv_min);
         tv_max = linearLayout.findViewById(R.id.tv_max);
@@ -98,20 +101,15 @@ public class RecordsOverviewFragment extends Fragment {
         hLabels[size]="";
         DataPoint[] dataPoints = new DataPoint[size+1];
         dataPoints[size]=new DataPoint(size,0);
-        int density = (int) Math.ceil(size/8.0);
-        int labelsCount = 0;
+        int density = (int) Math.ceil(size/7.0);
         for(int i = 0; i < size; i++) {
             Record record = filledRecords.get(i);
             dataPoints[i] = new DataPoint(i, record.getValue());
-            if((i)%density==0 || i==0){
-                hLabels[i] = Utils.dateToString(record.getDate(),Utils.DATE_FORMAT_DM);
-                labelsCount++;
-            }
-            else {
-                hLabels[i] = "";
+            if(((i+density-1)%density==0 && i!=0)||i==1){
+                hLabels[i] = DateUtils.dateToString(record.getDate(),DateUtils.DATE_FORMAT_DM);
             }
         }
-
+        glr.resetStyles();
         if(staticLabelsFormatter == null) {
             graph.getViewport().setMinX(0);
             staticLabelsFormatter = new StaticLabelsFormatter(graph);
@@ -126,30 +124,19 @@ public class RecordsOverviewFragment extends Fragment {
         else {
             staticLabelsFormatter.setHorizontalLabels(hLabels);
             series.resetData(dataPoints);
-            glr.resetStyles();
         }
+
         glr.setHorizontalLabelsAngle(1);
+        glr.setNumHorizontalLabels(hLabels.length);
+        glr.reloadStyles();
 
         if(min>0) graph.getViewport().setMinY(0);
         else graph.getViewport().setMinY(min - min/10);
 
         graph.getViewport().setMaxY(max + max/10);
 
-        graph.refreshDrawableState();
         showGraph();
 
-       /* switch (labelsCount)
-        {
-            case 8:glr.setHorizontalLabelsAngle(1);glr.setLabelsSpace(10); break;
-            case 9:glr.setHorizontalLabelsAngle(10);glr.setLabelsSpace(20);break;
-            case 10:glr.setHorizontalLabelsAngle(20);glr.setLabelsSpace(20);break;
-            case 11:glr.setHorizontalLabelsAngle(30);glr.setLabelsSpace(20);break;
-            case 12:glr.setHorizontalLabelsAngle(40);glr.setLabelsSpace(20);break;
-            case 13:glr.setHorizontalLabelsAngle(45);glr.setLabelsSpace(20);break;
-            case 14:glr.setHorizontalLabelsAngle(50);glr.setLabelsSpace(20);break;
-            case 15:glr.setHorizontalLabelsAngle(60);glr.setLabelsSpace(20);break;
-            default:  glr.setHorizontalLabelsAngle(0);glr.setLabelsSpace(5);
-        }*/
     }
 
     private ArrayList<Record> getFilledRecords() {
@@ -172,6 +159,7 @@ public class RecordsOverviewFragment extends Fragment {
                 size++;
             }
         }
+        filledRecords.add(new Record(new Date(),0));
         Collections.reverse(filledRecords);
         return filledRecords;
     }

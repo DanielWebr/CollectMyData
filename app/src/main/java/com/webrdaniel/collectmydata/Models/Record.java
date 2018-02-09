@@ -1,4 +1,4 @@
-package com.webrdaniel.collectmydata;
+package com.webrdaniel.collectmydata.Models;
 
 import java.util.Date;
 
@@ -7,13 +7,13 @@ public class Record{
     private Date date;
     private double value;
 
-    Record(int id, Date date, double value) {
+    public Record(int id, Date date, double value) {
         this.id = id;
         this.date = date;
         this.value = value;
     }
 
-    Record(Date date, double value) {
+    public Record(Date date, double value) {
         this.date = date;
         this.value = value;
     }

@@ -1,4 +1,4 @@
-package com.webrdaniel.collectmydata;
+package com.webrdaniel.collectmydata.Models;
 
 import java.util.Comparator;
 

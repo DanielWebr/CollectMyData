@@ -1,34 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:paddingEnd="24dp"
+    android:paddingStart="50dp"
+    android:paddingTop="8dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
     <TextView
-        android:id="@+id/tv3"
-        android:layout_width="match_parent"
+        android:layout_width="120dp"
+        android:gravity="center"
         android:layout_height="match_parent"
-        android:layout_weight="2"
-        android:gravity="center_vertical|end"
-        android:text="@string/value"
+        android:text="@string/value_"
         android:textSize="25sp" />
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/ti_layout"
-        android:layout_width="match_parent"
+    <android.support.design.widget.TextInputEditText
+        android:id="@+id/tiet_record_value_edit"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_weight="1">
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/ti_et"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:ems="10"
-            android:gravity="center_vertical"
-            android:inputType="numberSigned|numberDecimal"
-            android:maxLength="20"
-            android:textColor="@android:color/darker_gray" />
-    </android.support.design.widget.TextInputLayout>
-
+        android:ems="6"
+        android:gravity="center_vertical"
+        android:inputType="numberSigned|numberDecimal"
+        android:maxLength="6"
+        android:textColor="@android:color/darker_gray" />
 </LinearLayout>
 
 

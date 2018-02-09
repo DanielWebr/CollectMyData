@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:paddingEnd="36dp"
     android:paddingStart="36dp"
-    tools:context="com.webrdaniel.collectmydata.AboutAppActivity">
+    tools:context="com.webrdaniel.collectmydata.Activities.AboutAppActivity">
 
     <ImageView
         android:id="@+id/imageView"
@@ -53,23 +53,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="12dp"
         android:gravity="center_horizontal"
-        android:text="@string/app_icon" />
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:gravity="center_horizontal"
-        android:text="@string/date_picker_about" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:gravity="center_horizontal"
-        android:text="@string/about_chart" />
+        android:text="@string/app_resources" />
 
     <TextView
         android:id="@+id/textView7"

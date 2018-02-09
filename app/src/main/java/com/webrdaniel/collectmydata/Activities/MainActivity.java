@@ -1,5 +1,6 @@
-package com.webrdaniel.collectmydata;
+package com.webrdaniel.collectmydata.Activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -12,6 +13,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.webrdaniel.collectmydata.DatabaseHelper;
+import com.webrdaniel.collectmydata.Lists.DataCollListAdapter;
+import com.webrdaniel.collectmydata.Models.DataCollItem;
+import com.webrdaniel.collectmydata.R;
+import com.webrdaniel.collectmydata.Utils.KeyboardUtils;
+import com.webrdaniel.collectmydata.Utils.Utils;
+
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -19,15 +27,15 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity{
 
-    @BindView(R.id.fab) FloatingActionButton fab;
-    @BindView(R.id.toolbar) Toolbar toolbar;
-    @BindView(R.id.recycler_view) RecyclerView mRecyclerView;
-    @BindView(R.id.empty_view) TextView empty_view;
-    protected MainActivityCardAdapter adapter;
+    @BindView(R.id.fab_main_activity) public FloatingActionButton fab;
+    @BindView(R.id.toolbar) public Toolbar toolbar;
+    @BindView(R.id.recycler_view_main_activity) public RecyclerView mRecyclerView;
+    @BindView(R.id.empty_records_list) public TextView empty_view;
+    public DataCollListAdapter adapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    protected ArrayList<DataCollItem> mDataCollItemsArrayList;
-    protected DatabaseHelper mDatabaseHelper;
-    public static final String DATA_COLL_ITEM = "com.webrdaniel.collectmydata.MainActivity";
+    public ArrayList<DataCollItem> mDataCollItemsArrayList;
+    public DatabaseHelper mDatabaseHelper;
+    public static final String DATA_COLL_ITEM = "com.webrdaniel.collectmydata.Activities.MainActivity";
     private static final int NEW_DATA_COLL_ITEM = 100;
 
     @Override
@@ -45,11 +53,12 @@ public class MainActivity extends AppCompatActivity{
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        adapter = new MainActivityCardAdapter(MainActivity.this);
+        adapter = new DataCollListAdapter(MainActivity.this);
         mRecyclerView.setAdapter(adapter);
         messageIfEmpty();
 
         fab.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("RestrictedApi")
             @Override
             public void onClick(View view) {
                 Intent newDataColl= new Intent(MainActivity.this, NewDataCollActivity.class);
@@ -93,10 +102,10 @@ public class MainActivity extends AppCompatActivity{
     @Override
     protected void onPause() {
         super.onPause();
-        Utils.hideKeyboard(this);
+        KeyboardUtils.hideKeyboard(this);
     }
 
-    protected void messageIfEmpty() {
+    public void messageIfEmpty() {
         if (mDataCollItemsArrayList.isEmpty()) {
             mRecyclerView.setVisibility(View.GONE);
             empty_view.setVisibility(View.VISIBLE);

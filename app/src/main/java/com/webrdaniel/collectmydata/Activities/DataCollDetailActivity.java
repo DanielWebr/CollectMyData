@@ -1,4 +1,4 @@
-package com.webrdaniel.collectmydata;
+package com.webrdaniel.collectmydata.Activities;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -26,6 +26,16 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+import com.webrdaniel.collectmydata.DatabaseHelper;
+import com.webrdaniel.collectmydata.Fragments.RecordsListFragment;
+import com.webrdaniel.collectmydata.Fragments.RecordsOverviewFragment;
+import com.webrdaniel.collectmydata.Models.DataCollItem;
+import com.webrdaniel.collectmydata.Models.Record;
+import com.webrdaniel.collectmydata.Models.RecordComparator;
+import com.webrdaniel.collectmydata.R;
+import com.webrdaniel.collectmydata.Utils.DateUtils;
+import com.webrdaniel.collectmydata.Utils.DialogUtils;
+import com.webrdaniel.collectmydata.Utils.KeyboardUtils;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -41,15 +51,15 @@ import butterknife.ButterKnife;
 public class DataCollDetailActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
 
     @BindView(R.id.toolbar) Toolbar toolbar;
-    @BindView(R.id.viewpager) ViewPager viewPager;
-    @BindView(R.id.tabs) TabLayout tabs;
+    @BindView(R.id.viewpager_data_coll_detail) ViewPager viewPager;
+    @BindView(R.id.tabs_data_coll_detail) TabLayout tabs;
     @BindView(R.id.fab_records) FloatingActionButton fab;
     protected DataCollItem mDataCollItem;
     public ArrayList<Record> mRecords;
-    protected DatabaseHelper mDatabaseHelper;
-    protected DecimalFormat formatNoLastZero;
-    protected RecordsOverviewFragment recordsOverviewFragment;
-    protected RecordsRecyclerViewFragment recordsRecyclerViewFragment;
+    public DatabaseHelper mDatabaseHelper;
+    public DecimalFormat formatNoLastZero;
+    public RecordsOverviewFragment recordsOverviewFragment;
+    protected RecordsListFragment recordsListFragment;
     protected Adapter adapter;
     private TextInputEditText et_date;
     private TextInputLayout ti_layout_date;
@@ -86,17 +96,12 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
         });
         fab.hide();
 
+
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                    if(position == 0)
-                    {
-                        fab.hide();
-                    }
-                    else
-                    {
-                        fab.show();
-                    }
+                    if(position == 0) fab.hide();
+                    else fab.show();
             }
 
             @Override
@@ -131,7 +136,7 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
     @Override
     protected void onPause() {
         super.onPause();
-        Utils.hideKeyboard(this);
+        KeyboardUtils.hideKeyboard(this);
     }
 
     @Override
@@ -143,8 +148,8 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
         adapter = new Adapter(getSupportFragmentManager());
         recordsOverviewFragment = new RecordsOverviewFragment();
         adapter.addFragment(recordsOverviewFragment,getResources().getString(R.string.tab_overview));
-        recordsRecyclerViewFragment = new RecordsRecyclerViewFragment();
-        adapter.addFragment(recordsRecyclerViewFragment, "Data");
+        recordsListFragment = new RecordsListFragment();
+        adapter.addFragment(recordsListFragment, getResources().getString(R.string.records));
         viewPager.setAdapter(adapter);
     }
     static class Adapter extends FragmentPagerAdapter {
@@ -177,7 +182,7 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
 
     }
 
-    protected void updateDatesList() {
+    public void updateDatesList() {
         dates.clear();
         dates.addAll(mDatabaseHelper.getDates(mDataCollItem.getId()));
     }
@@ -185,10 +190,10 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
     private void showDialogAddValueDate() {
         LayoutInflater layoutInflaterAndroid = LayoutInflater.from(this);
         View dialog = layoutInflaterAndroid.inflate(R.layout.input_dialog_record_value_date, (ViewGroup) getWindow().getDecorView().getRootView(),false);
-        final TextInputEditText etValue = dialog.findViewById(R.id.ti_et);
-        et_date = dialog.findViewById(R.id.ti_et_date);
-        ti_layout_date = dialog.findViewById(R.id.ti_layout_date);
-        et_date.setText(Utils.dateToString(null, Utils.DATE_FORMAT_EDMM));
+        final TextInputEditText etValue = dialog.findViewById(R.id.tiet_edit_record_date_value);
+        et_date = dialog.findViewById(R.id.tiet_edit_record_value_date);
+        ti_layout_date = dialog.findViewById(R.id.til_edit_record_value_date);
+        et_date.setText(DateUtils.dateToString(null, DateUtils.DATE_FORMAT_EDMM));
 
         Callable methodStoreValue = new Callable() {
             @Override
@@ -197,10 +202,10 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
                 return null;
             }
         };
-        AlertDialog alertDialog = Utils.getDialog(dialog,this, methodStoreValue,R.string.add);
+        AlertDialog alertDialog = DialogUtils.getDialog(dialog,this, methodStoreValue,R.string.add);
 
-        Utils.onEnterConfirm(etValue,alertDialog);
-        Utils.showKeyboard(this);
+        DialogUtils.onEnterConfirm(etValue,alertDialog);
+        KeyboardUtils.showKeyboard(this);
 
         et_date.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -212,7 +217,7 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
         final Button positiveButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
         positiveButton.setEnabled(false);
 
-        dateChosen = Utils.dateToDateFormat(Utils.DATE_FORMAT_DMY);
+        dateChosen = DateUtils.dateToDateFormat(DateUtils.DATE_FORMAT_DMY);
         if(dates.contains(dateChosen))ti_layout_date.setError(getResources().getString(R.string.error_date));
 
         et_date.addTextChangedListener(new TextWatcher() {
@@ -263,11 +268,11 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
         DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(DataCollDetailActivity.this, year, month, day);
         datePickerDialog.show(getFragmentManager(), "DateFragment");
         datePickerDialog.setMaxDate(Calendar.getInstance());
-        Utils.hideKeyboard(DataCollDetailActivity.this,et_date);
+        KeyboardUtils.hideKeyboard(DataCollDetailActivity.this,et_date);
     }
 
     private void storeRecord(double value, Date date) {
-        int id = mDatabaseHelper.insertDataValue(mDataCollItem.getId(),value,Utils.dateToString(date,Utils.DATE_FORMAT_DMY));
+        int id = mDatabaseHelper.insertDataValue(mDataCollItem.getId(),value, DateUtils.dateToString(date,DateUtils.DATE_FORMAT_DMY));
         int idList = getIdToList(date);
         Record record = new Record(id,date,value);
         mRecords.add(idList,record);
@@ -275,8 +280,8 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
         Collections.sort(mRecords, new RecordComparator());
         recordsOverviewFragment.updateData();
         recordsOverviewFragment.updateLayout();
-        recordsRecyclerViewFragment.messageIfEmpty();
-        recordsRecyclerViewFragment.mBasicListAdapter.notifyDataSetChanged();
+        recordsListFragment.messageIfEmpty();
+        recordsListFragment.mRecordsListAdapter.notifyDataSetChanged();
         updateDatesList();
         Toast.makeText(this, this.getString(R.string.record_added), Toast.LENGTH_SHORT).show();
     }
@@ -294,8 +299,8 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
         calendar.set(year, month, day,0,0,0);
         calendar.clear(Calendar.MILLISECOND);
         dateChosen = calendar.getTime();
-        et_date.setText(Utils.dateToString(calendar.getTime(),Utils.DATE_FORMAT_EDM));
-        Utils.showKeyboard(this);
+        et_date.setText(DateUtils.dateToString(calendar.getTime(),DateUtils.DATE_FORMAT_EDM));
+        KeyboardUtils.showKeyboard(this);
     }
 
     private void showPopupMenuFilter() {
@@ -371,8 +376,8 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
         mRecords.removeAll(listToRemove);
         recordsOverviewFragment.updateData();
         recordsOverviewFragment.updateLayout();
-        recordsRecyclerViewFragment.messageIfEmpty();
-        recordsRecyclerViewFragment.mBasicListAdapter.notifyDataSetChanged();
+        recordsListFragment.messageIfEmpty();
+        recordsListFragment.mRecordsListAdapter.notifyDataSetChanged();
         filterDates = daysToPast;
     }
 
@@ -381,8 +386,8 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
         mRecords.addAll(mDatabaseHelper.getRecords(mDataCollItem.getId()));
         recordsOverviewFragment.updateData();
         recordsOverviewFragment.updateLayout();
-        recordsRecyclerViewFragment.messageIfEmpty();
-        recordsRecyclerViewFragment.mBasicListAdapter.notifyDataSetChanged();
+        recordsListFragment.messageIfEmpty();
+        recordsListFragment.mRecordsListAdapter.notifyDataSetChanged();
         filterDates = 0;
     }
 }

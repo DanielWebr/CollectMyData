@@ -4,18 +4,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingEnd="24dp"
+    android:paddingStart="16dp"
+    android:paddingTop="8dp"
     android:baselineAligned="false">
 
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/ti_layout"
+        android:id="@+id/til_record_date_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1">
 
         <android.support.design.widget.TextInputEditText
-            android:id="@+id/ti_et"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:id="@+id/tiet_edit_record_date_value"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
             android:ems="3"
             android:hint="@string/value"
             android:inputType="numberSigned|numberDecimal"
@@ -23,19 +26,20 @@
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/ti_layout_date"
+        android:id="@+id/til_edit_record_value_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         app:errorEnabled="true">
 
         <android.support.design.widget.TextInputEditText
-            android:id="@+id/ti_et_date"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="@string/date"
+            android:id="@+id/tiet_edit_record_value_date"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
             android:focusable="false"
-            android:focusableInTouchMode="false"/>
+            android:focusableInTouchMode="false"
+            android:hint="@string/date"
+            android:inputType="textNoSuggestions" />
     </android.support.design.widget.TextInputLayout>
 
 </LinearLayout>

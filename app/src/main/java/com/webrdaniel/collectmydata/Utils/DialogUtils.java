@@ -1,8 +1,7 @@
-package com.webrdaniel.collectmydata;
+package com.webrdaniel.collectmydata.Utils;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AlertDialog;
@@ -11,74 +10,14 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+import com.webrdaniel.collectmydata.R;
+
 import java.util.concurrent.Callable;
 
-
-public class Utils {
-    static final String DATE_FORMAT_DM ="d.M.";
-    static final String DATE_FORMAT_EDMM ="EEE d. MMMM";
-    static final String DATE_FORMAT_EDM ="EEE d. M.";
-    static final String DATE_FORMAT_DMY ="d. M. yyyy";
-
-    static int getMatColor(Context context) {
-        int arrayId = context.getResources().getIdentifier("mdcolor", "array", context.getApplicationContext().getPackageName());
-        TypedArray colors = context.getResources().obtainTypedArray(arrayId);
-        int index = (int) (Math.random() * colors.length());
-        int returnColor = colors.getColor(index, Color.BLACK);
-        colors.recycle();
-        return returnColor;
-    }
-
-    static Date stringToDate(String date, String format) {
-        SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.getDefault());
-        try {
-            return  sdf.parse(date);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new Date();
-        }
-    }
-
-    static String dateToString(Date date, String format) {
-            SimpleDateFormat sdf = new SimpleDateFormat(format,Locale.getDefault());
-            return sdf.format((date!=null)?date:new Date());
-    }
-
-    static Date dateToDateFormat(String format) {
-        SimpleDateFormat sdf = new SimpleDateFormat(format,Locale.getDefault());
-        try {
-            return sdf.parse(sdf.format(new Date()));
-        } catch (ParseException e) {
-            return new Date();
-        }
-    }
-
-    static void showKeyboard(Context activity) {
-        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (inputMethodManager != null) inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-    }
-
-    static void hideKeyboard(Context activity) {
-        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-        if(inputMethodManager != null && inputMethodManager.isAcceptingText()) {
-            inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_NOT_ALWAYS, 0);
-        }
-    }
-
-    static void hideKeyboard(Context activity, EditText editText) {
-    InputMethodManager imm = (InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (imm != null) imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
-    }
-
-    static AlertDialog getDialog(View dialog, Context context, final Callable method, int positiveButtonText){
+public class DialogUtils {
+    public static AlertDialog getDialog(View dialog, Context context, final Callable method, int positiveButtonText){
         AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(context);
         alertDialogBuilderUserInput.setView(dialog);
         alertDialogBuilderUserInput
@@ -112,7 +51,7 @@ public class Utils {
         return alertDialogAndroid;
     }
 
-    static void lockPositiveButtonOnEmptyText(AlertDialog alertDialogAndroid, final TextInputEditText tv, final String previousContent) {
+    public static void lockPositiveButtonOnEmptyText(AlertDialog alertDialogAndroid, final TextInputEditText tv, final String previousContent) {
         final Button positiveButton = alertDialogAndroid.getButton(AlertDialog.BUTTON_POSITIVE);
         positiveButton.setEnabled(false);
         tv.addTextChangedListener(new TextWatcher() {
@@ -127,7 +66,7 @@ public class Utils {
             @Override
             public void afterTextChanged(Editable s) {
                 if(previousContent!=null){
-                    if (s.toString().equals(previousContent)||TextUtils.isEmpty(s)) {
+                    if (s.toString().equals(previousContent)|| TextUtils.isEmpty(s)) {
                         tv.setTextColor(Color.GRAY);
                         positiveButton.setEnabled(false);
                     } else {
@@ -146,7 +85,7 @@ public class Utils {
         });
     }
 
-    static void onEnterConfirm(final TextInputEditText editText, final AlertDialog alertDialogAndroid) {
+    public static void onEnterConfirm(final TextInputEditText editText, final AlertDialog alertDialogAndroid) {
         editText.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View view, int keyCode, KeyEvent keyevent) {
                 Button button =  alertDialogAndroid.getButton(AlertDialog.BUTTON_POSITIVE);
@@ -159,5 +98,4 @@ public class Utils {
         });
 
     }
-
 }

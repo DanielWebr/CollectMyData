@@ -1,16 +1,16 @@
-package com.webrdaniel.collectmydata;
+package com.webrdaniel.collectmydata.Models;
 
 import java.io.Serializable;
 
-class DataCollItem implements Serializable {
+public class DataCollItem implements Serializable {
     private String name;
     private int color;
     private int id;
 
-    DataCollItem(){
+    public DataCollItem(){
 
     }
-    DataCollItem(int id, String name, int color){
+    public DataCollItem(int id, String name, int color){
         this.id = id;
         this.name = name;
         this.color = color;

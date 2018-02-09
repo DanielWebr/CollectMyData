@@ -6,19 +6,24 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.webrdaniel.collectmydata.Models.DataCollItem;
+import com.webrdaniel.collectmydata.Models.Record;
+import com.webrdaniel.collectmydata.Models.RecordComparator;
+import com.webrdaniel.collectmydata.Utils.DateUtils;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 
 
-class DatabaseHelper extends SQLiteOpenHelper {
+public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME ="dbCollectMyData";
     private static final String RECORDS_TABLE ="tblRecords";
     private static final String DATA_COLL_TABLE ="tblDataColl";
     private static final int DB_VERSION = 1;
 
-    DatabaseHelper(Context context) {
+    public DatabaseHelper(Context context) {
         super(context,DB_NAME,null, DB_VERSION);
     }
 
@@ -43,14 +48,14 @@ class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    int insertDataColl(String name, int color) {
+    public int insertDataColl(String name, int color) {
         ContentValues dataCollValues = new ContentValues();
         dataCollValues.put("name", name);
         dataCollValues.put("color", color);
         return (int) this.getWritableDatabase().insert(DATA_COLL_TABLE,null, dataCollValues);
     }
 
-    int insertDataValue(int IDDataColl, double value, String date) {
+    public int insertDataValue(int IDDataColl, double value, String date) {
         ContentValues dataCollValues = new ContentValues();
         dataCollValues.put("_idDataColl", IDDataColl);
         dataCollValues.put("value", value);
@@ -64,26 +69,26 @@ class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    ArrayList<DataCollItem> getDataCollItems() {
+    public ArrayList<DataCollItem> getDataCollItems() {
         String query = "SELECT  * FROM " + DATA_COLL_TABLE;
         ArrayList<DataCollItem> dataCollItems = new  ArrayList<>();
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
         if(cursor.moveToFirst())
         {
-          do{
-              DataCollItem item = new DataCollItem(
-                      cursor.getInt(0),
-                      cursor.getString(1),
-                      cursor.getInt(2));
-              dataCollItems.add(item);
-          }while(cursor.moveToNext());
+            do{
+                DataCollItem item = new DataCollItem(
+                        cursor.getInt(0),
+                        cursor.getString(1),
+                        cursor.getInt(2));
+                dataCollItems.add(item);
+            }while(cursor.moveToNext());
         }
         cursor.close();
         return dataCollItems;
     }
 
-    ArrayList<Record> getRecords(int dataCollId) {
+    public ArrayList<Record> getRecords(int dataCollId) {
         String query = "SELECT  * FROM " + RECORDS_TABLE + " WHERE _idDataColl=" + dataCollId;
         ArrayList<Record> records = new ArrayList<>();
         SQLiteDatabase db = this.getWritableDatabase();
@@ -92,7 +97,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
             do{
                 records.add( new Record(
                         cursor.getInt(0),
-                        Utils.stringToDate(cursor.getString(3),Utils.DATE_FORMAT_DMY),
+                        DateUtils.stringToDate(cursor.getString(3),DateUtils.DATE_FORMAT_DMY),
                         cursor.getDouble(2)));
             }while(cursor.moveToNext());
         }
@@ -124,7 +129,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
         return result;
     }
 
-    void renameDataColl(int id, String name) {
+    public void renameDataColl(int id, String name) {
         String queryRenameDataColl = "UPDATE "+DATA_COLL_TABLE+
                 " SET name = '"+ name +"'"+
                 " WHERE _id = " + id;
@@ -132,7 +137,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(queryRenameDataColl);
     }
 
-    void deleteDataColl(int id) {
+    public void deleteDataColl(int id) {
         String queryDeleteDataColl = "DELETE FROM "+DATA_COLL_TABLE+
                 " WHERE _id = " + id;
         String queryDeleteValues = "DELETE FROM "+ RECORDS_TABLE +
@@ -142,7 +147,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(queryDeleteValues);
     }
 
-    void editValue(int id, double value) {
+    public void editValue(int id, double value) {
         String queryRenameDataColl = "UPDATE "+ RECORDS_TABLE +
                 " SET value = '"+ value +"'"+
                 " WHERE _id = " + id;
@@ -150,21 +155,21 @@ class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(queryRenameDataColl);
     }
 
-    void deleteRecord(int id) {
+    public void deleteRecord(int id) {
         String queryDeleteValues = "DELETE FROM "+ RECORDS_TABLE +
                 " WHERE _id= " + id;
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL(queryDeleteValues);
     }
 
-    ArrayList<Date> getDates(int dataCollId){
+    public ArrayList<Date> getDates(int dataCollId){
         String query = "SELECT  date FROM " + RECORDS_TABLE + " WHERE _idDataColl=" + dataCollId;
         ArrayList<Date> dates = new ArrayList<>();
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
         if(cursor.moveToFirst()) {
             do{
-                dates.add( Utils.stringToDate(cursor.getString(0),Utils.DATE_FORMAT_DMY));
+                dates.add( DateUtils.stringToDate(cursor.getString(0),DateUtils.DATE_FORMAT_DMY));
             }while(cursor.moveToNext());
         }
         cursor.close();
