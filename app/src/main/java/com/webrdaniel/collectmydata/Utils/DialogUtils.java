@@ -17,11 +17,10 @@ import com.webrdaniel.collectmydata.R;
 import java.util.concurrent.Callable;
 
 public class DialogUtils {
-    public static AlertDialog getDialog(View dialog, Context context, final Callable method, int positiveButtonText){
-        AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(context);
-        alertDialogBuilderUserInput.setView(dialog);
-        alertDialogBuilderUserInput
-                .setCancelable(false)
+    public static AlertDialog showDialog(View dialog, Context context, final Callable method, int positiveButtonText){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+        alertDialogBuilder.setView(dialog);
+        alertDialogBuilder
                 .setPositiveButton(positiveButtonText, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialogBox, int id) {
                         try{
@@ -37,7 +36,7 @@ public class DialogUtils {
                         dialogBox.cancel();
                     }
                 });
-        AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
+        AlertDialog alertDialogAndroid = alertDialogBuilder.create();
         alertDialogAndroid.setOnKeyListener(new DialogInterface.OnKeyListener() {
             @Override
             public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {

@@ -11,15 +11,15 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:text="@string/date"
-        android:textSize="30sp"
-        android:textColor="@color/primaryTextColor"/>
+        android:textColor="@color/primaryTextColor"
+        android:textSize="28sp" />
 
     <TextView
         android:layout_width="120dp"
         android:layout_height="match_parent"
         android:gravity="center"
         android:text="@string/value"
-        android:textSize="30sp"
-        android:textColor="@color/primaryTextColor"/>
+        android:textColor="@color/primaryTextColor"
+        android:textSize="28sp" />
 
 </LinearLayout>

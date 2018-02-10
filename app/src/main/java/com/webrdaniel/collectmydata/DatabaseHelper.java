@@ -14,6 +14,7 @@ import com.webrdaniel.collectmydata.Utils.DateUtils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 
 
 public class DatabaseHelper extends SQLiteOpenHelper {
@@ -63,19 +64,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return (int) this.getWritableDatabase().insert(RECORDS_TABLE,null, dataCollValues);
     }
 
-    protected void deleteDataSQLite( ){
-        this.getWritableDatabase().delete(DATA_COLL_TABLE,null,null );
-        this.getWritableDatabase().delete(RECORDS_TABLE,null,null );
-
-    }
 
     public ArrayList<DataCollItem> getDataCollItems() {
         String query = "SELECT  * FROM " + DATA_COLL_TABLE;
         ArrayList<DataCollItem> dataCollItems = new  ArrayList<>();
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
-        if(cursor.moveToFirst())
-        {
+        if(cursor.moveToFirst()) {
             do{
                 DataCollItem item = new DataCollItem(
                         cursor.getInt(0),
@@ -104,29 +99,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         Collections.sort(records, new RecordComparator());
         return records;
-    }
-
-    protected double getValuesSelect (String type, int dataCollId) {
-        double result;
-        String query;
-        switch (type) {
-            case "COUNT": query = "SELECT COUNT(_id) FROM "+ RECORDS_TABLE + " WHERE _idDataColl="+ dataCollId;break;
-            case "MIN": query = "SELECT MIN(value) FROM "+ RECORDS_TABLE + " WHERE _idDataColl="+ dataCollId;break;
-            case "MAX": query = "SELECT MAX(value) FROM "+ RECORDS_TABLE + " WHERE _idDataColl="+ dataCollId;break;
-            case "AVG": query = "SELECT AVG(value) FROM "+ RECORDS_TABLE + " WHERE _idDataColl="+ dataCollId;break;
-            case "SUM": query = "SELECT SUM(value) FROM "+ RECORDS_TABLE + " WHERE _idDataColl="+ dataCollId;break;
-            default: return 0;
-        }
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery(query, null);
-        if(cursor.moveToFirst()) {
-            result = cursor.getDouble(0);
-        }
-        else {
-            result = 0;
-        }
-        cursor.close();
-        return result;
     }
 
     public void renameDataColl(int id, String name) {
@@ -162,9 +134,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(queryDeleteValues);
     }
 
-    public ArrayList<Date> getDates(int dataCollId){
+    public HashSet<Date> getDates(int dataCollId){
         String query = "SELECT  date FROM " + RECORDS_TABLE + " WHERE _idDataColl=" + dataCollId;
-        ArrayList<Date> dates = new ArrayList<>();
+        HashSet<Date> dates = new HashSet<>();
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
         if(cursor.moveToFirst()) {
@@ -174,5 +146,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         cursor.close();
         return dates;
+    }
+
+    protected double getValuesSelect (String type, int dataCollId) {
+        double result;
+        String query;
+        switch (type) {
+            case "COUNT": query = "SELECT COUNT(_id) FROM "+ RECORDS_TABLE + " WHERE _idDataColl="+ dataCollId;break;
+            case "MIN": query = "SELECT MIN(value) FROM "+ RECORDS_TABLE + " WHERE _idDataColl="+ dataCollId;break;
+            case "MAX": query = "SELECT MAX(value) FROM "+ RECORDS_TABLE + " WHERE _idDataColl="+ dataCollId;break;
+            case "AVG": query = "SELECT AVG(value) FROM "+ RECORDS_TABLE + " WHERE _idDataColl="+ dataCollId;break;
+            case "SUM": query = "SELECT SUM(value) FROM "+ RECORDS_TABLE + " WHERE _idDataColl="+ dataCollId;break;
+            default: return 0;
+        }
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        if(cursor.moveToFirst()) {
+            result = cursor.getDouble(0);
+        }
+        else {
+            result = 0;
+        }
+        cursor.close();
+        return result;
     }
 }

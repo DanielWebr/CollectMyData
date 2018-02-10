@@ -1,12 +1,10 @@
 package com.webrdaniel.collectmydata.Lists;
 
-import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -29,38 +27,36 @@ import java.util.concurrent.Callable;
 
 
 class DataCollViewHolder extends RecyclerView.ViewHolder {
-    private View mView;
-    TextView mDataCollname;
+    TextView mNameTv;
     ImageView mIcon;
-    ImageButton mIbDialog;
-    private ImageButton mIbmenu;
+    ImageButton mAddRecordIb;
+    private ImageButton mMenuIb;
+    private DataCollItem mDataCollItem;
+    private MainActivity mMainActivity;
 
-    private DataCollItem item;
-    private MainActivity activity;
+    DataCollViewHolder(View view, MainActivity mainActivity){
+        super(view);
+        mNameTv = view.findViewById(R.id.tv_card_name_data_coll);
+        mIcon = view.findViewById(R.id.iv_card_data_coll);
+        mAddRecordIb = view.findViewById(R.id.ib_card_data_coll_add);
+        mMenuIb = view.findViewById(R.id.ib_card_data_coll_menu);
+        mMainActivity = mainActivity;
 
-    DataCollViewHolder(View v, Context context){
-        super(v);
-        mDataCollname = v.findViewById(R.id.tv_card_name_data_coll);
-        mIcon = v.findViewById(R.id.iv_card_data_coll);
-        mIbDialog = v.findViewById(R.id.ib_card_data_coll_add);
-        mIbmenu = v.findViewById(R.id.ib_card_data_coll_menu);
-        activity = (MainActivity) context;
-        mView = v;
-
-        v.setOnClickListener(new View.OnClickListener() {
+        view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startDataCollDetailActivity();
             }
         });
-        mIbDialog.setOnClickListener(new View.OnClickListener() {
+
+        mAddRecordIb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                item = activity.mDataCollItemsArrayList.get(DataCollViewHolder.this.getAdapterPosition());
+                mDataCollItem = mMainActivity.dataCollItems.get(DataCollViewHolder.this.getAdapterPosition());
                 showDialogNewRecord();
             }
         });
-        mIbmenu.setOnClickListener(new View.OnClickListener() {
+        mMenuIb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showPopupMenu();
@@ -69,15 +65,15 @@ class DataCollViewHolder extends RecyclerView.ViewHolder {
     }
 
     private void startDataCollDetailActivity() {
-        item = activity.mDataCollItemsArrayList.get(DataCollViewHolder.this.getAdapterPosition());
-        Intent i = new Intent(activity, DataCollDetailActivity.class);
-        i.putExtra(MainActivity.DATA_COLL_ITEM, item);
-        activity.startActivity(i);
+        mDataCollItem = mMainActivity.dataCollItems.get(DataCollViewHolder.this.getAdapterPosition());
+        Intent i = new Intent(mMainActivity, DataCollDetailActivity.class);
+        i.putExtra(MainActivity.DATA_COLL_ITEM, mDataCollItem);
+        mMainActivity.startActivity(i);
     }
 
     private void showPopupMenu() {
-        item = activity.mDataCollItemsArrayList.get(DataCollViewHolder.this.getAdapterPosition());
-        PopupMenu popup = new PopupMenu(activity,mIbmenu );
+        mDataCollItem = mMainActivity.dataCollItems.get(DataCollViewHolder.this.getAdapterPosition());
+        PopupMenu popup = new PopupMenu(mMainActivity, mMenuIb);
         MenuInflater inflater = popup.getMenuInflater();
         inflater.inflate(R.menu.menu_main_card, popup.getMenu());
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -98,8 +94,8 @@ class DataCollViewHolder extends RecyclerView.ViewHolder {
     }
 
     private void showDialogDelete() {
-        LayoutInflater layoutInflaterAndroid = LayoutInflater.from(activity);
-        View dialog = layoutInflaterAndroid.inflate(R.layout.input_dialog_delete,(ViewGroup) activity.getWindow().getDecorView().getRootView(),false);
+        LayoutInflater layoutInflater = LayoutInflater.from(mMainActivity);
+        View dialog = layoutInflater.inflate(R.layout.dialog_delete,(ViewGroup) mMainActivity.getWindow().getDecorView().getRootView(),false);
         Callable methodDeleteDataColl = new Callable() {
             @Override
             public Object call() throws Exception {
@@ -107,78 +103,74 @@ class DataCollViewHolder extends RecyclerView.ViewHolder {
                 return null;
             }
         };
-        DialogUtils.getDialog(dialog,activity, methodDeleteDataColl,R.string.delete);
+        DialogUtils.showDialog(dialog, mMainActivity, methodDeleteDataColl,R.string.delete);
     }
 
     private void showDialogRename() {
-        LayoutInflater layoutInflaterAndroid = LayoutInflater.from(activity);
-        View dialog = layoutInflaterAndroid.inflate(R.layout.input_dialog_data_coll_rename, (ViewGroup) activity.getWindow().getDecorView().getRootView(),false);
-        final TextInputEditText et_name = dialog.findViewById(R.id.tiet_rename_data_coll);
-        et_name.setText(item.getName());
+        LayoutInflater layoutInflaterAndroid = LayoutInflater.from(mMainActivity);
+        View dialog = layoutInflaterAndroid.inflate(R.layout.input_dialog_data_coll_rename, (ViewGroup) mMainActivity.getWindow().getDecorView().getRootView(),false);
+        final TextInputEditText newDataCollNameTiet = dialog.findViewById(R.id.tiet_rename_data_coll);
+        newDataCollNameTiet.setText(mDataCollItem.getName());
 
         Callable methodRenameDataColl = new Callable() {
             @Override
             public Object call() throws Exception {
-                renameDataColl(et_name.getText()+"");
+                renameDataColl(newDataCollNameTiet.getText()+"");
                 return null;
             }
         };
-        AlertDialog alertDialog = DialogUtils.getDialog(dialog,activity, methodRenameDataColl,R.string.rename);
-        String name = activity.mDataCollItemsArrayList.get(DataCollViewHolder.this.getAdapterPosition()).getName();
-        DialogUtils.lockPositiveButtonOnEmptyText(alertDialog, et_name, name);
-        et_name.requestFocus();
-        et_name.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
-        DialogUtils.onEnterConfirm(et_name,alertDialog);
-        KeyboardUtils.showKeyboard(activity);
+        AlertDialog alertDialog = DialogUtils.showDialog(dialog, mMainActivity, methodRenameDataColl,R.string.rename);
+        DialogUtils.lockPositiveButtonOnEmptyText(alertDialog, newDataCollNameTiet, mDataCollItem.getName());
+        newDataCollNameTiet.requestFocus();
+        DialogUtils.onEnterConfirm(newDataCollNameTiet,alertDialog);
+        KeyboardUtils.showKeyboard(mMainActivity);
     }
 
     private void showDialogNewRecord() {
-        LayoutInflater layoutInflaterAndroid = LayoutInflater.from(activity);
-        View dialog = layoutInflaterAndroid.inflate(R.layout.input_dialog_data_coll_value, (ViewGroup) activity.getWindow().getDecorView().getRootView(),false);
-        final TextInputEditText etValue = dialog.findViewById(R.id.tiet_data_coll_edii_value);
-        final TextView tvDate = dialog.findViewById(R.id.tv_data_coll_date);
-        tvDate.setText(DateUtils.dateToString(null, DateUtils.DATE_FORMAT_EDMM));
+        LayoutInflater layoutInflater = LayoutInflater.from(mMainActivity);
+        View dialog = layoutInflater.inflate(R.layout.input_dialog_data_coll_value, (ViewGroup) mMainActivity.getWindow().getDecorView().getRootView(),false);
+        final TextInputEditText newRecordValeTiet = dialog.findViewById(R.id.tiet_data_coll_add_record_value);
+        final TextView actualDateTv = dialog.findViewById(R.id.tv_data_coll_date);
+        actualDateTv.setText(DateUtils.dateToString(null, DateUtils.DATE_FORMAT_EDMM));
 
         Callable methodStoreValue = new Callable() {
             @Override
             public Object call() throws Exception {
-                storeRecord(Double.parseDouble(etValue.getText().toString()));
+                storeRecord(Double.parseDouble(newRecordValeTiet.getText().toString()));
                 return null;
             }
         };
-        AlertDialog alertDialog = DialogUtils.getDialog(dialog,activity, methodStoreValue,R.string.add);
-        DialogUtils.lockPositiveButtonOnEmptyText(alertDialog, etValue, null);
-        etValue.requestFocus();
-        DialogUtils.onEnterConfirm(etValue,alertDialog);
-        KeyboardUtils.showKeyboard(activity);
+        AlertDialog alertDialog = DialogUtils.showDialog(dialog, mMainActivity, methodStoreValue,R.string.add);
+        DialogUtils.lockPositiveButtonOnEmptyText(alertDialog, newRecordValeTiet, null);
+        newRecordValeTiet.requestFocus();
+        DialogUtils.onEnterConfirm(newRecordValeTiet,alertDialog);
+        KeyboardUtils.showKeyboard(mMainActivity);
     }
 
     private void storeRecord(Double value) {
         Date date = DateUtils.dateToDateFormat(DateUtils.DATE_FORMAT_DMY);
-        if(activity.mDatabaseHelper.getDates(item.getId()).contains(date)) {
-            mIbDialog.setVisibility(View.GONE);
+        if(mMainActivity.databaseHelper.getDates(mDataCollItem.getId()).contains(date)) {
+            mAddRecordIb.setVisibility(View.GONE);
         }
         else{
-            mIbDialog.setVisibility(View.VISIBLE);
+            mAddRecordIb.setVisibility(View.VISIBLE);
         }
-        activity.adapter.notifyItemChanged(DataCollViewHolder.this.getAdapterPosition());
-        item = activity.mDataCollItemsArrayList.get(DataCollViewHolder.this.getAdapterPosition());
-        activity.mDatabaseHelper.insertDataValue(item.getId(),
-                value,
-                DateUtils.dateToString(null, DateUtils.DATE_FORMAT_DMY));
+        mMainActivity.dataCollRvAdapter.notifyItemChanged(DataCollViewHolder.this.getAdapterPosition());
+        mDataCollItem = mMainActivity.dataCollItems.get(DataCollViewHolder.this.getAdapterPosition());
+        mMainActivity.databaseHelper.insertDataValue(mDataCollItem.getId(), value, DateUtils.dateToString(null, DateUtils.DATE_FORMAT_DMY));
     }
 
     private void renameDataColl(String name) {
-        activity.mDatabaseHelper.renameDataColl(item.getId(),name);
-        item.setName(name);
-        activity.adapter.notifyItemChanged(DataCollViewHolder.this.getAdapterPosition());
+        mMainActivity.databaseHelper.renameDataColl(mDataCollItem.getId(),name);
+        mDataCollItem.setName(name);
+        mMainActivity.dataCollRvAdapter.notifyItemChanged(DataCollViewHolder.this.getAdapterPosition());
     }
 
     private void deleteDataColl() {
-        activity.mDatabaseHelper.deleteDataColl(item.getId());
-        activity.mDataCollItemsArrayList.remove(item);
-        activity.messageIfEmpty();
-        activity.adapter.notifyItemRemoved(DataCollViewHolder.this.getAdapterPosition());
+        mMainActivity.databaseHelper.deleteDataColl(mDataCollItem.getId());
+        mMainActivity.dataCollItems.remove(mDataCollItem);
+        mMainActivity.messageIfEmpty();
+        mMainActivity.dataCollRvAdapter.notifyItemRemoved(DataCollViewHolder.this.getAdapterPosition());
     }
 
 }

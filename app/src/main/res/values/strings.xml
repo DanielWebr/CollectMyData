@@ -41,7 +41,7 @@
     <string name="date_picker_about">Date picker dialog by Wouter Dullaert.</string>
     <string name="app_version">Veorsin 1.0</string>
     <string name="message_graph">Not enough data to make graph.</string>
-    <string name="error_date">Record with this date exists</string>
+    <string name="error_date">Record with this date already exists</string>
     <string name="record_added">Record added</string>
     <string name="my_data_collection">My data collection</string>
     <string name="menu">menu</string>

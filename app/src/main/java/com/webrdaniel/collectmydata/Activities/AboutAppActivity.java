@@ -15,10 +15,10 @@ public class AboutAppActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about_app);
-        TextView github = findViewById(R.id.textView5);
-        Spanned Text = Html.fromHtml(getString(R.string.app_info," <a href='https://github.com/DanielWebr/CollectMyData'>GitHub</a> "));
-        github.setMovementMethod(LinkMovementMethod.getInstance());
-        github.setText(Text);
+        TextView githubTv = findViewById(R.id.tv_about_app_github);
+        Spanned githubLink = Html.fromHtml(getString(R.string.app_info," <a href='https://github.com/DanielWebr/CollectMyData'>GitHub</a> "));
+        githubTv.setMovementMethod(LinkMovementMethod.getInstance());
+        githubTv.setText(githubLink);
         if(getSupportActionBar() != null)getSupportActionBar().setTitle(getString(R.string.about_app));
     }
 }

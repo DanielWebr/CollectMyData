@@ -27,16 +27,15 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity{
 
-    @BindView(R.id.fab_main_activity) public FloatingActionButton fab;
-    @BindView(R.id.toolbar) public Toolbar toolbar;
-    @BindView(R.id.recycler_view_main_activity) public RecyclerView mRecyclerView;
-    @BindView(R.id.empty_records_list) public TextView empty_view;
-    public DataCollListAdapter adapter;
-    private RecyclerView.LayoutManager mLayoutManager;
-    public ArrayList<DataCollItem> mDataCollItemsArrayList;
-    public DatabaseHelper mDatabaseHelper;
-    public static final String DATA_COLL_ITEM = "com.webrdaniel.collectmydata.Activities.MainActivity";
-    private static final int NEW_DATA_COLL_ITEM = 100;
+    @BindView(R.id.fab_main_activity) FloatingActionButton fab;
+    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.recycler_view_main_activity) RecyclerView mDataCollRv;
+    @BindView(R.id.tv_empty_data_coll_list) TextView mEmptyRvTv;
+    public static final String DATA_COLL_ITEM = "com.webrdaniel.collectmydata.Models.Records";
+    static final int NEW_DATA_COLL_ITEM = 100;
+    public DataCollListAdapter dataCollRvAdapter;
+    public ArrayList<DataCollItem> dataCollItems;
+    public DatabaseHelper databaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,14 +46,13 @@ public class MainActivity extends AppCompatActivity{
         if(getSupportActionBar()!=null)getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.drawable.ic_poll_orange_24dp);
 
-        mDatabaseHelper = new DatabaseHelper(this);
-
-        mDataCollItemsArrayList = mDatabaseHelper.getDataCollItems();
-        mRecyclerView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        adapter = new DataCollListAdapter(MainActivity.this);
-        mRecyclerView.setAdapter(adapter);
+        databaseHelper = new DatabaseHelper(this);
+        dataCollItems = databaseHelper.getDataCollItems();
+        mDataCollRv.setHasFixedSize(true);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
+        mDataCollRv.setLayoutManager(mLayoutManager);
+        dataCollRvAdapter = new DataCollListAdapter(MainActivity.this);
+        mDataCollRv.setAdapter(dataCollRvAdapter);
         messageIfEmpty();
 
         fab.setOnClickListener(new View.OnClickListener() {
@@ -78,8 +76,7 @@ public class MainActivity extends AppCompatActivity{
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        if (item.getItemId() == R.id.menu_main_about_app) {
             Intent settingIntent = new Intent(this, AboutAppActivity.class);
             startActivity(settingIntent);
             return true;
@@ -91,12 +88,11 @@ public class MainActivity extends AppCompatActivity{
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode == RESULT_CANCELED) return;
         DataCollItem item = (DataCollItem) data.getSerializableExtra(DATA_COLL_ITEM);
-        int id = mDatabaseHelper.insertDataColl(item.getName(), item.getColor());
+        int id = databaseHelper.insertDataColl(item.getName(), item.getColor());
         item.setId(id);
-        mDataCollItemsArrayList.add(item);
+        dataCollItems.add(item);
         messageIfEmpty();
-        adapter.notifyItemInserted(adapter.getItemCount());
-
+        dataCollRvAdapter.notifyItemInserted(dataCollRvAdapter.getItemCount());
     }
 
     @Override
@@ -106,15 +102,14 @@ public class MainActivity extends AppCompatActivity{
     }
 
     public void messageIfEmpty() {
-        if (mDataCollItemsArrayList.isEmpty()) {
-            mRecyclerView.setVisibility(View.GONE);
-            empty_view.setVisibility(View.VISIBLE);
+        if (dataCollItems.isEmpty()) {
+            mDataCollRv.setVisibility(View.GONE);
+            mEmptyRvTv.setVisibility(View.VISIBLE);
         }
         else {
-            mRecyclerView.setVisibility(View.VISIBLE);
-            empty_view.setVisibility(View.GONE);
+            mDataCollRv.setVisibility(View.VISIBLE);
+            mEmptyRvTv.setVisibility(View.GONE);
         }
     }
-
 }
 

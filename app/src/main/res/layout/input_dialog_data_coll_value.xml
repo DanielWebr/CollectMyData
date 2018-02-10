@@ -32,7 +32,7 @@
     </LinearLayout>
 
         <android.support.design.widget.TextInputEditText
-            android:id="@+id/tiet_data_coll_edii_value"
+            android:id="@+id/tiet_data_coll_add_record_value"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"

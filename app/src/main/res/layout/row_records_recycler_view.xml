@@ -26,5 +26,4 @@
         android:textSize="18sp"
         tools:text="value" />
 
-
 </LinearLayout>

@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 
+import java.text.DecimalFormat;
+
 
 public class Utils {
     public static int getMatColor(Context context) {
@@ -13,5 +15,11 @@ public class Utils {
         int returnColor = colors.getColor(index, Color.BLACK);
         colors.recycle();
         return returnColor;
+    }
+
+    public static String doubleToString(double number)
+    {
+        DecimalFormat format = new DecimalFormat("0.##");
+        return format.format(number);
     }
 }

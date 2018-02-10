@@ -8,63 +8,64 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.webrdaniel.collectmydata.Activities.DataCollDetailActivity;
+import com.webrdaniel.collectmydata.Fragments.RecordsListFragment;
 import com.webrdaniel.collectmydata.Models.Record;
 import com.webrdaniel.collectmydata.R;
 import com.webrdaniel.collectmydata.Utils.DialogUtils;
 import com.webrdaniel.collectmydata.Utils.KeyboardUtils;
+import com.webrdaniel.collectmydata.Utils.Utils;
 
 import java.util.concurrent.Callable;
 
 class RecordViewHolder extends RecyclerView.ViewHolder {
-    private RecordsListAdapter recordsListAdapter;
-    private View mView;
+    private RecordsListFragment mRecordsListFragment;
+    private DataCollDetailActivity dataCollDetailActivity;
     TextView mValueDate;
     TextView mValue;
     private Record record;
 
-    RecordViewHolder(RecordsListAdapter recordsListAdapter, View v) {
-        super(v);
-        this.recordsListAdapter = recordsListAdapter;
-        mView = v;
-        mValue = v.findViewById(R.id.tv_record_value);
-        mValueDate = v.findViewById(R.id.tv_record_date);
-        v.setOnClickListener(new View.OnClickListener() {
+    RecordViewHolder(RecordsListFragment RecordsListFragment, View view) {
+        super(view);
+        this.mRecordsListFragment = RecordsListFragment;
+        dataCollDetailActivity = mRecordsListFragment.dataCollDetailActivity;
+        mValue = view.findViewById(R.id.tv_record_value);
+        mValueDate = view.findViewById(R.id.tv_record_date);
+        view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showDialogEditValue();
             }
         });
-
     }
 
     private void showDialogEditValue() {
-        LayoutInflater layoutInflaterAndroid = LayoutInflater.from(recordsListAdapter.recordsRecyclerViewAdapter.parent);
-        View dialog = layoutInflaterAndroid.inflate(R.layout.input_dialog_record_value_edit, (ViewGroup) recordsListAdapter.recordsRecyclerViewAdapter.rootView, false);
-        final TextInputEditText et_name = dialog.findViewById(R.id.tiet_record_value_edit);
-        double value = recordsListAdapter.recordsRecyclerViewAdapter.parent.mRecords.get(RecordViewHolder.this.getAdapterPosition() - 1).getValue();
-        et_name.setText(recordsListAdapter.recordsRecyclerViewAdapter.parent.formatNoLastZero.format(value));
+        LayoutInflater layoutInflaterAndroid = LayoutInflater.from(dataCollDetailActivity);
+        View dialog = layoutInflaterAndroid.inflate(R.layout.input_dialog_record_value_edit, (ViewGroup) mRecordsListFragment.mRootView, false);
+        final TextInputEditText valueTiet = dialog.findViewById(R.id.tiet_record_value_edit);
+        record = dataCollDetailActivity.records.get(RecordViewHolder.this.getAdapterPosition() - 1);
+        valueTiet.setText(Utils.doubleToString(record.getValue()));
         Callable methodEditValue = new Callable() {
             @Override
             public Object call() throws Exception {
-                editValue(Double.parseDouble(et_name.getText().toString()));
+                editValue(Double.parseDouble(valueTiet.getText().toString()));
                 return null;
             }
         };
-        AlertDialog alertDialog = DialogUtils.getDialog(dialog, recordsListAdapter.recordsRecyclerViewAdapter.parent, methodEditValue, R.string.edit);
-        DialogUtils.lockPositiveButtonOnEmptyText(alertDialog, et_name, String.valueOf(recordsListAdapter.recordsRecyclerViewAdapter.parent.formatNoLastZero.format(value)));
-        et_name.requestFocus();
-        DialogUtils.onEnterConfirm(et_name, alertDialog);
-        KeyboardUtils.showKeyboard(recordsListAdapter.recordsRecyclerViewAdapter.parent);
+        AlertDialog alertDialog = DialogUtils.showDialog(dialog, dataCollDetailActivity, methodEditValue, R.string.edit);
+        DialogUtils.lockPositiveButtonOnEmptyText(alertDialog, valueTiet, Utils.doubleToString(record.getValue()));
+        valueTiet.requestFocus();
+        DialogUtils.onEnterConfirm(valueTiet, alertDialog);
+        KeyboardUtils.showKeyboard(mRecordsListFragment.dataCollDetailActivity);
     }
 
     private void editValue(Double value) {
         int position = RecordViewHolder.this.getAdapterPosition();
-        record = recordsListAdapter.recordsRecyclerViewAdapter.parent.mRecords.get(position - 1);
-        recordsListAdapter.recordsRecyclerViewAdapter.parent.mDatabaseHelper.editValue(record.getId(), value);
+        dataCollDetailActivity.databaseHelper.editValue(record.getId(), value);
         record.setValue(value);
-        recordsListAdapter.recordsRecyclerViewAdapter.mRecordsListAdapter.notifyItemChanged(position);
-        recordsListAdapter.recordsRecyclerViewAdapter.parent.recordsOverviewFragment.updateData();
-        recordsListAdapter.recordsRecyclerViewAdapter.parent.recordsOverviewFragment.updateLayout();
+        mRecordsListFragment.recordsListAdapter.notifyItemChanged(position);
+        dataCollDetailActivity.recordsOverviewFragment.updateData();
+        dataCollDetailActivity.recordsOverviewFragment.updateLayout();
 
     }
 }

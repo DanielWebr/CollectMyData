@@ -27,7 +27,6 @@
     <string name="no_data_coll">Nemáš žádné datové kolekce.</string>
     <string name="about_app">O aplikaci</string>
     <string name="app_info">Kód aplikace dostupný na %1$s pod Apache 2.0 licencí. </string>
-    <string name="app_icon">Ikony použity v aplikaci pževzaty z Material design icons od společnosti Google.</string>
     <string name="new_dataColl">Nová datová kolekce</string>
     <string name="really_delete_record">Opravdu odstranit záznam?</string>
     <string name="date">Datum</string>
@@ -41,12 +40,11 @@
     <string name="this_week">Tenhle týden</string>
     <string name="this_month">Tenhle měsíc</string>
     <string name="this_year">Tenhle rok</string>
-    <string name="date_picker_about">Dialog výběru datumu od Wouter Dullaert</string>
     <string name="app_version">Verze 1.0</string>
     <string name="message_graph">Není dostatek dat pro vytvoření grafu.</string>
-    <string name="error_date">Záznam s tímto datem existuje</string>
+    <string name="error_date">Záznam s tímto datem již existuje</string>
     <string name="record_added">Záznam přidán</string>
-    <string name="about_chart">Grafické znázornění hodnot od Jonas Gehring</string>
     <string name="my_data_collection">Moje datová kolekce</string>
     <string name="records">Záznamy</string>
+    <string name="app_resources">Knihovny třetích stran použity v aplikaci: GraphView library by Jonas Gehring, Date picker dialog by Wouter Dullaert, Material design icons by Google.</string>
 </resources>

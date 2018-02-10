@@ -37,11 +37,11 @@ import com.webrdaniel.collectmydata.Utils.DateUtils;
 import com.webrdaniel.collectmydata.Utils.DialogUtils;
 import com.webrdaniel.collectmydata.Utils.KeyboardUtils;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -50,23 +50,21 @@ import butterknife.ButterKnife;
 
 public class DataCollDetailActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
 
+    @BindView(R.id.fab_records) FloatingActionButton fab;
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.viewpager_data_coll_detail) ViewPager viewPager;
-    @BindView(R.id.tabs_data_coll_detail) TabLayout tabs;
-    @BindView(R.id.fab_records) FloatingActionButton fab;
-    protected DataCollItem mDataCollItem;
-    public ArrayList<Record> mRecords;
-    public DatabaseHelper mDatabaseHelper;
-    public DecimalFormat formatNoLastZero;
+    @BindView(R.id.tabs_data_coll_detail) TabLayout tabLayout;
+    public DatabaseHelper databaseHelper;
     public RecordsOverviewFragment recordsOverviewFragment;
-    protected RecordsListFragment recordsListFragment;
-    protected Adapter adapter;
-    private TextInputEditText et_date;
-    private TextInputLayout ti_layout_date;
-    private Menu menu;
-    private Date dateChosen;
-    private ArrayList <Date> dates;
-    private int filterDates;
+    public ArrayList<Record> records;
+    private HashSet<Date> mStoredDates;
+    private int mDataCollItemId;
+    private int mFilterDatesCount;
+    private RecordsListFragment mRecordsListFragment;
+    private TextInputEditText mDialogDateTiet;
+    private TextInputLayout mDialogDateTil;
+    private Menu mMenu;
+    private Date mDialogDateToStore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,17 +72,15 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
         setContentView(R.layout.activity_data_coll_detail);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
-
-        formatNoLastZero = new DecimalFormat("0.##");
-        //dateChosen = Utils.dateToDateFormat(Utils.DATE_FORMAT_DMY);
-
         setupViewPager(viewPager);
-        tabs.setupWithViewPager(viewPager);
-        mDataCollItem = (DataCollItem)getIntent().getSerializableExtra(MainActivity.DATA_COLL_ITEM);
-        mDatabaseHelper = new DatabaseHelper(this);
-        dates = mDatabaseHelper.getDates(mDataCollItem.getId());
-        mRecords = mDatabaseHelper.getRecords(mDataCollItem.getId());
-        if(getSupportActionBar()!=null)getSupportActionBar().setTitle(mDataCollItem.getName());
+        tabLayout.setupWithViewPager(viewPager);
+
+        DataCollItem dataCollItem = (DataCollItem)getIntent().getSerializableExtra(MainActivity.DATA_COLL_ITEM);
+        mDataCollItemId = dataCollItem.getId();
+        databaseHelper = new DatabaseHelper(this);
+        mStoredDates = databaseHelper.getDates(mDataCollItemId);
+        records = databaseHelper.getRecords(mDataCollItemId);
+        if(getSupportActionBar()!=null)getSupportActionBar().setTitle(dataCollItem.getName());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
@@ -96,19 +92,16 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
         });
         fab.hide();
 
-
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                     if(position == 0) fab.hide();
                     else fab.show();
             }
-
             @Override
             public void onPageSelected(int position) {
 
             }
-
             @Override
             public void onPageScrollStateChanged(int state) {
 
@@ -118,7 +111,7 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        this.menu = menu;
+        this.mMenu = menu;
         getMenuInflater().inflate(R.menu.menu_data_coll_detail, menu);
         return true;
     }
@@ -145,12 +138,12 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        adapter = new Adapter(getSupportFragmentManager());
+        Adapter viewPagerAdapter = new Adapter(getSupportFragmentManager());
         recordsOverviewFragment = new RecordsOverviewFragment();
-        adapter.addFragment(recordsOverviewFragment,getResources().getString(R.string.tab_overview));
-        recordsListFragment = new RecordsListFragment();
-        adapter.addFragment(recordsListFragment, getResources().getString(R.string.records));
-        viewPager.setAdapter(adapter);
+        mRecordsListFragment = new RecordsListFragment();
+        viewPagerAdapter.addFragment(recordsOverviewFragment,getResources().getString(R.string.tab_overview));
+        viewPagerAdapter.addFragment(mRecordsListFragment, getResources().getString(R.string.records));
+        viewPager.setAdapter(viewPagerAdapter);
     }
     static class Adapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
@@ -174,7 +167,6 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
             mFragmentList.add(fragment);
             mFragmentTitleList.add(title);
         }
-
         @Override
         public CharSequence getPageTitle(int position) {
             return mFragmentTitleList.get(position);
@@ -183,31 +175,32 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
     }
 
     public void updateDatesList() {
-        dates.clear();
-        dates.addAll(mDatabaseHelper.getDates(mDataCollItem.getId()));
+        mStoredDates.clear();
+        mStoredDates.addAll(databaseHelper.getDates(mDataCollItemId));
     }
 
     private void showDialogAddValueDate() {
-        LayoutInflater layoutInflaterAndroid = LayoutInflater.from(this);
-        View dialog = layoutInflaterAndroid.inflate(R.layout.input_dialog_record_value_date, (ViewGroup) getWindow().getDecorView().getRootView(),false);
-        final TextInputEditText etValue = dialog.findViewById(R.id.tiet_edit_record_date_value);
-        et_date = dialog.findViewById(R.id.tiet_edit_record_value_date);
-        ti_layout_date = dialog.findViewById(R.id.til_edit_record_value_date);
-        et_date.setText(DateUtils.dateToString(null, DateUtils.DATE_FORMAT_EDMM));
+        LayoutInflater layoutInflater = LayoutInflater.from(this);
+        View dialog = layoutInflater.inflate(R.layout.input_dialog_record_value_date, (ViewGroup) getWindow().getDecorView().getRootView(),false);
+        final TextInputEditText dialogValueTiet = dialog.findViewById(R.id.tiet_edit_record_date_value);
+        mDialogDateTiet = dialog.findViewById(R.id.tiet_edit_record_value_date);
+        mDialogDateTil = dialog.findViewById(R.id.til_edit_record_value_date);
+        mDialogDateTiet.setText(DateUtils.dateToString(null, DateUtils.DATE_FORMAT_EDMM));
 
         Callable methodStoreValue = new Callable() {
             @Override
             public Object call() throws Exception {
-                storeRecord(Double.parseDouble(etValue.getText().toString()),dateChosen);
+                storeRecord(Double.parseDouble(dialogValueTiet.getText().toString()), mDialogDateToStore);
                 return null;
             }
         };
-        AlertDialog alertDialog = DialogUtils.getDialog(dialog,this, methodStoreValue,R.string.add);
 
-        DialogUtils.onEnterConfirm(etValue,alertDialog);
+        AlertDialog alertDialog = DialogUtils.showDialog(dialog,this, methodStoreValue,R.string.add);
+
+        DialogUtils.onEnterConfirm(dialogValueTiet,alertDialog);
         KeyboardUtils.showKeyboard(this);
 
-        et_date.setOnClickListener(new View.OnClickListener() {
+        mDialogDateTiet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showDatePickerDialog();
@@ -217,10 +210,10 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
         final Button positiveButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
         positiveButton.setEnabled(false);
 
-        dateChosen = DateUtils.dateToDateFormat(DateUtils.DATE_FORMAT_DMY);
-        if(dates.contains(dateChosen))ti_layout_date.setError(getResources().getString(R.string.error_date));
+        mDialogDateToStore = DateUtils.dateToDateFormat(DateUtils.DATE_FORMAT_DMY);
+        if(mStoredDates.contains(mDialogDateToStore)) mDialogDateTil.setError(getResources().getString(R.string.error_date));
 
-        et_date.addTextChangedListener(new TextWatcher() {
+        mDialogDateTiet.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -231,18 +224,18 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
             }
             @Override
             public void afterTextChanged(Editable s) {
-                if(dates.contains(dateChosen)) {
+                if(mStoredDates.contains(mDialogDateToStore)) {
                     positiveButton.setEnabled(false);
-                    ti_layout_date.setError(getResources().getString(R.string.error_date));
+                    mDialogDateTil.setError(getResources().getString(R.string.error_date));
                 }
                 else{
-                    ti_layout_date.setError(null);
-                   if(!TextUtils.isEmpty(etValue.getText())) positiveButton.setEnabled(true);
+                    mDialogDateTil.setError(null);
+                   if(!TextUtils.isEmpty(dialogValueTiet.getText())) positiveButton.setEnabled(true);
                 }
             }
         });
 
-        etValue.addTextChangedListener(new TextWatcher() {
+        dialogValueTiet.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -254,52 +247,40 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
             @Override
             public void afterTextChanged(Editable s) {
                 if (TextUtils.isEmpty(s))positiveButton.setEnabled(false);
-                else if(!dates.contains(dateChosen))positiveButton.setEnabled(true);
+                else if(!mStoredDates.contains(mDialogDateToStore))positiveButton.setEnabled(true);
             }
         });
     }
 
     private void showDatePickerDialog(){
         Calendar calendar =Calendar.getInstance();
-        calendar.setTime(dateChosen);
+        calendar.setTime(mDialogDateToStore);
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
         DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(DataCollDetailActivity.this, year, month, day);
         datePickerDialog.show(getFragmentManager(), "DateFragment");
         datePickerDialog.setMaxDate(Calendar.getInstance());
-        KeyboardUtils.hideKeyboard(DataCollDetailActivity.this,et_date);
+        KeyboardUtils.hideKeyboard(DataCollDetailActivity.this, mDialogDateTiet);
     }
 
     private void storeRecord(double value, Date date) {
-        int id = mDatabaseHelper.insertDataValue(mDataCollItem.getId(),value, DateUtils.dateToString(date,DateUtils.DATE_FORMAT_DMY));
-        int idList = getIdToList(date);
+        int id = databaseHelper.insertDataValue(mDataCollItemId,value, DateUtils.dateToString(date,DateUtils.DATE_FORMAT_DMY));
         Record record = new Record(id,date,value);
-        mRecords.add(idList,record);
-        filterRecords(filterDates);
-        Collections.sort(mRecords, new RecordComparator());
-        recordsOverviewFragment.updateData();
-        recordsOverviewFragment.updateLayout();
-        recordsListFragment.messageIfEmpty();
-        recordsListFragment.mRecordsListAdapter.notifyDataSetChanged();
+        records.add(record);
+        filterRecords(mFilterDatesCount);
+        Collections.sort(records, new RecordComparator());
+        updateFragments();
         updateDatesList();
         Toast.makeText(this, this.getString(R.string.record_added), Toast.LENGTH_SHORT).show();
-    }
-
-    private int getIdToList(Date date) {
-        for(Record record : mRecords ) {
-            if(date.after(record.getDate()))
-            return mRecords.indexOf(record);
-        }
-        return mRecords.size();
     }
 
     private void setDate(int year, int month, int day){
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month, day,0,0,0);
         calendar.clear(Calendar.MILLISECOND);
-        dateChosen = calendar.getTime();
-        et_date.setText(DateUtils.dateToString(calendar.getTime(),DateUtils.DATE_FORMAT_EDM));
+        mDialogDateToStore = calendar.getTime();
+        mDialogDateTiet.setText(DateUtils.dateToString(calendar.getTime(),DateUtils.DATE_FORMAT_EDM));
         KeyboardUtils.showKeyboard(this);
     }
 
@@ -307,7 +288,7 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
         PopupMenu popup = new PopupMenu(this,findViewById(R.id.tv_filter) );
         MenuInflater inflater = popup.getMenuInflater();
         inflater.inflate(R.menu.menu_filter, popup.getMenu());
-        final MenuItem menuitem = menu.getItem(0);
+        final MenuItem menuitem = mMenu.getItem(0);
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -348,13 +329,13 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
         popup.show();
     }
 
-    private int getDaysPast(int field, int value) {
-        Calendar c = Calendar.getInstance();
-        c.set(field,value);
+    private int getDaysPast(int period, int value) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(period,value);
         Date date = new Date();
-        long difference = date.getTime() - c.getTime().getTime();
+        long difference = date.getTime() - calendar.getTime().getTime();
         float daysBetween = (difference / (1000*60*60*24));
-        return (int) daysBetween;
+        return (int) daysBetween+1;
     }
 
     private void filterRecords(int daysToPast) {
@@ -362,32 +343,34 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
             showAllRecords();
             return;
         }
-        mRecords.clear();
-        mRecords.addAll(mDatabaseHelper.getRecords(mDataCollItem.getId()));
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, -daysToPast-1);
-        Date date = cal.getTime();
-        List<Record> listToRemove = new ArrayList<>();
-        for(Record record : mRecords) {
-            if (record.getDate().before(date)) {
-                listToRemove.add(record);
+        records.clear();
+        List<Record> listToAdd = databaseHelper.getRecords(mDataCollItemId);
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE, -daysToPast);
+        Date date = calendar.getTime();
+        for(Record record : listToAdd) {
+            if (record.getDate().after(date)) {
+                records.add(record);
             }
         }
-        mRecords.removeAll(listToRemove);
-        recordsOverviewFragment.updateData();
-        recordsOverviewFragment.updateLayout();
-        recordsListFragment.messageIfEmpty();
-        recordsListFragment.mRecordsListAdapter.notifyDataSetChanged();
-        filterDates = daysToPast;
+        updateFragments();
+        mFilterDatesCount = daysToPast;
     }
 
     private void showAllRecords() {
-        mRecords.clear();
-        mRecords.addAll(mDatabaseHelper.getRecords(mDataCollItem.getId()));
+        records.clear();
+        records.addAll(databaseHelper.getRecords(mDataCollItemId));
+        updateFragments();
+        mFilterDatesCount = 0;
+    }
+
+    private void updateFragments()
+    {
         recordsOverviewFragment.updateData();
         recordsOverviewFragment.updateLayout();
-        recordsListFragment.messageIfEmpty();
-        recordsListFragment.mRecordsListAdapter.notifyDataSetChanged();
-        filterDates = 0;
+        mRecordsListFragment.showTvIfRvIsEmpty();
+        mRecordsListFragment.recordsListAdapter.notifyDataSetChanged();
     }
+
+
 }
