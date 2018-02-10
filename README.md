@@ -1,9 +1,7 @@
 # CollectMyData
 Android app for collecting data.
 
-<img src="https://github.com/DanielWebr/CollectMyData/blob/master/screenshots/Screenshot2.png" width="250" align="left"/>
-<img src="https://github.com/DanielWebr/CollectMyData/blob/master/screenshots/Screenshot3.png" width="250" align="center"/>
-<img src="https://github.com/DanielWebr/CollectMyData/blob/master/screenshots/Screenshot4.png" width="250" align="right"/>
+<img src="https://github.com/DanielWebr/CollectMyData/blob/master/screenshots/Screenshot2.png" width="200" margin="8dp" /> <img src="https://github.com/DanielWebr/CollectMyData/blob/master/screenshots/Screenshot3.png" width="200" /> <img src="https://github.com/DanielWebr/CollectMyData/blob/master/screenshots/Screenshot4.png" width="200" />
 
 ## Libraries used in app
 <a href="https://materialdesignicons.com/">Material Design Icons<a/><br>
