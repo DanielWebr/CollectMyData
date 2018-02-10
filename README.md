@@ -6,6 +6,9 @@ Android app for collecting data.
 <a href="http://www.android-graphview.org/">Graph View<a/><br>
 <a href="https://github.com/wdullaer/MaterialDateTimePicker">Material Date Time Picker<a/><br>
     
+![Create data collections](https://github.com/DanielWebr/CollectMyData/blob/master/screenshots/Screenshot2.png)
+![See overviews, filter your data](https://github.com/DanielWebr/CollectMyData/blob/master/screenshots/Screenshot3.png)
+![See your data easily](https://github.com/DanielWebr/CollectMyData/blob/master/screenshots/Screenshot4.png)
 
 ## License
 
