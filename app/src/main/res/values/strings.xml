@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CollectMyData</string>
+    <string name="app_name">Collect My Data</string>
     <string name="action_settings">Nastavení</string>
     <string name="setting_reset">Vymazat data aplikace</string>
     <string name="setting_delete">Vymazat</string>
@@ -38,8 +38,7 @@
     <string name="this_week">This week</string>
     <string name="this_month">This month</string>
     <string name="this_year">This year</string>
-    <string name="date_picker_about">Date picker dialog by Wouter Dullaert.</string>
-    <string name="app_version">Veorsin 1.0</string>
+    <string name="app_version">Veorsin 1.1</string>
     <string name="message_graph">Not enough data to make graph.</string>
     <string name="error_date">Record with this date already exists</string>
     <string name="record_added">Record added</string>
