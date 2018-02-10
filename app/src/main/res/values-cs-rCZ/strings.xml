@@ -32,7 +32,6 @@
     <string name="date">Datum</string>
     <string name="last_week">Týden</string>
     <string name="last_month">Měsíc</string>
-    <string name="last_six_months">6 měsíců</string>
     <string name="last_year">Rok</string>
     <string name="filter">Filtr</string>
     <string name="add_record">Přidej záznam</string>
@@ -40,11 +39,12 @@
     <string name="this_week">Tenhle týden</string>
     <string name="this_month">Tenhle měsíc</string>
     <string name="this_year">Tenhle rok</string>
-    <string name="app_version">Verze 1.0</string>
+    <string name="app_version">Verze 1.1</string>
     <string name="message_graph">Není dostatek dat pro vytvoření grafu.</string>
     <string name="error_date">Záznam s tímto datem již existuje</string>
     <string name="record_added">Záznam přidán</string>
     <string name="my_data_collection">Moje datová kolekce</string>
     <string name="records">Záznamy</string>
+    <string name="menu">menu</string>
     <string name="app_resources">Knihovny třetích stran použity v aplikaci: GraphView library by Jonas Gehring, Date picker dialog by Wouter Dullaert, Material design icons by Google.</string>
 </resources>
