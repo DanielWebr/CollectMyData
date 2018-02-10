@@ -1,4 +1,4 @@
-# Collect MyD ata
+# Collect My Data
 Android app for collecting data.
 
 <a href="https://play.google.com/store/apps/details?id=com.webrdaniel.collectmydata">Collect My Data at Google Play<a/><br>
