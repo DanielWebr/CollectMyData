@@ -5,10 +5,13 @@ Android app for collecting data.
 <a href="https://materialdesignicons.com/">Material Design Icons<a/><br>
 <a href="http://www.android-graphview.org/">Graph View<a/><br>
 <a href="https://github.com/wdullaer/MaterialDateTimePicker">Material Date Time Picker<a/><br>
-    
-![Create data collections](https://github.com/DanielWebr/CollectMyData/blob/master/screenshots/Screenshot2.png)
-![See overviews, filter your data](https://github.com/DanielWebr/CollectMyData/blob/master/screenshots/Screenshot3.png)
-![See your data easily](https://github.com/DanielWebr/CollectMyData/blob/master/screenshots/Screenshot4.png)
+ 
+ <p align="center">
+Create data collections <img src="https://github.com/DanielWebr/CollectMyData/blob/master/screenshots/Screenshot2.png" width="350"/>
+See overviews, filter your data <img src="https://github.com/DanielWebr/CollectMyData/blob/master/screenshots/Screenshot3.png" width="350"/>
+See your data easily <img src="https://github.com/DanielWebr/CollectMyData/blob/master/screenshots/Screenshot4.png" width="350"/>
+</p>
+
 
 ## License
 
