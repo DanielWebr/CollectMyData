@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
+    android:padding="8dp"
     tools:context="com.webrdaniel.collectmydata.Activities.NewDataCollActivity">
 
     <android.support.design.widget.TextInputLayout
@@ -23,10 +23,10 @@
             android:layout_height="wrap_content"
             android:layout_alignStart="@+id/til_new_data_coll"
             android:layout_alignTop="@+id/fab_main_activity"
-            android:ems="10"
+            android:ems="16"
             android:hint="@string/name_of_data_collection"
             android:inputType="textPersonName"
-            android:maxLength="10" />
+            android:maxLength="16" />
 
     </android.support.design.widget.TextInputLayout>
 
