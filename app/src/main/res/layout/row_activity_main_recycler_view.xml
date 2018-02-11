@@ -24,6 +24,7 @@
             android:layout_width="82dp"
             android:layout_height="82dp"
             android:src="@drawable/ic_poll_orange_24dp"
+            android:scaleType="fitXY"
             android:contentDescription="@string/my_data_collection" />
 
         <TextView
