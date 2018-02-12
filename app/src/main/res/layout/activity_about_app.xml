@@ -24,9 +24,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:gravity="center_horizontal"
-        android:text="Collect My Data"
-        android:textSize="30sp"
-        tools:ignore="HardcodedText" />
+        android:text="@string/app_name"
+        android:textSize="30sp" />
 
     <TextView
         android:layout_width="match_parent"
