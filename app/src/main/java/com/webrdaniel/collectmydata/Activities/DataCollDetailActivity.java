@@ -91,7 +91,6 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
             }
         });
         fab.hide();
-
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

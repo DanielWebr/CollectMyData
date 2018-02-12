@@ -100,14 +100,14 @@ public class RecordsListFragment extends Fragment {
         View dialog = layoutInflaterAndroid.inflate(R.layout.dialog_delete, (ViewGroup) mRootView,false);
         TextView deleteTv =  dialog.findViewById(R.id.tv_dialog_delete);
         deleteTv.setText(dataCollDetailActivity.getString(R.string.really_delete_record));
-        Callable methodEditValue = new Callable() {
+        Callable methodDeleteRecord = new Callable() {
             @Override
             public Object call() throws Exception {
                 deleteRecord(position);
                 return null;
             }
         };
-        AlertDialog alertDialog = DialogUtils.showDialog(dialog, dataCollDetailActivity, methodEditValue,R.string.delete);
+        AlertDialog alertDialog = DialogUtils.showDialog(dialog, dataCollDetailActivity, methodDeleteRecord,R.string.delete);
         alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {

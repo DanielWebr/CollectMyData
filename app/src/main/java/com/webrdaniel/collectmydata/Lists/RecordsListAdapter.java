@@ -55,5 +55,4 @@ public class RecordsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             return 1; //normal
         }
     }
-
 }
