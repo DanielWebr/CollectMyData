@@ -157,7 +157,7 @@ class DataCollViewHolder extends RecyclerView.ViewHolder {
         }
         mMainActivity.dataCollRvAdapter.notifyItemChanged(DataCollViewHolder.this.getAdapterPosition());
         mDataCollItem = mMainActivity.dataCollItems.get(DataCollViewHolder.this.getAdapterPosition());
-        mMainActivity.databaseHelper.insertDataValue(mDataCollItem.getId(), value, DateUtils.dateToString(null, DateUtils.DATE_FORMAT_DMY));
+        mMainActivity.databaseHelper.insertRecord(mDataCollItem.getId(), value, DateUtils.dateToString(null, DateUtils.DATE_FORMAT_DMY));
     }
 
     private void renameDataColl(String name) {

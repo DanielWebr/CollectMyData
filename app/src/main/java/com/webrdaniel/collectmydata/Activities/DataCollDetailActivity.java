@@ -265,7 +265,7 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
     }
 
     private void storeRecord(double value, Date date) {
-        int id = databaseHelper.insertDataValue(mDataCollItemId,value, DateUtils.dateToString(date,DateUtils.DATE_FORMAT_DMY));
+        int id = databaseHelper.insertRecord(mDataCollItemId,value, DateUtils.dateToString(date,DateUtils.DATE_FORMAT_DMY));
         Record record = new Record(id,date,value);
         records.add(record);
         filterRecords(mFilterDatesCount);

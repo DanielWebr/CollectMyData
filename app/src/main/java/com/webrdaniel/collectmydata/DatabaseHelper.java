@@ -28,7 +28,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         super(context,DB_NAME,null, DB_VERSION);
     }
 
-
     @Override
     public void onCreate(SQLiteDatabase db) {
         String queryDataCollTable = "CREATE TABLE "+DATA_COLL_TABLE+" ("+
@@ -56,14 +55,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return (int) this.getWritableDatabase().insert(DATA_COLL_TABLE,null, dataCollValues);
     }
 
-    public int insertDataValue(int IDDataColl, double value, String date) {
+    public int insertRecord(int IDDataColl, double value, String date) {
         ContentValues dataCollValues = new ContentValues();
         dataCollValues.put("_idDataColl", IDDataColl);
         dataCollValues.put("value", value);
         dataCollValues.put("date", date);
         return (int) this.getWritableDatabase().insert(RECORDS_TABLE,null, dataCollValues);
     }
-
 
     public ArrayList<DataCollItem> getDataCollItems() {
         String query = "SELECT  * FROM " + DATA_COLL_TABLE;

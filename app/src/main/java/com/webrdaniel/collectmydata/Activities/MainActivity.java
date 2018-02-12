@@ -1,6 +1,5 @@
 package com.webrdaniel.collectmydata.Activities;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -56,7 +55,6 @@ public class MainActivity extends AppCompatActivity{
         messageIfEmpty();
 
         fab.setOnClickListener(new View.OnClickListener() {
-            @SuppressLint("RestrictedApi")
             @Override
             public void onClick(View view) {
                 Intent newDataColl= new Intent(MainActivity.this, NewDataCollActivity.class);
