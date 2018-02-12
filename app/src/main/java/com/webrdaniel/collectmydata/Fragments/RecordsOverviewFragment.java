@@ -56,7 +56,6 @@ public class RecordsOverviewFragment extends Fragment {
         mGraph = linearLayout.findViewById(R.id.graph);
         mCountTv.setText(String.valueOf(mCount));
 
-
         mStaticLabelsFormatter = new StaticLabelsFormatter(mGraph);
         mGridLabelRenderer = mGraph.getGridLabelRenderer();
         mGridLabelRenderer.setLabelFormatter(mStaticLabelsFormatter);
@@ -66,17 +65,16 @@ public class RecordsOverviewFragment extends Fragment {
         mGraph.addSeries(mBarGraphSeries);
         mGraph.getViewport().setYAxisBoundsManual(true);
 
-
         updateLayout();
         return linearLayout;
     }
 
     public void updateData() {
         mCount = dataCollDetailActivity.records.size();
-        if(mCount !=0) getValues();
+        if(mCount !=0) getStats();
     }
 
-    public void getValues() {
+    public void getStats() {
         mSum = 0;
         mMax = dataCollDetailActivity.records.get(0).getValue();
         mMin = dataCollDetailActivity.records.get(0).getValue();
@@ -111,7 +109,6 @@ public class RecordsOverviewFragment extends Fragment {
         ArrayList<Record> filledRecords = getFilledRecords();
         int size = filledRecords.size();
         String[] hLabels = new String[size+1];
-        hLabels[size]="";
         DataPoint[] dataPoints = new DataPoint[size+1];
         dataPoints[size]=new DataPoint(size,0);
         int density = (int) Math.ceil(size/7.0);
@@ -135,7 +132,6 @@ public class RecordsOverviewFragment extends Fragment {
 
         mGridLabelRenderer.reloadStyles();
         graphVisible(true);
-
     }
 
     private ArrayList<Record> getFilledRecords() {
