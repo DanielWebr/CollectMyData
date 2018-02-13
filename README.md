@@ -1,12 +1,10 @@
-# Collect My Data
-Android app for collecting data.
-
-<a href="https://play.google.com/store/apps/details?id=com.webrdaniel.collectmydata">Collect My Data at Google Play<a/><br>
+<img src="https://raw.githubusercontent.com/DanielWebr/CollectMyData/master/CollectMyDataDayDream.png" width="800" />
 
 <img src="https://github.com/DanielWebr/CollectMyData/blob/master/screenshots/Screenshot1.png" width="200" /> <img 
 src="https://github.com/DanielWebr/CollectMyData/blob/master/screenshots/Screenshot3.png" width="200" /> <img 
 src="https://github.com/DanielWebr/CollectMyData/blob/master/screenshots/Screenshot4.png" width="200" /> <img src="https://github.com/DanielWebr/CollectMyData/blob/master/screenshots/Screenshot2.png" width="200" />
 
+<a href="https://play.google.com/store/apps/details?id=com.webrdaniel.collectmydata">Collect My Data at Google Play<a/><br>
 
 ## Libraries used in app
 <a href="https://materialdesignicons.com/">Material Design Icons<a/><br>
