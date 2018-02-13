@@ -16,7 +16,7 @@ src="https://github.com/DanielWebr/CollectMyData/blob/master/screenshots/Screens
 
 ## License
 
-    Copyright 2018 DanielWebr
+    Copyright 2018 Daniel Wébr
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
