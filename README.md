@@ -1,5 +1,5 @@
 # Collect My Data
-Android app for collecting data.
+<img src="https://raw.githubusercontent.com/DanielWebr/CollectMyData/master/CollectMyDataDayDream.png" width="800" />
 
 <a href="https://play.google.com/store/apps/details?id=com.webrdaniel.collectmydata">Collect My Data at Google Play<a/><br>
 
