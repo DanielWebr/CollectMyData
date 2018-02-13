@@ -71,18 +71,15 @@ public class RecordsOverviewFragment extends Fragment {
 
     public void updateData() {
         mCount = dataCollDetailActivity.records.size();
-        if(mCount !=0) getStats();
-    }
-
-    public void getStats() {
+        if(mCount == 0) return;
         mSum = 0;
         mMax = dataCollDetailActivity.records.get(0).getValue();
         mMin = dataCollDetailActivity.records.get(0).getValue();
         for(Record record : dataCollDetailActivity.records) {
             double value = record.getValue();
-            mSum +=value;
-            if(value< mMin) mMin = value;
-            else if(value> mMax) mMax = value;
+            mSum += value;
+            if(value < mMin) mMin = value;
+            else if(value > mMax) mMax = value;
         }
         mAvg = mSum / dataCollDetailActivity.records.size();
     }
