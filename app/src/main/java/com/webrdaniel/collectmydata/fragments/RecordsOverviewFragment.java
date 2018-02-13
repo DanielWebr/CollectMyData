@@ -1,4 +1,4 @@
-package com.webrdaniel.collectmydata.Fragments;
+package com.webrdaniel.collectmydata.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,11 +14,11 @@ import com.jjoe64.graphview.GridLabelRenderer;
 import com.jjoe64.graphview.helper.StaticLabelsFormatter;
 import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
-import com.webrdaniel.collectmydata.Activities.DataCollDetailActivity;
-import com.webrdaniel.collectmydata.Models.Record;
+import com.webrdaniel.collectmydata.activities.DataCollDetailActivity;
+import com.webrdaniel.collectmydata.models.Record;
 import com.webrdaniel.collectmydata.R;
-import com.webrdaniel.collectmydata.Utils.DateUtils;
-import com.webrdaniel.collectmydata.Utils.Utils;
+import com.webrdaniel.collectmydata.utils.DateUtils;
+import com.webrdaniel.collectmydata.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Calendar;

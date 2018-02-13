@@ -11,7 +11,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".Activities.MainActivity"
+            android:name=".activities.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden"
@@ -21,16 +21,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activities.NewDataCollActivity"
-            android:parentActivityName=".Activities.MainActivity"/>
-        <activity android:name=".Activities.AboutAppActivity"
+        <activity android:name=".activities.NewDataCollActivity"
+            android:parentActivityName=".activities.MainActivity"/>
+        <activity android:name=".activities.AboutAppActivity"
             android:screenOrientation="portrait"
-            android:parentActivityName=".Activities.MainActivity"/>
-        <activity android:name=".Activities.DataCollDetailActivity"
+            android:parentActivityName=".activities.MainActivity"/>
+        <activity android:name=".activities.DataCollDetailActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden"
-            android:parentActivityName=".Activities.MainActivity"/>
+            android:parentActivityName=".activities.MainActivity"/>
     </application>
 
 </manifest>

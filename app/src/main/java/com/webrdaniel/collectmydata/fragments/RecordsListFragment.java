@@ -1,4 +1,4 @@
-package com.webrdaniel.collectmydata.Fragments;
+package com.webrdaniel.collectmydata.fragments;
 
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
@@ -17,11 +17,11 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.webrdaniel.collectmydata.Activities.DataCollDetailActivity;
-import com.webrdaniel.collectmydata.Lists.RecordsListAdapter;
-import com.webrdaniel.collectmydata.Models.Record;
+import com.webrdaniel.collectmydata.activities.DataCollDetailActivity;
+import com.webrdaniel.collectmydata.lists.RecordsListAdapter;
+import com.webrdaniel.collectmydata.models.Record;
 import com.webrdaniel.collectmydata.R;
-import com.webrdaniel.collectmydata.Utils.DialogUtils;
+import com.webrdaniel.collectmydata.utils.DialogUtils;
 
 import java.util.concurrent.Callable;
 

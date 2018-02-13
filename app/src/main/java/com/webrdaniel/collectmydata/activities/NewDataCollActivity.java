@@ -1,4 +1,4 @@
-package com.webrdaniel.collectmydata.Activities;
+package com.webrdaniel.collectmydata.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,9 +12,9 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 
-import com.webrdaniel.collectmydata.Models.DataCollItem;
+import com.webrdaniel.collectmydata.models.DataCollItem;
 import com.webrdaniel.collectmydata.R;
-import com.webrdaniel.collectmydata.Utils.KeyboardUtils;
+import com.webrdaniel.collectmydata.utils.KeyboardUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

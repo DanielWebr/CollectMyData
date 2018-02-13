@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.webrdaniel.collectmydata.Activities.DataCollDetailActivity">
+    tools:context="com.webrdaniel.collectmydata.activities.DataCollDetailActivity">
     <item
         android:id="@+id/menu_filter_all"
         android:orderInCategory="1"

@@ -1,8 +1,5 @@
 <resources>
     <string name="app_name">Collect My Data</string>
-    <string name="action_settings">Nastavení</string>
-    <string name="setting_reset">Vymazat data aplikace</string>
-    <string name="setting_delete">Vymazat</string>
     <string name="tab_overview">Overview</string>
     <string name="enter_data">Enter data</string>
     <string name="value">Value</string>
@@ -23,7 +20,7 @@
     <string name="really_delete_data_collection">Really delete data collection?</string>
     <string name="edit">Edit</string>
     <string name="no_data">There are no data available.</string>
-    <string name="no_data_coll">You do not have any data colletions.</string>
+    <string name="no_data_coll">You do not have any data collections.</string>
     <string name="about_app">About app</string>
     <string name="app_info">Application code available on %1$s under Apache 2.0 licence.</string>
     <string name="new_dataColl">New data collection</string>
@@ -38,12 +35,12 @@
     <string name="this_week">This week</string>
     <string name="this_month">This month</string>
     <string name="this_year">This year</string>
-    <string name="app_version">Veorsin 1.0</string>
+    <string name="app_version">Version 1.0</string>
     <string name="message_graph">Not enough data to make graph.</string>
     <string name="error_date">Record with this date already exists</string>
     <string name="record_added">Record added</string>
     <string name="my_data_collection">My data collection</string>
-    <string name="menu">menu</string>
+    <string name="menu">Menu</string>
     <string name="records">Records</string>
     <string name="app_resources">Third-party libraries used in app: GraphView library by Jonas Gehring, Date picker dialog by Wouter Dullaert, Material design icons by Google.</string>
 </resources>

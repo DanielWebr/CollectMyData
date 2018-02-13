@@ -1,4 +1,4 @@
-package com.webrdaniel.collectmydata.Activities;
+package com.webrdaniel.collectmydata.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

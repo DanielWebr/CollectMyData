@@ -1,4 +1,4 @@
-package com.webrdaniel.collectmydata.Activities;
+package com.webrdaniel.collectmydata.activities;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -27,15 +27,15 @@ import android.widget.Toast;
 
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.webrdaniel.collectmydata.DatabaseHelper;
-import com.webrdaniel.collectmydata.Fragments.RecordsListFragment;
-import com.webrdaniel.collectmydata.Fragments.RecordsOverviewFragment;
-import com.webrdaniel.collectmydata.Models.DataCollItem;
-import com.webrdaniel.collectmydata.Models.Record;
-import com.webrdaniel.collectmydata.Models.RecordComparator;
+import com.webrdaniel.collectmydata.fragments.RecordsListFragment;
+import com.webrdaniel.collectmydata.fragments.RecordsOverviewFragment;
+import com.webrdaniel.collectmydata.models.DataCollItem;
+import com.webrdaniel.collectmydata.models.Record;
+import com.webrdaniel.collectmydata.models.RecordComparator;
 import com.webrdaniel.collectmydata.R;
-import com.webrdaniel.collectmydata.Utils.DateUtils;
-import com.webrdaniel.collectmydata.Utils.DialogUtils;
-import com.webrdaniel.collectmydata.Utils.KeyboardUtils;
+import com.webrdaniel.collectmydata.utils.DateUtils;
+import com.webrdaniel.collectmydata.utils.DialogUtils;
+import com.webrdaniel.collectmydata.utils.KeyboardUtils;
 
 import java.util.ArrayList;
 import java.util.Calendar;

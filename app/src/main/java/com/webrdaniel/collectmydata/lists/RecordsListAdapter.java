@@ -1,15 +1,15 @@
-package com.webrdaniel.collectmydata.Lists;
+package com.webrdaniel.collectmydata.lists;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.webrdaniel.collectmydata.Fragments.RecordsListFragment;
-import com.webrdaniel.collectmydata.Models.Record;
+import com.webrdaniel.collectmydata.fragments.RecordsListFragment;
+import com.webrdaniel.collectmydata.models.Record;
 import com.webrdaniel.collectmydata.R;
-import com.webrdaniel.collectmydata.Utils.DateUtils;
-import com.webrdaniel.collectmydata.Utils.Utils;
+import com.webrdaniel.collectmydata.utils.DateUtils;
+import com.webrdaniel.collectmydata.utils.Utils;
 
 import java.util.ArrayList;
 

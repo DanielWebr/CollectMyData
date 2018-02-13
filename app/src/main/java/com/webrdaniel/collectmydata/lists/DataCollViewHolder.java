@@ -1,4 +1,4 @@
-package com.webrdaniel.collectmydata.Lists;
+package com.webrdaniel.collectmydata.lists;
 
 import android.content.Intent;
 import android.support.design.widget.TextInputEditText;
@@ -14,13 +14,13 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.webrdaniel.collectmydata.Activities.DataCollDetailActivity;
-import com.webrdaniel.collectmydata.Activities.MainActivity;
-import com.webrdaniel.collectmydata.Models.DataCollItem;
+import com.webrdaniel.collectmydata.activities.DataCollDetailActivity;
+import com.webrdaniel.collectmydata.activities.MainActivity;
+import com.webrdaniel.collectmydata.models.DataCollItem;
 import com.webrdaniel.collectmydata.R;
-import com.webrdaniel.collectmydata.Utils.DateUtils;
-import com.webrdaniel.collectmydata.Utils.DialogUtils;
-import com.webrdaniel.collectmydata.Utils.KeyboardUtils;
+import com.webrdaniel.collectmydata.utils.DateUtils;
+import com.webrdaniel.collectmydata.utils.DialogUtils;
+import com.webrdaniel.collectmydata.utils.KeyboardUtils;
 
 import java.util.Date;
 import java.util.concurrent.Callable;

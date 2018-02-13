@@ -1,4 +1,4 @@
-package com.webrdaniel.collectmydata.Lists;
+package com.webrdaniel.collectmydata.lists;
 
 import android.content.res.ColorStateList;
 import android.support.v4.widget.ImageViewCompat;
@@ -7,10 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.webrdaniel.collectmydata.Activities.MainActivity;
-import com.webrdaniel.collectmydata.Models.DataCollItem;
+import com.webrdaniel.collectmydata.activities.MainActivity;
+import com.webrdaniel.collectmydata.models.DataCollItem;
 import com.webrdaniel.collectmydata.R;
-import com.webrdaniel.collectmydata.Utils.DateUtils;
+import com.webrdaniel.collectmydata.utils.DateUtils;
 
 import java.util.ArrayList;
 import java.util.Date;

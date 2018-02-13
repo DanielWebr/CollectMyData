@@ -1,4 +1,4 @@
-package com.webrdaniel.collectmydata.Lists;
+package com.webrdaniel.collectmydata.lists;
 
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AlertDialog;
@@ -8,13 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.webrdaniel.collectmydata.Activities.DataCollDetailActivity;
-import com.webrdaniel.collectmydata.Fragments.RecordsListFragment;
-import com.webrdaniel.collectmydata.Models.Record;
+import com.webrdaniel.collectmydata.activities.DataCollDetailActivity;
+import com.webrdaniel.collectmydata.fragments.RecordsListFragment;
+import com.webrdaniel.collectmydata.models.Record;
 import com.webrdaniel.collectmydata.R;
-import com.webrdaniel.collectmydata.Utils.DialogUtils;
-import com.webrdaniel.collectmydata.Utils.KeyboardUtils;
-import com.webrdaniel.collectmydata.Utils.Utils;
+import com.webrdaniel.collectmydata.utils.DialogUtils;
+import com.webrdaniel.collectmydata.utils.KeyboardUtils;
+import com.webrdaniel.collectmydata.utils.Utils;
 
 import java.util.concurrent.Callable;
 
