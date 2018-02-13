@@ -7,13 +7,12 @@ import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 
-import com.webrdaniel.collectmydata.models.DataCollItem;
 import com.webrdaniel.collectmydata.R;
+import com.webrdaniel.collectmydata.models.DataCollItem;
 import com.webrdaniel.collectmydata.utils.KeyboardUtils;
 
 import butterknife.BindView;
@@ -48,7 +47,6 @@ public class NewDataCollActivity extends AppCompatActivity {
         });
 
         newDataCollNameTiet.requestFocus();
-        newDataCollNameTiet.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         newDataCollNameTiet.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

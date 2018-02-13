@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity{
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.recycler_view_main_activity) RecyclerView mDataCollRv;
     @BindView(R.id.tv_empty_data_coll_list) TextView mEmptyRvTv;
-    public static final String DATA_COLL_ITEM = "com.webrdaniel.collectmydata.Models.Records";
+    public static final String DATA_COLL_ITEM = "com.webrdaniel.collectmydata.models.records";
     static final int NEW_DATA_COLL_ITEM = 100;
     public DataCollListAdapter dataCollRvAdapter;
     public ArrayList<DataCollItem> dataCollItems;
@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity{
         mDataCollRv.setLayoutManager(mLayoutManager);
         dataCollRvAdapter = new DataCollListAdapter(MainActivity.this);
         mDataCollRv.setAdapter(dataCollRvAdapter);
-        messageIfEmpty();
+        showTvIfRvIsEmpty();
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,8 +75,8 @@ public class MainActivity extends AppCompatActivity{
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_main_about_app) {
-            Intent settingIntent = new Intent(this, AboutAppActivity.class);
-            startActivity(settingIntent);
+            Intent intent = new Intent(this, AboutAppActivity.class);
+            startActivity(intent);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity{
         int id = databaseHelper.insertDataColl(item.getName(), item.getColor());
         item.setId(id);
         dataCollItems.add(item);
-        messageIfEmpty();
+        showTvIfRvIsEmpty();
         dataCollRvAdapter.notifyItemInserted(dataCollRvAdapter.getItemCount());
     }
 
@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity{
         KeyboardUtils.hideKeyboard(this);
     }
 
-    public void messageIfEmpty() {
+    public void showTvIfRvIsEmpty() {
         if (dataCollItems.isEmpty()) {
             mDataCollRv.setVisibility(View.GONE);
             mEmptyRvTv.setVisibility(View.VISIBLE);

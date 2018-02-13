@@ -111,7 +111,6 @@ class DataCollViewHolder extends RecyclerView.ViewHolder {
         View dialog = layoutInflaterAndroid.inflate(R.layout.input_dialog_data_coll_rename, (ViewGroup) mMainActivity.getWindow().getDecorView().getRootView(),false);
         final TextInputEditText newDataCollNameTiet = dialog.findViewById(R.id.tiet_rename_data_coll);
         newDataCollNameTiet.setText(mDataCollItem.getName());
-
         Callable methodRenameDataColl = new Callable() {
             @Override
             public Object call() throws Exception {
@@ -129,21 +128,20 @@ class DataCollViewHolder extends RecyclerView.ViewHolder {
     private void showDialogNewRecord() {
         LayoutInflater layoutInflater = LayoutInflater.from(mMainActivity);
         View dialog = layoutInflater.inflate(R.layout.input_dialog_data_coll_value, (ViewGroup) mMainActivity.getWindow().getDecorView().getRootView(),false);
-        final TextInputEditText newRecordValeTiet = dialog.findViewById(R.id.tiet_data_coll_add_record_value);
+        final TextInputEditText newRecordValueTiet = dialog.findViewById(R.id.tiet_data_coll_add_record_value);
         final TextView actualDateTv = dialog.findViewById(R.id.tv_data_coll_date);
         actualDateTv.setText(DateUtils.dateToString(null, DateUtils.DATE_FORMAT_EDMM));
-
         Callable methodStoreValue = new Callable() {
             @Override
             public Object call() throws Exception {
-                storeRecord(Double.parseDouble(newRecordValeTiet.getText().toString()));
+                storeRecord(Double.parseDouble(newRecordValueTiet.getText().toString()));
                 return null;
             }
         };
         AlertDialog alertDialog = DialogUtils.showDialog(dialog, mMainActivity, methodStoreValue,R.string.add);
-        DialogUtils.lockPositiveButtonOnEmptyText(alertDialog, newRecordValeTiet, null);
-        newRecordValeTiet.requestFocus();
-        DialogUtils.onEnterConfirm(newRecordValeTiet,alertDialog);
+        DialogUtils.lockPositiveButtonOnEmptyText(alertDialog, newRecordValueTiet, null);
+        newRecordValueTiet.requestFocus();
+        DialogUtils.onEnterConfirm(newRecordValueTiet,alertDialog);
         KeyboardUtils.showKeyboard(mMainActivity);
     }
 
@@ -169,7 +167,7 @@ class DataCollViewHolder extends RecyclerView.ViewHolder {
     private void deleteDataColl() {
         mMainActivity.databaseHelper.deleteDataColl(mDataCollItem.getId());
         mMainActivity.dataCollItems.remove(mDataCollItem);
-        mMainActivity.messageIfEmpty();
+        mMainActivity.showTvIfRvIsEmpty();
         mMainActivity.dataCollRvAdapter.notifyItemRemoved(DataCollViewHolder.this.getAdapterPosition());
     }
 

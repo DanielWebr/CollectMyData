@@ -24,9 +24,8 @@
             android:layout_alignTop="@+id/fab_main_activity"
             android:ems="16"
             android:hint="@string/name_of_data_collection"
-            android:inputType="textPersonName"
+            android:inputType="textPersonName|textCapSentences"
             android:maxLength="16" />
-
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.FloatingActionButton

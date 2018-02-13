@@ -37,8 +37,9 @@ public class RecordsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (position != 0) {
             RecordViewHolder recordHolder = (RecordViewHolder) holder;
-            recordHolder.mValue.setText(Utils.doubleToString(mRecords.get(position - 1).getValue()));
-            recordHolder.mValueDate.setText(DateUtils.dateToString(mRecords.get(position - 1).getDate(), DateUtils.DATE_FORMAT_EDM));
+            Record record = mRecords.get(position-1);
+            recordHolder.mValue.setText(Utils.doubleToString(record.getValue()));
+            recordHolder.mValueDate.setText(DateUtils.dateToString(record.getDate(), DateUtils.DATE_FORMAT_EDM));
         }
     }
 

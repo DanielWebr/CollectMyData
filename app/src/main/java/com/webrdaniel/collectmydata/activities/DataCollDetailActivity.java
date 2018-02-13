@@ -117,10 +117,9 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        switch (id) {
-            case R.id.tv_filter:
-                showPopupMenuFilter();return true;
+        if(item.getItemId() == R.id.tv_filter) {
+                showPopupMenuFilter();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -186,7 +185,7 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
         mDialogDateTil = dialog.findViewById(R.id.til_edit_record_value_date);
         mDialogDateTiet.setText(DateUtils.dateToString(null, DateUtils.DATE_FORMAT_EDMM));
 
-        Callable methodStoreValue = new Callable() {
+        Callable methodStoreRecord = new Callable() {
             @Override
             public Object call() throws Exception {
                 storeRecord(Double.parseDouble(dialogValueTiet.getText().toString()), mDialogDateToStore);
@@ -194,7 +193,7 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
             }
         };
 
-        AlertDialog alertDialog = DialogUtils.showDialog(dialog,this, methodStoreValue,R.string.add);
+        AlertDialog alertDialog = DialogUtils.showDialog(dialog,this, methodStoreRecord,R.string.add);
 
         DialogUtils.onEnterConfirm(dialogValueTiet,alertDialog);
         KeyboardUtils.showKeyboard(this);
@@ -306,15 +305,15 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
                         return true;
                     case R.id.menu_filter_this_week:
                         menuitem.setTitle(R.string.this_week);
-                        filterRecords(getDaysPast(Calendar.DAY_OF_WEEK,Calendar.MONDAY));
+                        filterRecords(DateUtils.getDaysPastSince(Calendar.DAY_OF_WEEK,Calendar.MONDAY));
                         return true;
                     case R.id.menu_filter_this_month:
                         menuitem.setTitle(R.string.this_month);
-                        filterRecords(getDaysPast(Calendar.DAY_OF_MONTH,1));
+                        filterRecords(DateUtils.getDaysPastSince(Calendar.DAY_OF_MONTH,1));
                         return true;
                     case R.id.menu_filter_this_year:
                         menuitem.setTitle(R.string.this_year);
-                        filterRecords(getDaysPast(Calendar.DAY_OF_YEAR,1));
+                        filterRecords(DateUtils.getDaysPastSince(Calendar.DAY_OF_YEAR,1));
                         return true;
                     case R.id.menu_filter_all:
                         menuitem.setTitle(R.string.all);
@@ -328,15 +327,6 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
         popup.show();
     }
 
-    private int getDaysPast(int period, int value) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(period,value);
-        Date date = new Date();
-        long difference = date.getTime() - calendar.getTime().getTime();
-        float daysBetween = (difference / (1000*60*60*24));
-        return (int) daysBetween+1;
-    }
-
     private void filterRecords(int daysToPast) {
         if (daysToPast==0) {
             showAllRecords();
@@ -348,9 +338,7 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
         calendar.add(Calendar.DATE, -daysToPast);
         Date date = calendar.getTime();
         for(Record record : listToAdd) {
-            if (record.getDate().after(date)) {
-                records.add(record);
-            }
+            if (record.getDate().after(date))  records.add(record);
         }
         updateFragments();
         mFilterDatesCount = daysToPast;
@@ -363,8 +351,7 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
         mFilterDatesCount = 0;
     }
 
-    private void updateFragments()
-    {
+    private void updateFragments() {
         recordsOverviewFragment.updateData();
         recordsOverviewFragment.updateLayout();
         mRecordsListFragment.showTvIfRvIsEmpty();

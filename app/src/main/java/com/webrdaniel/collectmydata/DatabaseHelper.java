@@ -6,10 +6,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.webrdaniel.collectmydata.Models.DataCollItem;
-import com.webrdaniel.collectmydata.Models.Record;
-import com.webrdaniel.collectmydata.Models.RecordComparator;
-import com.webrdaniel.collectmydata.Utils.DateUtils;
+import com.webrdaniel.collectmydata.models.DataCollItem;
+import com.webrdaniel.collectmydata.models.Record;
+import com.webrdaniel.collectmydata.models.RecordComparator;
+import com.webrdaniel.collectmydata.utils.DateUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -56,11 +56,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public int insertRecord(int IDDataColl, double value, String date) {
-        ContentValues dataCollValues = new ContentValues();
-        dataCollValues.put("_idDataColl", IDDataColl);
-        dataCollValues.put("value", value);
-        dataCollValues.put("date", date);
-        return (int) this.getWritableDatabase().insert(RECORDS_TABLE,null, dataCollValues);
+        ContentValues recordValues = new ContentValues();
+        recordValues.put("_idDataColl", IDDataColl);
+        recordValues.put("value", value);
+        recordValues.put("date", date);
+        return (int) this.getWritableDatabase().insert(RECORDS_TABLE,null, recordValues);
     }
 
     public ArrayList<DataCollItem> getDataCollItems() {
@@ -118,18 +118,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void editValue(int id, double value) {
-        String queryRenameDataColl = "UPDATE "+ RECORDS_TABLE +
+        String queryEditValue = "UPDATE "+ RECORDS_TABLE +
                 " SET value = '"+ value +"'"+
                 " WHERE _id = " + id;
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL(queryRenameDataColl);
+        db.execSQL(queryEditValue);
     }
 
     public void deleteRecord(int id) {
-        String queryDeleteValues = "DELETE FROM "+ RECORDS_TABLE +
+        String queryDeleteRecords = "DELETE FROM "+ RECORDS_TABLE +
                 " WHERE _id= " + id;
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL(queryDeleteValues);
+        db.execSQL(queryDeleteRecords);
     }
 
     public HashSet<Date> getDates(int dataCollId){
