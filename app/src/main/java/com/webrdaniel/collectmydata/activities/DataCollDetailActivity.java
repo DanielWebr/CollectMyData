@@ -29,14 +29,16 @@ import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.webrdaniel.collectmydata.DatabaseHelper;
 import com.webrdaniel.collectmydata.fragments.RecordsListFragment;
 import com.webrdaniel.collectmydata.fragments.RecordsOverviewFragment;
-import com.webrdaniel.collectmydata.models.DataCollItem;
+import com.webrdaniel.collectmydata.models.mDataCollItem;
 import com.webrdaniel.collectmydata.models.Record;
 import com.webrdaniel.collectmydata.models.RecordComparator;
 import com.webrdaniel.collectmydata.R;
+import com.webrdaniel.collectmydata.utils.CSVUtils;
 import com.webrdaniel.collectmydata.utils.DateUtils;
 import com.webrdaniel.collectmydata.utils.DialogUtils;
 import com.webrdaniel.collectmydata.utils.KeyboardUtils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -57,6 +59,7 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
     public DatabaseHelper databaseHelper;
     public RecordsOverviewFragment recordsOverviewFragment;
     public ArrayList<Record> records;
+    private mDataCollItem dataCollItem;
     private HashSet<Date> mStoredDates;
     private int mDataCollItemId;
     private int mFilterDatesCount;
@@ -75,7 +78,7 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
 
-        DataCollItem dataCollItem = (DataCollItem)getIntent().getSerializableExtra(MainActivity.DATA_COLL_ITEM);
+        dataCollItem = (mDataCollItem)getIntent().getSerializableExtra(MainActivity.DATA_COLL_ITEM);
         mDataCollItemId = dataCollItem.getId();
         databaseHelper = new DatabaseHelper(this);
         mStoredDates = databaseHelper.getDates(mDataCollItemId);
@@ -112,6 +115,7 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
     public boolean onCreateOptionsMenu(Menu menu) {
         this.mMenu = menu;
         getMenuInflater().inflate(R.menu.menu_data_coll_detail, menu);
+        enableExportIfData();
         return true;
     }
 
@@ -120,6 +124,14 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
         if(item.getItemId() == R.id.tv_filter) {
                 showPopupMenuFilter();
                 return true;
+        }
+        else if(item.getItemId() == R.id.menu_data_coll_detail_export){
+            try {
+                CSVUtils.recordsToCSV(this,records);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -175,6 +187,11 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
     public void updateDatesList() {
         mStoredDates.clear();
         mStoredDates.addAll(databaseHelper.getDates(mDataCollItemId));
+    }
+
+    public void enableExportIfData(){
+        if (records.size()!=0) mMenu.getItem(1).setEnabled(true);
+        else mMenu.getItem(1).setEnabled(false);
     }
 
     private void showDialogAddValueDate() {
@@ -270,6 +287,7 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
         Collections.sort(records, new RecordComparator());
         updateFragments();
         updateDatesList();
+        enableExportIfData();
         Toast.makeText(this, this.getString(R.string.record_added), Toast.LENGTH_SHORT).show();
     }
 
@@ -358,5 +376,8 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
         mRecordsListFragment.recordsListAdapter.notifyDataSetChanged();
     }
 
+    public mDataCollItem getDataCollItem() {
+        return dataCollItem;
+    }
 
 }

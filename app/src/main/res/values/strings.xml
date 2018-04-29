@@ -43,4 +43,5 @@
     <string name="menu">Menu</string>
     <string name="records">Records</string>
     <string name="app_resources">Third-party libraries used in app: GraphView library by Jonas Gehring, Date picker dialog by Wouter Dullaert, Material design icons by Google.</string>
+    <string name="Export">Export to CSV</string>
 </resources>
