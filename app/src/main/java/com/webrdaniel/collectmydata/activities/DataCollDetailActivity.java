@@ -1,7 +1,11 @@
 package com.webrdaniel.collectmydata.activities;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
@@ -27,12 +31,12 @@ import android.widget.Toast;
 
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.webrdaniel.collectmydata.DatabaseHelper;
+import com.webrdaniel.collectmydata.R;
 import com.webrdaniel.collectmydata.fragments.RecordsListFragment;
 import com.webrdaniel.collectmydata.fragments.RecordsOverviewFragment;
-import com.webrdaniel.collectmydata.models.mDataCollItem;
 import com.webrdaniel.collectmydata.models.Record;
 import com.webrdaniel.collectmydata.models.RecordComparator;
-import com.webrdaniel.collectmydata.R;
+import com.webrdaniel.collectmydata.models.mDataCollItem;
 import com.webrdaniel.collectmydata.utils.CSVUtils;
 import com.webrdaniel.collectmydata.utils.DateUtils;
 import com.webrdaniel.collectmydata.utils.DialogUtils;
@@ -130,6 +134,18 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
+            Snackbar.make(this.tabLayout, R.string.CSV_saved, Snackbar.LENGTH_SHORT)
+                    .setAction(R.string.show, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                            Uri uri = Uri.parse(Environment.getExternalStorageDirectory().getPath());
+                            intent.setDataAndType(uri, "text/csv");
+                            startActivity(Intent.createChooser(intent, "Open folder"));
+                        }
+                    }).show();
+
             return true;
         }
         return super.onOptionsItemSelected(item);

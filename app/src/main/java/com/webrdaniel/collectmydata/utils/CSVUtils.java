@@ -2,9 +2,7 @@ package com.webrdaniel.collectmydata.utils;
 
 import android.media.MediaScannerConnection;
 import android.os.Environment;
-import android.widget.Toast;
 
-import com.webrdaniel.collectmydata.R;
 import com.webrdaniel.collectmydata.activities.DataCollDetailActivity;
 import com.webrdaniel.collectmydata.models.Record;
 
@@ -22,7 +20,7 @@ public class CSVUtils {
     public static void recordsToCSV(DataCollDetailActivity context, ArrayList<Record> records) throws IOException {
 
             String name = context.getDataCollItem().getName()+".csv";
-            File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), name);
+            File file = new File(Environment.getExternalStorageDirectory(), name);
             if (!file.exists()) file.createNewFile();
             BufferedWriter writer = new BufferedWriter(new FileWriter(file, true /*append*/));
 
@@ -43,6 +41,5 @@ public class CSVUtils {
                     null,
                     null);
 
-            Toast.makeText(context, context.getString(R.string.CSV_saved), Toast.LENGTH_SHORT).show();
     }
 }

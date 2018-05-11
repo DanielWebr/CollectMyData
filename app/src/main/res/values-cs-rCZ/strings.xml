@@ -48,5 +48,6 @@
     <string name="menu">menu</string>
     <string name="app_resources">Knihovny třetích stran použity v aplikaci: GraphView library by Jonas Gehring, Date picker dialog by Wouter Dullaert, Material design icons by Google.</string>
     <string name="Export">Exportovat do CSV</string>
-    <string name="CSV_saved">CSV soubor uložen do složky Stahování</string>
+    <string name="CSV_saved">CSV uloženo</string>
+    <string name="show">Zobrazit</string>
 </resources>

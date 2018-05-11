@@ -11,12 +11,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.webrdaniel.collectmydata.DatabaseHelper;
+import com.webrdaniel.collectmydata.R;
 import com.webrdaniel.collectmydata.lists.DataCollListAdapter;
 import com.webrdaniel.collectmydata.models.mDataCollItem;
-import com.webrdaniel.collectmydata.R;
 import com.webrdaniel.collectmydata.utils.KeyboardUtils;
 import com.webrdaniel.collectmydata.utils.Utils;
 
@@ -65,7 +64,6 @@ public class MainActivity extends AppCompatActivity{
                 startActivityForResult(newDataColl, NEW_DATA_COLL_ITEM);
             }
         });
-        Toast.makeText(this, "OnCreate", Toast.LENGTH_SHORT).show();
     }
 
     @Override
