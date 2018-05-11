@@ -85,7 +85,6 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
         records = databaseHelper.getRecords(mDataCollItemId);
         if(getSupportActionBar()!=null)getSupportActionBar().setTitle(dataCollItem.getName());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

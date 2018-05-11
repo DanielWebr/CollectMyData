@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.webrdaniel.collectmydata.DatabaseHelper;
 import com.webrdaniel.collectmydata.lists.DataCollListAdapter;
@@ -64,6 +65,7 @@ public class MainActivity extends AppCompatActivity{
                 startActivityForResult(newDataColl, NEW_DATA_COLL_ITEM);
             }
         });
+        Toast.makeText(this, "OnCreate", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -97,6 +99,12 @@ public class MainActivity extends AppCompatActivity{
     protected void onPause() {
         super.onPause();
         KeyboardUtils.hideKeyboard(this);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        dataCollRvAdapter.notifyDataSetChanged();
     }
 
     public void showTvIfRvIsEmpty() {
