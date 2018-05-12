@@ -1,14 +1,14 @@
 package com.webrdaniel.collectmydata.activities;
 
-import android.content.Intent;
-import android.net.Uri;
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -72,6 +72,7 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
     private TextInputLayout mDialogDateTil;
     private Menu mMenu;
     private Date mDialogDateToStore;
+    private static int MY_PERMISSIONS_WRITE_EXTERNAL_STORAGE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,27 +126,11 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.tv_filter) {
-                showPopupMenuFilter();
-                return true;
+            showPopupMenuFilter();
+            return true;
         }
         else if(item.getItemId() == R.id.menu_data_coll_detail_export){
-            try {
-                CSVUtils.recordsToCSV(this,records);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            Snackbar.make(this.tabLayout, R.string.CSV_saved, Snackbar.LENGTH_SHORT)
-                    .setAction(R.string.show, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                            Uri uri = Uri.parse(Environment.getExternalStorageDirectory().getPath());
-                            intent.setDataAndType(uri, "text/csv");
-                            startActivity(Intent.createChooser(intent, "Open folder"));
-                        }
-                    }).show();
-
+            exportToCSV();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -389,6 +374,36 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
         recordsOverviewFragment.updateLayout();
         mRecordsListFragment.showTvIfRvIsEmpty();
         mRecordsListFragment.recordsListAdapter.notifyDataSetChanged();
+    }
+
+    private void exportToCSV(){
+
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                MY_PERMISSIONS_WRITE_EXTERNAL_STORAGE);
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case 1: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    try {
+                        CSVUtils.recordsToCSV(this,records);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    Toast.makeText(this, R.string.CSV_saved, Toast.LENGTH_SHORT).show();
+                } else {
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+        }
     }
 
     public mDataCollItem getDataCollItem() {

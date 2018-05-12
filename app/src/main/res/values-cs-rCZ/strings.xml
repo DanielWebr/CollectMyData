@@ -23,7 +23,7 @@
     <string name="name">Jméno:</string>
     <string name="really_delete_data_collection">Opravdu odstranit datovou kolekci?</string>
     <string name="edit">Upravit</string>
-    <string name="no_data">Neexistují žádná uložená data.</string>
+    <string name="no_data">Žádná uložená data.</string>
     <string name="no_data_coll">Nemáš žádné datové kolekce.</string>
     <string name="about_app">O aplikaci</string>
     <string name="app_info">Kód aplikace dostupný na %1$s pod Apache 2.0 licencí. </string>

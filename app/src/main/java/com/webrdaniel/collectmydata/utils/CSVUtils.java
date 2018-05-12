@@ -1,6 +1,5 @@
 package com.webrdaniel.collectmydata.utils;
 
-import android.media.MediaScannerConnection;
 import android.os.Environment;
 
 import com.webrdaniel.collectmydata.activities.DataCollDetailActivity;
@@ -19,27 +18,27 @@ public class CSVUtils {
 
     public static void recordsToCSV(DataCollDetailActivity context, ArrayList<Record> records) throws IOException {
 
-            String name = context.getDataCollItem().getName()+".csv";
-            File file = new File(Environment.getExternalStorageDirectory(), name);
-            if (!file.exists()) file.createNewFile();
-            BufferedWriter writer = new BufferedWriter(new FileWriter(file, true /*append*/));
+        String name = context.getDataCollItem().getName()+".csv";
+        File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
 
-            StringBuilder content = new StringBuilder();
-            for (Record record : records) {
-                content.append(DateUtils.dateToString(record.getDate(),DateUtils.DATE_FORMAT_DMY));
-                content.append(DEFAULT_SEPARATOR);
-                content.append(Utils.doubleToString(record.getValue()));
-                content.append("\n");
-            }
+        File file = new File(dir.getAbsolutePath()+"/"+name);
 
-            writer.write(content.toString());
+        file.createNewFile();
 
-            writer.close();
+        BufferedWriter writer = new BufferedWriter(new FileWriter(file, true ));
 
-            MediaScannerConnection.scanFile(context,
-                    new String[]{file.toString()},
-                    null,
-                    null);
+        StringBuilder content = new StringBuilder();
+        for (Record record : records) {
+            content.append(DateUtils.dateToString(record.getDate(),DateUtils.DATE_FORMAT_DMY));
+            content.append(DEFAULT_SEPARATOR);
+            content.append(Utils.doubleToString(record.getValue()));
+            content.append("\n");
+        }
+
+        writer.write(content.toString());
+
+        writer.close();
+
 
     }
 }
