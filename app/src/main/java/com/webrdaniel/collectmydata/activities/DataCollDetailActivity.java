@@ -1,10 +1,13 @@
 package com.webrdaniel.collectmydata.activities;
 
 import android.Manifest;
+import android.app.DownloadManager;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
@@ -396,7 +399,14 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
                         e.printStackTrace();
                     }
 
-                    Toast.makeText(this, R.string.CSV_saved, Toast.LENGTH_SHORT).show();
+                    Snackbar.make(this.tabLayout, R.string.CSV_saved, Snackbar.LENGTH_SHORT)
+                            .setAction(R.string.show, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    startActivity(new Intent(DownloadManager.ACTION_VIEW_DOWNLOADS));
+                                }
+                            }).show();
+
                 } else {
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.

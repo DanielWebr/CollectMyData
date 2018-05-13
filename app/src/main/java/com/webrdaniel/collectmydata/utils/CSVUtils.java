@@ -1,5 +1,6 @@
 package com.webrdaniel.collectmydata.utils;
 
+import android.app.DownloadManager;
 import android.os.Environment;
 
 import com.webrdaniel.collectmydata.activities.DataCollDetailActivity;
@@ -22,8 +23,13 @@ public class CSVUtils {
         File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
 
         File file = new File(dir.getAbsolutePath()+"/"+name);
-
-        file.createNewFile();
+        if(!file.exists()) {
+            file.createNewFile();
+            DownloadManager downloadManager = (DownloadManager) context.getSystemService(context.DOWNLOAD_SERVICE);
+            downloadManager.addCompletedDownload(file.getName(), file.getName(), true, "text/csv",file.getAbsolutePath(),file.length(),false);
+        }else{
+            file.delete();
+        }
 
         BufferedWriter writer = new BufferedWriter(new FileWriter(file, true ));
 
@@ -35,10 +41,15 @@ public class CSVUtils {
             content.append("\n");
         }
 
+        writer.flush();
+
         writer.write(content.toString());
 
         writer.close();
 
 
     }
+
+
+
 }
