@@ -39,7 +39,7 @@
     <string name="this_week">Tento týden</string>
     <string name="this_month">Tento měsíc</string>
     <string name="this_year">Tento rok</string>
-    <string name="app_version">Verze 1.0</string>
+    <string name="app_version">Verze 1.1</string>
     <string name="message_graph">Není dostatek dat pro vytvoření grafu.</string>
     <string name="error_date">Záznam s tímto datem již existuje</string>
     <string name="record_added">Záznam přidán</string>
