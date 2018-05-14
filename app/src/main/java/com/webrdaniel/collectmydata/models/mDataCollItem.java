@@ -2,15 +2,15 @@ package com.webrdaniel.collectmydata.models;
 
 import java.io.Serializable;
 
-public class DataCollItem implements Serializable {
+public class mDataCollItem implements Serializable {
     private String name;
     private int color;
     private int id;
 
-    public DataCollItem(){
+    public mDataCollItem(){
 
     }
-    public DataCollItem(int id, String name, int color){
+    public mDataCollItem(int id, String name, int color){
         this.id = id;
         this.name = name;
         this.color = color;

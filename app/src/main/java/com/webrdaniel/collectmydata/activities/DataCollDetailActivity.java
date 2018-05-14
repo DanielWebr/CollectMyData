@@ -1,10 +1,17 @@
 package com.webrdaniel.collectmydata.activities;
 
+import android.Manifest;
+import android.app.DownloadManager;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -27,16 +34,18 @@ import android.widget.Toast;
 
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.webrdaniel.collectmydata.DatabaseHelper;
+import com.webrdaniel.collectmydata.R;
 import com.webrdaniel.collectmydata.fragments.RecordsListFragment;
 import com.webrdaniel.collectmydata.fragments.RecordsOverviewFragment;
-import com.webrdaniel.collectmydata.models.DataCollItem;
 import com.webrdaniel.collectmydata.models.Record;
 import com.webrdaniel.collectmydata.models.RecordComparator;
-import com.webrdaniel.collectmydata.R;
+import com.webrdaniel.collectmydata.models.mDataCollItem;
+import com.webrdaniel.collectmydata.utils.CSVUtils;
 import com.webrdaniel.collectmydata.utils.DateUtils;
 import com.webrdaniel.collectmydata.utils.DialogUtils;
 import com.webrdaniel.collectmydata.utils.KeyboardUtils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -57,6 +66,7 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
     public DatabaseHelper databaseHelper;
     public RecordsOverviewFragment recordsOverviewFragment;
     public ArrayList<Record> records;
+    private mDataCollItem dataCollItem;
     private HashSet<Date> mStoredDates;
     private int mDataCollItemId;
     private int mFilterDatesCount;
@@ -65,6 +75,7 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
     private TextInputLayout mDialogDateTil;
     private Menu mMenu;
     private Date mDialogDateToStore;
+    private static int MY_PERMISSIONS_WRITE_EXTERNAL_STORAGE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,14 +86,13 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
 
-        DataCollItem dataCollItem = (DataCollItem)getIntent().getSerializableExtra(MainActivity.DATA_COLL_ITEM);
+        dataCollItem = (mDataCollItem)getIntent().getSerializableExtra(MainActivity.DATA_COLL_ITEM);
         mDataCollItemId = dataCollItem.getId();
         databaseHelper = new DatabaseHelper(this);
         mStoredDates = databaseHelper.getDates(mDataCollItemId);
         records = databaseHelper.getRecords(mDataCollItemId);
         if(getSupportActionBar()!=null)getSupportActionBar().setTitle(dataCollItem.getName());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,14 +122,19 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
     public boolean onCreateOptionsMenu(Menu menu) {
         this.mMenu = menu;
         getMenuInflater().inflate(R.menu.menu_data_coll_detail, menu);
+        enableExportIfData();
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.tv_filter) {
-                showPopupMenuFilter();
-                return true;
+            showPopupMenuFilter();
+            return true;
+        }
+        else if(item.getItemId() == R.id.menu_data_coll_detail_export){
+            exportToCSV();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -175,6 +190,11 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
     public void updateDatesList() {
         mStoredDates.clear();
         mStoredDates.addAll(databaseHelper.getDates(mDataCollItemId));
+    }
+
+    public void enableExportIfData(){
+        if (records.size()!=0) mMenu.getItem(1).setEnabled(true);
+        else mMenu.getItem(1).setEnabled(false);
     }
 
     private void showDialogAddValueDate() {
@@ -270,6 +290,7 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
         Collections.sort(records, new RecordComparator());
         updateFragments();
         updateDatesList();
+        enableExportIfData();
         Toast.makeText(this, this.getString(R.string.record_added), Toast.LENGTH_SHORT).show();
     }
 
@@ -358,5 +379,45 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
         mRecordsListFragment.recordsListAdapter.notifyDataSetChanged();
     }
 
+    private void exportToCSV(){
+
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                MY_PERMISSIONS_WRITE_EXTERNAL_STORAGE);
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case 1: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    try {
+                        CSVUtils.recordsToCSV(this,records);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    Snackbar.make(this.tabLayout, R.string.CSV_saved, Snackbar.LENGTH_SHORT)
+                            .setAction(R.string.show, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    startActivity(new Intent(DownloadManager.ACTION_VIEW_DOWNLOADS));
+                                }
+                            }).show();
+
+                } else {
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+        }
+    }
+
+    public mDataCollItem getDataCollItem() {
+        return dataCollItem;
+    }
 
 }

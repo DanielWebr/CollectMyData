@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.webrdaniel.collectmydata.models.DataCollItem;
+import com.webrdaniel.collectmydata.models.mDataCollItem;
 import com.webrdaniel.collectmydata.models.Record;
 import com.webrdaniel.collectmydata.models.RecordComparator;
 import com.webrdaniel.collectmydata.utils.DateUtils;
@@ -63,14 +63,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return (int) this.getWritableDatabase().insert(RECORDS_TABLE,null, recordValues);
     }
 
-    public ArrayList<DataCollItem> getDataCollItems() {
+    public ArrayList<mDataCollItem> getDataCollItems() {
         String query = "SELECT  * FROM " + DATA_COLL_TABLE;
-        ArrayList<DataCollItem> dataCollItems = new  ArrayList<>();
+        ArrayList<mDataCollItem> dataCollItems = new  ArrayList<>();
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
         if(cursor.moveToFirst()) {
             do{
-                DataCollItem item = new DataCollItem(
+                mDataCollItem item = new mDataCollItem(
                         cursor.getInt(0),
                         cursor.getString(1),
                         cursor.getInt(2));

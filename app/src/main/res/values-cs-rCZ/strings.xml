@@ -23,7 +23,7 @@
     <string name="name">Jméno:</string>
     <string name="really_delete_data_collection">Opravdu odstranit datovou kolekci?</string>
     <string name="edit">Upravit</string>
-    <string name="no_data">Neexistují žádná uložená data.</string>
+    <string name="no_data">Žádná uložená data.</string>
     <string name="no_data_coll">Nemáš žádné datové kolekce.</string>
     <string name="about_app">O aplikaci</string>
     <string name="app_info">Kód aplikace dostupný na %1$s pod Apache 2.0 licencí. </string>
@@ -39,7 +39,7 @@
     <string name="this_week">Tento týden</string>
     <string name="this_month">Tento měsíc</string>
     <string name="this_year">Tento rok</string>
-    <string name="app_version">Verze 1.0</string>
+    <string name="app_version">Verze 1.1</string>
     <string name="message_graph">Není dostatek dat pro vytvoření grafu.</string>
     <string name="error_date">Záznam s tímto datem již existuje</string>
     <string name="record_added">Záznam přidán</string>
@@ -47,4 +47,7 @@
     <string name="records">Záznamy</string>
     <string name="menu">menu</string>
     <string name="app_resources">Knihovny třetích stran použity v aplikaci: GraphView library by Jonas Gehring, Date picker dialog by Wouter Dullaert, Material design icons by Google.</string>
+    <string name="Export">Exportovat do CSV</string>
+    <string name="CSV_saved">CSV uloženo</string>
+    <string name="show">Zobrazit</string>
 </resources>

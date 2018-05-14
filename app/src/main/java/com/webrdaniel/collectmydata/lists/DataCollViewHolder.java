@@ -16,7 +16,6 @@ import android.widget.TextView;
 
 import com.webrdaniel.collectmydata.activities.DataCollDetailActivity;
 import com.webrdaniel.collectmydata.activities.MainActivity;
-import com.webrdaniel.collectmydata.models.DataCollItem;
 import com.webrdaniel.collectmydata.R;
 import com.webrdaniel.collectmydata.utils.DateUtils;
 import com.webrdaniel.collectmydata.utils.DialogUtils;
@@ -31,7 +30,7 @@ class DataCollViewHolder extends RecyclerView.ViewHolder {
     ImageView mIcon;
     ImageButton mAddRecordIb;
     private ImageButton mMenuIb;
-    private DataCollItem mDataCollItem;
+    private com.webrdaniel.collectmydata.models.mDataCollItem mDataCollItem;
     private MainActivity mMainActivity;
 
     DataCollViewHolder(View view, MainActivity mainActivity){

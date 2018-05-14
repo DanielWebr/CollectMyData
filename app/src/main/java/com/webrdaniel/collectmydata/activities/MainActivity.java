@@ -13,9 +13,9 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.webrdaniel.collectmydata.DatabaseHelper;
-import com.webrdaniel.collectmydata.lists.DataCollListAdapter;
-import com.webrdaniel.collectmydata.models.DataCollItem;
 import com.webrdaniel.collectmydata.R;
+import com.webrdaniel.collectmydata.lists.DataCollListAdapter;
+import com.webrdaniel.collectmydata.models.mDataCollItem;
 import com.webrdaniel.collectmydata.utils.KeyboardUtils;
 import com.webrdaniel.collectmydata.utils.Utils;
 
@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity{
     public static final String DATA_COLL_ITEM = "com.webrdaniel.collectmydata.models.records";
     static final int NEW_DATA_COLL_ITEM = 100;
     public DataCollListAdapter dataCollRvAdapter;
-    public ArrayList<DataCollItem> dataCollItems;
+    public ArrayList<mDataCollItem> dataCollItems;
     public DatabaseHelper databaseHelper;
 
     @Override
@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onClick(View view) {
                 Intent newDataColl= new Intent(MainActivity.this, NewDataCollActivity.class);
-                DataCollItem item = new DataCollItem();
+                mDataCollItem item = new mDataCollItem();
                 item.setColor(Utils.getMatColor(MainActivity.this));
                 newDataColl.putExtra(DATA_COLL_ITEM, item);
                 startActivityForResult(newDataColl, NEW_DATA_COLL_ITEM);
@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity{
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode == RESULT_CANCELED) return;
-        DataCollItem item = (DataCollItem) data.getSerializableExtra(DATA_COLL_ITEM);
+        mDataCollItem item = (mDataCollItem) data.getSerializableExtra(DATA_COLL_ITEM);
         int id = databaseHelper.insertDataColl(item.getName(), item.getColor());
         item.setId(id);
         dataCollItems.add(item);
@@ -97,6 +97,12 @@ public class MainActivity extends AppCompatActivity{
     protected void onPause() {
         super.onPause();
         KeyboardUtils.hideKeyboard(this);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        dataCollRvAdapter.notifyDataSetChanged();
     }
 
     public void showTvIfRvIsEmpty() {

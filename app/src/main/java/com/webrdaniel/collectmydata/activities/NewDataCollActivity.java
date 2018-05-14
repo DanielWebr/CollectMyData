@@ -12,7 +12,6 @@ import android.text.TextWatcher;
 import android.view.View;
 
 import com.webrdaniel.collectmydata.R;
-import com.webrdaniel.collectmydata.models.DataCollItem;
 import com.webrdaniel.collectmydata.utils.KeyboardUtils;
 
 import butterknife.BindView;
@@ -22,7 +21,7 @@ public class NewDataCollActivity extends AppCompatActivity {
     @BindView(R.id.fab_new_data_coll) FloatingActionButton fab;
     @BindView(R.id.tiet_new_data_coll) TextInputEditText newDataCollNameTiet;
     @BindView(R.id.til_new_data_coll) TextInputLayout newDataCollNameTil;
-    private DataCollItem mDataCollItem;
+    private com.webrdaniel.collectmydata.models.mDataCollItem mDataCollItem;
     private String mUserEnteredText;
 
     @Override
@@ -31,7 +30,7 @@ public class NewDataCollActivity extends AppCompatActivity {
         setContentView(R.layout.activity_new_data_coll);
         ButterKnife.bind(this);
         if(getSupportActionBar()!=null)getSupportActionBar().setTitle(getString(R.string.new_dataColl));
-        mDataCollItem = (DataCollItem)getIntent().getSerializableExtra(MainActivity.DATA_COLL_ITEM);
+        mDataCollItem = (com.webrdaniel.collectmydata.models.mDataCollItem)getIntent().getSerializableExtra(MainActivity.DATA_COLL_ITEM);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

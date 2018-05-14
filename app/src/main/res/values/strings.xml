@@ -35,7 +35,7 @@
     <string name="this_week">This week</string>
     <string name="this_month">This month</string>
     <string name="this_year">This year</string>
-    <string name="app_version">Version 1.0</string>
+    <string name="app_version">Version 1.1</string>
     <string name="message_graph">Not enough data to make graph.</string>
     <string name="error_date">Record with this date already exists</string>
     <string name="record_added">Record added</string>
@@ -43,4 +43,7 @@
     <string name="menu">Menu</string>
     <string name="records">Records</string>
     <string name="app_resources">Third-party libraries used in app: GraphView library by Jonas Gehring, Date picker dialog by Wouter Dullaert, Material design icons by Google.</string>
+    <string name="Export">Export to CSV</string>
+    <string name="CSV_saved">CSV saved</string>
+    <string name="show">Show</string>
 </resources>

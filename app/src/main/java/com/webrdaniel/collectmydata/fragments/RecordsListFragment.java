@@ -124,6 +124,7 @@ public class RecordsListFragment extends Fragment {
         dataCollDetailActivity.recordsOverviewFragment.updateLayout();
         dataCollDetailActivity.updateDatesList();
         showTvIfRvIsEmpty();
+        dataCollDetailActivity.enableExportIfData();
     }
 
 }

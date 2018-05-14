@@ -44,7 +44,7 @@ class RecordViewHolder extends RecyclerView.ViewHolder {
         View dialog = layoutInflaterAndroid.inflate(R.layout.input_dialog_record_value_edit, (ViewGroup) mRecordsListFragment.mRootView, false);
         final TextInputEditText valueTiet = dialog.findViewById(R.id.tiet_record_value_edit);
         record = dataCollDetailActivity.records.get(RecordViewHolder.this.getAdapterPosition() - 1);
-        valueTiet.setText(Utils.doubleToString(record.getValue()));
+        valueTiet.setText(Utils.doubleToString(record.getValue()).replaceFirst(",","."));
         Callable methodEditValue = new Callable() {
             @Override
             public Object call() throws Exception {
