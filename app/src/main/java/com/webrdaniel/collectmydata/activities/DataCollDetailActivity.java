@@ -363,6 +363,7 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
         }
         updateFragments();
         mFilterDatesCount = daysToPast;
+        enableExportIfData();
     }
 
     private void showAllRecords() {
@@ -370,6 +371,7 @@ public class DataCollDetailActivity extends AppCompatActivity implements DatePic
         records.addAll(databaseHelper.getRecords(mDataCollItemId));
         updateFragments();
         mFilterDatesCount = 0;
+        enableExportIfData();
     }
 
     private void updateFragments() {
